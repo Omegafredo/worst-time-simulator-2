@@ -1,0 +1,86 @@
+[gd_scene load_steps=7 format=3 uid="uid://blty1ony4m351"]
+
+[ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/menu_label.tres" id="1_w1fbp"]
+[ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
+[ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="3_8yvr6"]
+[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul.png" id="3_pbhkn"]
+[ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
+[ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
+
+[node name="Menu Scene" type="Node"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="Menu" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 900.0
+offset_top = 200.0
+offset_right = 1500.0
+offset_bottom = 1100.0
+script = ExtResource("1_yo4v4")
+
+[node name="MarginContainer" type="MarginContainer" parent="Menu"]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 900.0
+
+[node name="FirstMenu" type="VBoxContainer" parent="Menu/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Start" type="Label" parent="Menu/MarginContainer/FirstMenu"]
+layout_mode = 2
+text = "Start"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="Settings" type="Label" parent="Menu/MarginContainer/FirstMenu"]
+layout_mode = 2
+text = "Settings"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="Credits" type="Label" parent="Menu/MarginContainer/FirstMenu"]
+layout_mode = 2
+text = "Credits"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="Custom Attacks" type="Label" parent="Menu/MarginContainer/FirstMenu"]
+layout_mode = 2
+text = "Custom Attacks"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="SettingsMenu" type="VBoxContainer" parent="Menu/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="NoMusic" type="Label" parent="Menu/MarginContainer/SettingsMenu"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+text = "No Music"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="DifficultyLabel" type="Label" parent="Menu/MarginContainer/SettingsMenu"]
+layout_mode = 2
+text = "Difficulty Settings"
+label_settings = ExtResource("1_w1fbp")
+
+[node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
+stream = ExtResource("3_8yvr6")
+
+[node name="MenuSelect" type="AudioStreamPlayer" parent="Menu"]
+stream = ExtResource("3_vws4m")
+
+[node name="SoulSelector" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_fex45")
+
+[node name="Sprite2D" type="Sprite2D" parent="SoulSelector"]
+modulate = Color(1, 0, 0, 1)
+texture_filter = 1
+rotation = 1.5708
+scale = Vector2(3, 3)
+texture = ExtResource("3_pbhkn")
+
+[connection signal="finished_arrival" from="SoulSelector" to="Menu" method="_on_soul_finished_arrival"]

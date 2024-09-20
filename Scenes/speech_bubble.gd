@@ -48,6 +48,7 @@ func clearText() -> void:
 
 func continueText(addedText : String) -> void:
 	print(TextLabel.text.length())
+	# Append Text doesn't work?
 	TextLabel.append_text(addedText)
 	print("test4", TextLabel.text.length())
 	if not TextLabel.visible_characters >= TextLabel.text.length():
