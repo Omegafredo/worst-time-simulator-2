@@ -18,8 +18,7 @@ config/icon="res://Resources/Sprites/icon.svg"
 
 [autoload]
 
-Settings="*res://Scripts/Global_Settings.gd"
-Global_Func="*res://Scripts/Global_Functions.gd"
+Globals="*res://Scripts/Global_Settings.gd"
 
 [display]
 

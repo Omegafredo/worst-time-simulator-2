@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bnxqojgp0mp8a"]
+
+[ext_resource type="FontFile" uid="uid://cwt2tg2yamfvk" path="res://Resources/Fonts/8bitoperator_jve.ttf" id="1_yqa2m"]
+
+[resource]
+base_font = ExtResource("1_yqa2m")
+spacing_glyph = 2

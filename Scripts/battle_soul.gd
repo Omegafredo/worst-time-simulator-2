@@ -82,7 +82,7 @@ func _process(delta: float) -> void:
 				CoyoteTime.start()
 				
 				
-			if Settings.CoolAnimations:
+			if Globals.CoolAnimations:
 				SoulSprite.rotation = rotate_toward(SoulSprite.rotation, deg_to_rad(gravityDir * -90 + 90), delta * 10)
 			else:
 				SoulSprite.rotation_degrees = gravityDir * -90 + 90
@@ -98,7 +98,8 @@ func Change_Soul(Type) -> void:
 	# TODO Implement additional reasons to not do the animation (such as when flashes are added)
 	if Soul_Type != Type:
 		$Ding.play()
-		FadeSoulAnim()
+		if Globals.CoolAnimations:
+			FadeSoulAnim()
 	Soul_Type = Type
 	match Soul_Type:
 		SOUL_RED:
@@ -111,13 +112,13 @@ func Change_Soul(Type) -> void:
 func SlamHitGround() -> void:
 	Slammed = false
 	$Slam.play()
-	if Settings.HP > 0:
-		if Settings.HP - SlamDamage > 0:
-			Settings.HP = SlamDamage
+	if Globals.HP > 0:
+		if Globals.HP - SlamDamage > 0:
+			Globals.HP = SlamDamage
 		else:
-			Settings.HP = 1
+			Globals.HP = 1
 	else:
-		Settings.HP = SlamDamage
+		Globals.HP = SlamDamage
 	
 func FadeSoulAnim():
 	FadeSprite.scale = Vector2(1, 1)

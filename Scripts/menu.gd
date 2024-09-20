@@ -27,7 +27,7 @@ const WTSLogoPosition := Vector2(-625, 25)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
-	Settings.CoolAnims_Changed.connect(on_cool_anims_changed)
+	Globals.CoolAnims_Changed.connect(on_cool_anims_changed)
 	
 	
 	# Gathers all the Menus into an array
@@ -43,8 +43,8 @@ func _ready() -> void:
 	CurrentMenu = Menus[0]
 	
 	
-	if Settings.ShowIntro:
-		Settings.ShowIntro = false
+	if Globals.ShowIntro:
+		Globals.ShowIntro = false
 		InitiateIntro()
 	else:
 		InitiateMenu()
@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 			if held_time > 0.45:
 				if held_free:
 					held_free = false
-					await Global_Func.Wait(0.04)
+					await Globals.Wait(0.04)
 					@warning_ignore("narrowing_conversion")
 					SideOption(Input.get_axis("left", "right") * 2)
 					held_free = true
@@ -125,7 +125,7 @@ func ConfirmAction() -> void:
 				InitiateBattle()
 			_:
 				if !CurrentLabel.LinkedProperty.is_empty():
-					Settings.set(CurrentLabel.LinkedProperty, !Settings.get(CurrentLabel.LinkedProperty))
+					Globals.set(CurrentLabel.LinkedProperty, !Globals.get(CurrentLabel.LinkedProperty))
 		
 		UpdateLabels()
 		MenuSelectSound.play()
@@ -165,13 +165,13 @@ func ReturnMenu() -> void:
 func SideOption(Direction : int) -> void:
 	if CurrentLabel in SideOptions:
 		if !CurrentLabel.LinkedProperty.is_empty() and CurrentLabel.CheckIfClamp(Direction):
-			Settings.set(CurrentLabel.LinkedProperty, Settings.get(CurrentLabel.LinkedProperty) + CurrentLabel.LowerIfNearEdge(Direction))
+			Globals.set(CurrentLabel.LinkedProperty, Globals.get(CurrentLabel.LinkedProperty) + CurrentLabel.LowerIfNearEdge(Direction))
 			MenuSelectSound.play()
 		
 		UpdateLabels()
 	
 func InitiateBattle() -> void:
-	if Settings.CoolAnimations:
+	if Globals.CoolAnimations:
 		ControlsAllowed = false
 		for i in range(4):
 			await Flash(true)
@@ -184,16 +184,16 @@ func InitiateBattle() -> void:
 	get_tree().change_scene_to_file("res://Scenes/battle_scene.tscn")
 	
 func InitiateIntro() -> void:
-	if Settings.CoolAnimations:
+	if Globals.CoolAnimations:
 		MainContainer.hide()
 		Soul.hide()
 		WTSLogo.hide()
-		await Global_Func.Wait(3)
+		await Globals.Wait(3)
 		WTSLogo.show()
 		MenuLogoSound.play()
-		await Global_Func.Wait(1)
+		await Globals.Wait(1)
 		InterpolateObject(WTSLogo, "position:y", WTSLogoPosition.y, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
-		await Global_Func.Wait(0.75)
+		await Globals.Wait(0.75)
 		MainContainer.show()
 		InterpolateObject(BottomGradient, "modulate:a", 1, 2, Tween.EASE_IN_OUT, Tween.TRANS_QUAD)
 		BottomParticles.emitting = true
@@ -203,7 +203,7 @@ func InitiateIntro() -> void:
 		for Option in CurrentMenu.get_children():
 			InterpolateObject(Option, "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 			Total_Gap += Option.size.y + 4
-			await Global_Func.Wait(0.07)
+			await Globals.Wait(0.07)
 			
 		Soul.show()
 		Soul.position = Vector2(CurrentMenu.global_position.x + SoulOffset.x, 1700)
@@ -223,15 +223,15 @@ func InitiateMenu() -> void:
 	Soul.show()
 	WTSLogo.show()
 	MainContainer.show()
-	BottomGradient.visible = Settings.CoolAnimations
-	BottomParticles.emitting = Settings.CoolAnimations
+	BottomGradient.visible = Globals.CoolAnimations
+	BottomParticles.emitting = Globals.CoolAnimations
 	BottomParticles.preprocess = 2
 	WTSLogo.position = WTSLogoPosition
 	BottomGradient.modulate.a = 1
 	Soul.position = CurrentMenu.global_position + SoulOffset
 	ControlsAllowed = true
 	
-	if Settings.CoolAnimations:
+	if Globals.CoolAnimations:
 		MenuSway()
 	
 	
@@ -239,11 +239,11 @@ func InitiateMenu() -> void:
 	UpdateLabels()
 	
 func on_cool_anims_changed():
-	BottomParticles.emitting = Settings.CoolAnimations
-	BottomGradient.visible = Settings.CoolAnimations
+	BottomParticles.emitting = Globals.CoolAnimations
+	BottomGradient.visible = Globals.CoolAnimations
 	
 	
-	if Settings.CoolAnimations:
+	if Globals.CoolAnimations:
 		MenuSway()
 	else:
 		Soul.InterpolateMovement(CurrentMenu.get_child(MoveIndex).global_position + SoulOffset)
@@ -294,4 +294,4 @@ func Flash(Toggle : bool) -> void:
 		WTSLogo.show()
 		BottomGradient.show()
 		BottomParticles.show()
-	await Global_Func.Wait(0.0766)
+	await Globals.Wait(0.0766)

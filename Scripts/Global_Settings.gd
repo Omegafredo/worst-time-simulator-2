@@ -1,6 +1,6 @@
 extends Node
 
-# Settings
+# Settings variables
 
 signal CoolAnims_Changed
 
@@ -15,3 +15,8 @@ var ShowIntro : bool = true
 
 var HP := 92
 var MaxHP := 92
+
+# Functions
+
+func Wait(Seconds) -> void:
+	await get_tree().create_timer(Seconds).timeout

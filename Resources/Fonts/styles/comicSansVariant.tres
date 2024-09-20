@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://be438q838t6oh"]
+
+[ext_resource type="FontFile" uid="uid://cf1l68bnyehbe" path="res://Resources/Fonts/sans-undertale.ttf" id="1_ns6tc"]
+
+[resource]
+base_font = ExtResource("1_ns6tc")

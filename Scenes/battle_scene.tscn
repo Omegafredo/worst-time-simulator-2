@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
-[ext_resource type="Script" path="res://Scenes/speech_bubble.gd" id="5_pb5ae"]
-[ext_resource type="FontFile" uid="uid://cf1l68bnyehbe" path="res://Resources/Fonts/sans-undertale.ttf" id="6_xy35p"]
+[ext_resource type="Script" path="res://Scripts/speech_bubble.gd" id="5_pb5ae"]
+[ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
 [ext_resource type="AudioStream" uid="uid://13gpiwhn3i43" path="res://Resources/Sounds/SansSpeak.ogg" id="7_rkth3"]
 
 [sub_resource type="Animation" id="Animation_mnjtw"]
@@ -101,9 +101,12 @@ offset_top = -52.176
 offset_right = 76.531
 offset_bottom = 36.824
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_fonts/normal_font = ExtResource("6_xy35p")
+theme_override_fonts/normal_font = ExtResource("6_piuie")
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
+text = "Should be burning in hell"
+scroll_active = false
+shortcut_keys_enabled = false
 
 [node name="SansSpeak" type="AudioStreamPlayer" parent="Battle Controller/SpeechBubble"]
 stream = ExtResource("7_rkth3")

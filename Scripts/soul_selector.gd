@@ -8,7 +8,7 @@ var ActiveTweens : Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Settings.CoolAnims_Changed.connect(on_cool_anims_changed)
+	Globals.CoolAnims_Changed.connect(on_cool_anims_changed)
 	pass # Replace with function body.
 
 
@@ -35,7 +35,7 @@ func InterpolateMovement(GivenPosition : Vector2) -> Tween:
 	#SentSignal = false
 	#LerpProgress = 0
 	#MoveTo = GivenPosition
-	if Settings.CoolAnimations:
+	if Globals.CoolAnimations:
 		var tween = get_tree().create_tween()
 		ActiveTweens.append(tween)
 		tween.set_ease(Tween.EASE_OUT)
