@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://qjh4h6r7nww5"]
+
+[ext_resource type="Script" path="res://Scripts/battle_soul.gd" id="1_6hssw"]
+[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul.png" id="2_ab1kl"]
+[ext_resource type="AudioStream" uid="uid://clnhipeueds0f" path="res://Resources/Sounds/Slam.ogg" id="3_tijpy"]
+[ext_resource type="AudioStream" uid="uid://bf3kxpnhxdot2" path="res://Resources/Sounds/Ding.ogg" id="4_730i4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u50k1"]
+size = Vector2(15, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7h2k"]
+size = Vector2(48, 48)
+
+[node name="Node2D" type="CharacterBody2D"]
+texture_filter = 1
+collision_mask = 3
+platform_floor_layers = 0
+script = ExtResource("1_6hssw")
+
+[node name="SoulSprite" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+rotation = 1.5708
+scale = Vector2(3, 3)
+texture = ExtResource("2_ab1kl")
+
+[node name="FadeSprite" type="Sprite2D" parent="SoulSprite"]
+texture = ExtResource("2_ab1kl")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="AttackHitbox" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_u50k1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p7h2k")
+
+[node name="CoyoteTime" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="JumpRemember" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Slam" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_tijpy")
+
+[node name="Ding" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_730i4")

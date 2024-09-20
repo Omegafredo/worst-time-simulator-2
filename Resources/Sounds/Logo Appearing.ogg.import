@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://df024t67wo4ev"
+path="res://.godot/imported/Logo Appearing.ogg-aebe26fb5b7850dc652af5aaa0d6ab4c.oggvorbisstr"
+
+[deps]
+
+source_file="res://Resources/Sounds/Logo Appearing.ogg"
+dest_files=["res://.godot/imported/Logo Appearing.ogg-aebe26fb5b7850dc652af5aaa0d6ab4c.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
