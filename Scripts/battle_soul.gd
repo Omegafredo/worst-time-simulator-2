@@ -17,7 +17,7 @@ var gravity : float = 980
 @onready var CoyoteTime := $CoyoteTime
 @onready var JumpRemember := $JumpRemember
 
-const SPEED := 300.0
+const SPEED := 450.0
 const JUMP_STRENGTH := 700.0
 
 var MaxFallSpeed := 2000.0

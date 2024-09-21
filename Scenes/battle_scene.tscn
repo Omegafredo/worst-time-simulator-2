@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=26 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -7,6 +7,99 @@
 [ext_resource type="Script" path="res://Scripts/speech_bubble.gd" id="5_pb5ae"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
 [ext_resource type="AudioStream" uid="uid://13gpiwhn3i43" path="res://Resources/Sounds/SansSpeak.ogg" id="7_rkth3"]
+[ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/FightActive.png" id="8_p1agq"]
+[ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/Fight.png" id="9_1vr6p"]
+[ext_resource type="Texture2D" uid="uid://b84jsn40th0h6" path="res://Resources/Sprites/UI/MercyActive.png" id="10_juirh"]
+[ext_resource type="Texture2D" uid="uid://bow6juiucml11" path="res://Resources/Sprites/UI/Mercy.png" id="11_1auo4"]
+[ext_resource type="Texture2D" uid="uid://d3n58oo2idn28" path="res://Resources/Sprites/UI/ItemActive.png" id="12_mcuwc"]
+[ext_resource type="Texture2D" uid="uid://cwmbovj4biki" path="res://Resources/Sprites/UI/Item.png" id="13_mtp18"]
+[ext_resource type="Texture2D" uid="uid://ck3eof4kjy527" path="res://Resources/Sprites/UI/ActActive.png" id="14_yhw15"]
+[ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/Act.png" id="15_e83yw"]
+[ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_p1agq")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_1vr6p")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qixrn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_yhw15")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_e83yw")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uamvm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_mcuwc")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_mtp18")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_71xtk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_juirh")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_1auo4")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="FontVariation" id="FontVariation_qavlf"]
+base_font = ExtResource("16_ppebc")
+spacing_glyph = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_ndomo"]
+font = SubResource("FontVariation_qavlf")
+font_size = 20
 
 [sub_resource type="Animation" id="Animation_mnjtw"]
 length = 0.001
@@ -80,13 +173,14 @@ position = Vector2(856, 1103)
 [node name="Player" parent="Battle Controller" instance=ExtResource("1_ma1ba")]
 unique_name_in_owner = true
 z_index = 6
-position = Vector2(1000, 1200)
+position = Vector2(1000, 1000)
 
 [node name="SpeechBubble" type="Sprite2D" parent="Battle Controller"]
 texture_filter = 1
-position = Vector2(1500, 450)
+position = Vector2(1152, 321)
 scale = Vector2(3, 3)
 texture = ExtResource("4_kn0io")
+centered = false
 script = ExtResource("5_pb5ae")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Battle Controller/SpeechBubble"]
@@ -96,10 +190,10 @@ anchor_left = 0.137
 anchor_top = 0.069
 anchor_right = 0.137
 anchor_bottom = 0.069
-offset_left = -118.469
-offset_top = -52.176
-offset_right = 76.531
-offset_bottom = 36.824
+offset_left = 1.19767
+offset_top = -0.509333
+offset_right = 196.198
+offset_bottom = 88.4907
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("6_piuie")
 theme_override_font_sizes/normal_font_size = 14
@@ -110,6 +204,49 @@ shortcut_keys_enabled = false
 
 [node name="SansSpeak" type="AudioStreamPlayer" parent="Battle Controller/SpeechBubble"]
 stream = ExtResource("7_rkth3")
+
+[node name="ContinueDelay" type="Timer" parent="Battle Controller/SpeechBubble"]
+one_shot = true
+
+[node name="Fight" type="AnimatedSprite2D" parent="Battle Controller"]
+texture_filter = 1
+position = Vector2(96, 1296)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_c56tm")
+centered = false
+
+[node name="Act" type="AnimatedSprite2D" parent="Battle Controller"]
+texture_filter = 1
+position = Vector2(552, 1296)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_qixrn")
+centered = false
+
+[node name="Item" type="AnimatedSprite2D" parent="Battle Controller"]
+texture_filter = 1
+position = Vector2(1032, 1296)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_uamvm")
+centered = false
+
+[node name="Mercy" type="AnimatedSprite2D" parent="Battle Controller"]
+texture_filter = 1
+position = Vector2(1488, 1296)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_71xtk")
+centered = false
+
+[node name="Name" type="Label" parent="Battle Controller"]
+texture_filter = 1
+offset_left = 96.0
+offset_top = 1206.0
+offset_right = 320.0
+offset_bottom = 1246.0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(0, 18)
+text = "Chara LV19"
+label_settings = SubResource("LabelSettings_ndomo")
+uppercase = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

@@ -40,21 +40,16 @@ func SoulSlam(SlamDirection : int):
 	Soul.gravityDir = SlamDirection
 	
 func _ready():
-	request_ready()
-	CombatBoxInstant(100, 900, 1800, 1300)
-	SpeechBubble.AskForInput = false
+	InitialiseBattle()
+	
+	SpeechBubble.AskForInput = true
 	SpeechBubble.setText("Waiting system")
 	
-	await SpeechBubble.textDone
-	await Globals.Wait(1)
+	SpeechBubble.continueText(" You can continue text", 1)
 	
-	SpeechBubble.continueText(" You can continue text")
-	
-	await SpeechBubble.textDone
-	SpeechBubble.AskForInput = true
-	await Globals.Wait(1.5)
+	await SpeechBubble.receivedInput
 	SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
-	await SpeechBubble.textDone
+	await SpeechBubble.receivedInput
 	await Globals.Wait(1.5)
 	SpeechBubble.changeMode(1)
 	SpeechBubble.setText("Should be burning in hell.")
@@ -71,3 +66,8 @@ func _ready():
 	#await Globals.Wait(1)
 	#SoulMode(0)
 	#CombatBox(100, 900, 500, 1300)
+	
+func InitialiseBattle():
+	request_ready()
+	CombatBoxInstant(111, 720, 1839, 1152)
+	$Name.text = str(Globals.PlayerName + "  LV19")

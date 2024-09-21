@@ -10,6 +10,7 @@ var CoolAnimations : bool = true:
 		CoolAnimations = ca
 		CoolAnims_Changed.emit()
 var ShowIntro : bool = true
+var PlayerName := "CHARA"
 
 # Gameplay
 

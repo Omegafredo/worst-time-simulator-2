@@ -34,7 +34,7 @@ var Height : float:
 
 var CenterPos : Vector2:
 	get():
-		return Vector2(TopLeft.x + Width / 2, TopLeft.y + Height / 2)
+		return Vector2((TopLeft.x + Width / 2) - CornerSize.x * 3, TopLeft.y + Height / 2)
 var TopLeftOffset : Vector2:
 	get():
 		return Vector2((Width * -0.5) / scale.x, (Height * -0.5) / scale.x)
@@ -43,49 +43,49 @@ var TopMiddleOffset : Vector2:
 		return Vector2(TopLeftOffset.x + CornerSize.x, TopLeftOffset.y)
 var TopRightOffset : Vector2:
 	get():
-		return Vector2((Width * 0.5) / scale.x, (Height * -0.5) / scale.x)
+		return Vector2((Width * 0.5) / scale.x - CornerSize.x, (Height * -0.5) / scale.x)
 var LeftMiddleOffset : Vector2:
 	get():
 		return Vector2((Width * -0.5) / scale.x, ((Height * -0.5) / scale.x) + CornerSize.y)
 var RightMiddleOffset : Vector2:
 	get():
-		return Vector2((Width * 0.5) / scale.x + 1, ((Height * -0.5) / scale.x) + CornerSize.y)
+		return Vector2((Width * 0.5) / scale.x + 1 - CornerSize.x, ((Height * -0.5) / scale.x) + CornerSize.y)
 var BottomLeftOffset : Vector2:
 	get():
-		return Vector2((Width * -0.5) / scale.x, (Height * 0.5) / scale.x)
+		return Vector2((Width * -0.5) / scale.x, (Height * 0.5) / scale.x - CornerSize.y)
 var BottomMiddleOffset : Vector2:
 	get():
-		return Vector2(((Width * -0.5) / scale.x) + CornerSize.x, (Height * 0.5) / scale.x + 1)
+		return Vector2(((Width * -0.5) / scale.x) + CornerSize.x, (Height * 0.5) / scale.x + 1 - CornerSize.y)
 var BottomRightOffset : Vector2:
 	get():
-		return Vector2((Width * 0.5) / scale.x, (Height * 0.5) / scale.x)
+		return Vector2((Width * 0.5) / scale.x - CornerSize.x, (Height * 0.5) / scale.x - CornerSize.y)
 
 var BottomHitboxOffset : Vector2:
 	get():
-		return Vector2(CornerSize.x / 2, (Height * 0.5) / scale.x + CornerSize.y / 2 + 0.5)
+		return Vector2(0, (Height * 0.5) / scale.x - CornerSize.y / 2 + 0.5)
 var TopHitboxOffset : Vector2:
 	get():
-		return Vector2(CornerSize.x / 2, (Height * -0.5) / scale.x + CornerSize.y / 2 - 0.5)
+		return Vector2(0, (Height * -0.5) / scale.x + CornerSize.y / 2 - 0.5)
 var LeftHitboxOffset : Vector2:
 	get():
-		return Vector2((Width * -0.5) / scale.x + CornerSize.y / 2 - 0.5, CornerSize.y / 2)
+		return Vector2((Width * -0.5) / scale.x + CornerSize.y / 2 - 0.5, 0)
 var RightHitboxOffset : Vector2:
 	get():
-		return Vector2((Width * 0.5) / scale.x + CornerSize.y / 2 + 0.5, CornerSize.y / 2)
+		return Vector2((Width * 0.5) / scale.x - CornerSize.y / 2 + 0.5, 0)
 
 var HorizontalScale : float:
 	get():
-		return (Width - CornerSize.x * 3) / 15
+		return (Width - CornerSize.x * 6) / 15
 var VerticalScale : float:
 	get():
-		return (Height - CornerSize.x * 3) / 15
+		return (Height - CornerSize.x * 6) / 15
 
 var HorizontalHitboxScale : float:
 	get():
-		return (Width + CornerSize.x * 3) / 3
+		return (Width) / 3
 var VerticalHitboxScale : float:
 	get():
-		return (Height + CornerSize.x * 3) / 3
+		return (Height) / 3
 
 var CornerSize := Vector2(6, 6)
 

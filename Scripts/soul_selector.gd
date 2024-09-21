@@ -1,6 +1,6 @@
 extends Node2D
 
-#var MoveTo : Vector2
+var MoveTo : Vector2
 #var LerpProgress: float
 #var SentSignal : bool = false
 
@@ -14,6 +14,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	for tween in ActiveTweens:
+		if !tween.is_valid():
+			ActiveTweens.pop_front()
+	
 	pass
 	#if Settings.CoolAnimations:
 		#
@@ -34,7 +38,7 @@ func _process(_delta: float) -> void:
 func InterpolateMovement(GivenPosition : Vector2) -> Tween:
 	#SentSignal = false
 	#LerpProgress = 0
-	#MoveTo = GivenPosition
+	MoveTo = GivenPosition
 	if Globals.CoolAnimations:
 		var tween = get_tree().create_tween()
 		ActiveTweens.append(tween)
@@ -50,7 +54,7 @@ func InterpolateMovement(GivenPosition : Vector2) -> Tween:
 func on_cool_anims_changed():
 	for tween in ActiveTweens:
 		tween.kill()
-	ActiveTweens.clear()
+	position = MoveTo
 	
 	
 	

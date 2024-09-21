@@ -38,7 +38,7 @@ func Update() -> void:
 		CurrentColor = Default
 	if DeactiveState:
 		CurrentColor = Deactive
-	modulate = CurrentColor
+	modulate = Color(CurrentColor, modulate.a)
 	
 func CheckIfClamp(Direction : int) -> bool:
 	if ClampedMin != 0 and ClampedMax != 0:

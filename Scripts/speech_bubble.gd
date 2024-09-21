@@ -7,8 +7,10 @@ var eightbit = preload("res://Resources/Fonts/styles/8bitVariant.tres")
 
 @onready var TextLabel := $RichTextLabel
 @onready var SansSpeak := $SansSpeak
+@onready var ContinueDelay := $ContinueDelay
 
 signal sendInput
+signal sendSkip
 signal clearedText
 signal receivedInput
 signal textDone
@@ -17,6 +19,8 @@ var CurrentMode : int = Default
 var CharacterInterval : float = 0.07
 var AskForInput := true
 var SkippableText := true
+var Skipping := false
+var Waiting := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,22 +28,24 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
 		sendInput.emit()
 	if Input.is_action_just_pressed("cancel") and SkippableText:
 		TextLabel.visible_ratio = 1.0
-
+		Skipping = true
+		sendSkip.emit()
 func setText(text : String) -> void:
-	self.show()
 	
 	TextLabel.text = text
 	TextLabel.visible_characters = 0
 	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 		displayChar()
+	await get_tree().process_frame
+	self.show()
 	
 func displayChar() -> void:
-	if TextLabel.visible_ratio != 1.0:
+	if !Skipping:
 		TextLabel.visible_characters += 1
 		
 		if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " " and CurrentMode == Default:
@@ -54,15 +60,19 @@ func displayChar() -> void:
 		textDone.emit()
 
 func clearText() -> void:
-	TextLabel.text = ""
 	self.hide()
 	clearedText.emit()
 
-func continueText(addedText : String) -> void:
-	print(TextLabel.text.length())
+func continueText(addedText : String, Delay : float = 0.0) -> void:
+	Waiting = true
+	await textDone
+	if !Skipping:
+		await Globals.Wait(Delay) or self.sendSkip
+	else:
+		Skipping = false
+	Waiting = false
 	# append_text() doesn't work for some reason
 	TextLabel.text += addedText
-	print("test4 ", TextLabel.text.length())
 	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 		displayChar()
 		
@@ -81,8 +91,9 @@ func changeMode(modeChange : int) -> void:
 
 func _on_text_done() -> void:
 	if AskForInput:
-		await self.sendInput or self.clearedText
-		if self.visible:
-			receivedInput.emit()
-			clearText()
+		if !Waiting:
+			await self.sendInput or self.clearedText
+			if self.visible:
+				receivedInput.emit()
+				clearText()
 			
