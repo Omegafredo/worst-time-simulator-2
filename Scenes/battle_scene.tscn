@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=28 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/Act.png" id="15_e83yw"]
 [ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
+[ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -170,6 +171,10 @@ script = ExtResource("2_taess")
 
 [node name="CombatZone" parent="Battle Controller" instance=ExtResource("3_agmmr")]
 position = Vector2(856, 1103)
+
+[node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
+position = Vector2(960, 672)
+scale = Vector2(6, 6)
 
 [node name="Player" parent="Battle Controller" instance=ExtResource("1_ma1ba")]
 unique_name_in_owner = true

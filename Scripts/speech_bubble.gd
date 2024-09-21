@@ -10,7 +10,6 @@ var eightbit = preload("res://Resources/Fonts/styles/8bitVariant.tres")
 @onready var ContinueDelay := $ContinueDelay
 
 signal sendInput
-signal sendSkip
 signal clearedText
 signal receivedInput
 signal textDone
@@ -32,9 +31,12 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
 		sendInput.emit()
 	if Input.is_action_just_pressed("cancel") and SkippableText:
+		TextLabel.visible_ratio = 0
 		TextLabel.visible_ratio = 1.0
 		Skipping = true
-		sendSkip.emit()
+		ContinueDelay.wait_time = 0
+		ContinueDelay.timeout.emit()
+		
 func setText(text : String) -> void:
 	Skipping = false
 	
@@ -68,7 +70,8 @@ func continueText(addedText : String, Delay : float = 0.0) -> void:
 	Waiting = true
 	await textDone
 	if !Skipping:
-		await Globals.Wait(Delay) or self.sendSkip
+		ContinueDelay.start(Delay)
+		await ContinueDelay.timeout
 	Waiting = false
 	# append_text() doesn't work for some reason
 	TextLabel.text += addedText
@@ -92,7 +95,7 @@ func changeMode(modeChange : int) -> void:
 func _on_text_done() -> void:
 	if AskForInput:
 		if !Waiting:
-			await self.sendInput or self.clearedText
+			await self.sendInput
 			if self.visible:
 				receivedInput.emit()
 				clearText()

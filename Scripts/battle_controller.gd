@@ -48,32 +48,42 @@ func SoulSlam(SlamDirection : int):
 func _ready():
 	InitialiseBattle()
 	
-	#ReturnToMenu()
 	
-	#SpeechBubble.AskForInput = true
-	#SpeechBubble.setText("Waiting system")
-	#
-	#SpeechBubble.continueText(" You can continue text", 1)
-	#
-	#await SpeechBubble.receivedInput
-	#SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
-	#await SpeechBubble.receivedInput
-	#await Globals.Wait(1.5)
-	#SpeechBubble.changeMode(1)
-	#SpeechBubble.setText("Should be burning in hell.")
-	#
+	SpeechBubble.AskForInput = true
+	SpeechBubble.setText("Waiting system")
 	
-	#await Globals.Wait(3)
-	#SoulMode(1)
-	#await Globals.Wait(5)
-	#SoulSlam(2)
-	#await Globals.Wait(2)
-	#SoulSlam(1)
-	#await Globals.Wait(2)
-	#SoulSlam(0)
-	#await Globals.Wait(1)
-	#SoulMode(0)
-	#CombatBox(100, 900, 500, 1300)
+	SpeechBubble.continueText(" You can continue text", 1)
+	
+	await SpeechBubble.receivedInput
+	SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
+	await SpeechBubble.receivedInput
+	await Globals.Wait(1.5)
+	SpeechBubble.changeMode(1)
+	SpeechBubble.setText("Serious text as well")
+	
+	await SpeechBubble.receivedInput
+	await Globals.Wait(1)
+	SoulMode(1)
+	await Globals.Wait(1)
+	SoulSlam(2)
+	await Globals.Wait(0.5)
+	SoulSlam(0)
+	await Globals.Wait(0.5)
+	SoulSlam(2)
+	await Globals.Wait(1)
+	SoulMode(0)
+	CombatBox(Vector2(111, 720), Vector2(700, 1152))
+	
+	await Globals.Wait(2)
+	Bone(Vector2(700, 800), 50, 180, 100)
+	
+	await Globals.Wait(1)
+	
+	CombatBoxRotate(780)
+	
+	await Globals.Wait(5)
+	
+	ReturnToMenu()
 	
 func _process(_delta) -> void:
 	if MenuMode:
@@ -87,6 +97,7 @@ func InitialiseBattle():
 	$Name.text = str(Globals.PlayerName + "  LV19")
 	
 func ReturnToMenu():
+	CombatBoxRotate(720)
 	CombatBox(Vector2(111, 720), Vector2(1839, 1152))
 	MoveMenu(0)
 	MenuMode = true
