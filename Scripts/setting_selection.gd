@@ -8,8 +8,12 @@ const Default : Color = Color(1, 1, 1, 1)
 const Deactive : Color = Color(0.7, 0.7, 0.7, 1)
 
 @export var SideOption := false
+@export var DirMultiplier : float = 1
+@export var MultiplyShown : float = 1
+@export var MenuChange : Menu
 @export var ClampedMin : float
 @export var ClampedMax : float
+@export var PropertyObject : NodePath = "/root/Globals"
 @export var LinkedProperty : String
 @export var Inverted : bool
 
@@ -25,7 +29,7 @@ func _ready() -> void:
 func Update() -> void:
 	if !LinkedProperty.is_empty():
 		if SideOption:
-			text = str(Original_Text, " : ", Globals.get(LinkedProperty))
+			text = str(Original_Text, " : ", snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown)
 		else:
 			if Inverted:
 				ActiveState = !Globals.get(LinkedProperty)
@@ -40,19 +44,18 @@ func Update() -> void:
 		CurrentColor = Deactive
 	modulate = Color(CurrentColor, modulate.a)
 	
-func CheckIfClamp(Direction : int) -> bool:
-	if ClampedMin != 0 and ClampedMax != 0:
-		if Globals.get(LinkedProperty) <= ClampedMin and Direction <= 0:
+func CheckIfClamp(Direction : float) -> bool:
+	if ClampedMin != 0 or ClampedMax != 0:
+		if get_node(PropertyObject).get(LinkedProperty) <= ClampedMin and Direction <= 0:
 			return false
-		if Globals.get(LinkedProperty) >= ClampedMax and Direction >= 0:
+		if get_node(PropertyObject).get(LinkedProperty) >= ClampedMax and Direction >= 0:
 			return false
-		return true
-	else:
-		return true
+	return true
 
-func LowerIfNearEdge(Direction : int) -> int:
-	if Globals.get(LinkedProperty) + Direction < ClampedMin:
-		return Direction + 1
-	if Globals.get(LinkedProperty) + Direction > ClampedMax:
-		return Direction - 1
+func LowerIfNearEdge(Direction : float) -> float:
+	if ClampedMin != 0 or ClampedMax != 0:
+		if get_node(PropertyObject).get(LinkedProperty) + Direction < ClampedMin:
+			return -abs(ClampedMin - get_node(PropertyObject).get(LinkedProperty))
+		if get_node(PropertyObject).get(LinkedProperty) + Direction > ClampedMax:
+			return abs(ClampedMax - get_node(PropertyObject).get(LinkedProperty))
 	return Direction

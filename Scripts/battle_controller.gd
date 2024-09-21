@@ -4,13 +4,20 @@ var BonePath := load("res://Scenes/bone_v.tscn")
 @onready var CombatZone := $CombatZone
 @onready var Soul := %Player
 @onready var SpeechBubble := $SpeechBubble
+@onready var MenuButtons := $MenuButtons
+@onready var MenuCursor := $MenuCursor
 
-func CombatBox(TopLeftX : float, TopLeftY : float, BottomRightX : float, BottomRightY : float):
-	CombatZone.TopLeft = Vector2(TopLeftX, TopLeftY)
-	CombatZone.BottomRight = Vector2(BottomRightX, BottomRightY)
+var MenuMode := false
+var SelectIndex : int = 0
+
+const SoulOffset := Vector2(49, 64)
+
+func CombatBox(TopLeft : Vector2, BottomRight : Vector2):
+	CombatZone.TopLeft = TopLeft
+	CombatZone.BottomRight = BottomRight
 	
-func CombatBoxInstant(TopLeftX : float, TopLeftY : float, BottomRightX : float, BottomRightY : float):
-	CombatBox(TopLeftX, TopLeftY, BottomRightX, BottomRightY)
+func CombatBoxInstant(TopLeft : Vector2, BottomRight : Vector2):
+	CombatBox(TopLeft, BottomRight)
 	CombatZone.SetPos()
 
 func CombatBoxSpeed(NewSpeed : float):
@@ -21,10 +28,9 @@ func CombatBoxRotate(NewRotation : float):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, 2)
 	
 
-func Bone(NewX : float, NewY : float, NewHeight : float, NewDirection : float, NewSpeed : float) -> Object:
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float) -> Object:
 	var newBone = BonePath.instantiate()
-	newBone.position.x = NewX
-	newBone.position.y = NewY
+	newBone.position = StartPos
 	newBone.Height = NewHeight
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
@@ -42,18 +48,20 @@ func SoulSlam(SlamDirection : int):
 func _ready():
 	InitialiseBattle()
 	
-	SpeechBubble.AskForInput = true
-	SpeechBubble.setText("Waiting system")
+	#ReturnToMenu()
 	
-	SpeechBubble.continueText(" You can continue text", 1)
-	
-	await SpeechBubble.receivedInput
-	SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
-	await SpeechBubble.receivedInput
-	await Globals.Wait(1.5)
-	SpeechBubble.changeMode(1)
-	SpeechBubble.setText("Should be burning in hell.")
-	
+	#SpeechBubble.AskForInput = true
+	#SpeechBubble.setText("Waiting system")
+	#
+	#SpeechBubble.continueText(" You can continue text", 1)
+	#
+	#await SpeechBubble.receivedInput
+	#SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
+	#await SpeechBubble.receivedInput
+	#await Globals.Wait(1.5)
+	#SpeechBubble.changeMode(1)
+	#SpeechBubble.setText("Should be burning in hell.")
+	#
 	
 	#await Globals.Wait(3)
 	#SoulMode(1)
@@ -67,7 +75,31 @@ func _ready():
 	#SoulMode(0)
 	#CombatBox(100, 900, 500, 1300)
 	
+func _process(_delta) -> void:
+	if MenuMode:
+		if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("right"):
+			@warning_ignore("narrowing_conversion")
+			MoveMenu(Input.get_axis("left", "right"))
+	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxInstant(111, 720, 1839, 1152)
+	CombatBoxInstant(Vector2(111, 720), Vector2(1839, 1152))
 	$Name.text = str(Globals.PlayerName + "  LV19")
+	
+func ReturnToMenu():
+	CombatBox(Vector2(111, 720), Vector2(1839, 1152))
+	MoveMenu(0)
+	MenuMode = true
+
+func MoveMenu(Direction : int) -> void:
+	SelectIndex += Direction
+	MenuCursor.play()
+	if SelectIndex > 3:
+		SelectIndex = 0
+	elif SelectIndex < 0:
+		SelectIndex = 3
+	Soul.position = MenuButtons.get_child(SelectIndex).position + SoulOffset
+	for menu in MenuButtons.get_children():
+		menu.play("default")
+	MenuButtons.get_child(SelectIndex).play("active")
+	

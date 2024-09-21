@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=27 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://ck3eof4kjy527" path="res://Resources/Sprites/UI/ActActive.png" id="14_yhw15"]
 [ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/Act.png" id="15_e83yw"]
 [ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
+[ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -176,6 +177,7 @@ z_index = 6
 position = Vector2(1000, 1000)
 
 [node name="SpeechBubble" type="Sprite2D" parent="Battle Controller"]
+visible = false
 texture_filter = 1
 position = Vector2(1152, 321)
 scale = Vector2(3, 3)
@@ -207,28 +209,30 @@ stream = ExtResource("7_rkth3")
 [node name="ContinueDelay" type="Timer" parent="Battle Controller/SpeechBubble"]
 one_shot = true
 
-[node name="Fight" type="AnimatedSprite2D" parent="Battle Controller"]
+[node name="MenuButtons" type="Node" parent="Battle Controller"]
+
+[node name="Fight" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
 texture_filter = 1
 position = Vector2(96, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_c56tm")
 centered = false
 
-[node name="Act" type="AnimatedSprite2D" parent="Battle Controller"]
+[node name="Act" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
 texture_filter = 1
 position = Vector2(552, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_qixrn")
 centered = false
 
-[node name="Item" type="AnimatedSprite2D" parent="Battle Controller"]
+[node name="Item" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
 texture_filter = 1
 position = Vector2(1032, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_uamvm")
 centered = false
 
-[node name="Mercy" type="AnimatedSprite2D" parent="Battle Controller"]
+[node name="Mercy" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
 texture_filter = 1
 position = Vector2(1488, 1296)
 scale = Vector2(3, 3)
@@ -250,6 +254,10 @@ pivot_offset = Vector2(0, 21)
 text = "Chara LV19"
 label_settings = SubResource("LabelSettings_ndomo")
 uppercase = true
+
+[node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller"]
+stream = ExtResource("17_xl1g0")
+bus = &"SoundEffects"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

@@ -67,13 +67,14 @@ text = "Start"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
-[node name="Settings" type="Label" parent="Menu/MenuContainer/FirstMenu"]
+[node name="Settings" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 68.0
 offset_right = 600.0
 offset_bottom = 132.0
 text = "Settings"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
+MenuChange = NodePath("../../SettingsMenu")
 
 [node name="Credits" type="Label" parent="Menu/MenuContainer/FirstMenu"]
 offset_top = 136.0
@@ -95,33 +96,31 @@ script = ExtResource("3_rhj55")
 visible = false
 script = ExtResource("2_hl0mm")
 
-[node name="NoMusic" type="Label" parent="Menu/MenuContainer/SettingsMenu"]
-modulate = Color(1, 1, 0, 1)
-offset_right = 212.0
+[node name="Video" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
+offset_right = 140.0
 offset_bottom = 64.0
-text = "No Music"
+text = "Video"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
-LinkedProperty = "MusicEnabled"
-Inverted = true
+MenuChange = NodePath("../../VideoMenu")
 
-[node name="CoolAnimations" type="Label" parent="Menu/MenuContainer/SettingsMenu"]
-modulate = Color(1, 1, 0, 1)
+[node name="Audio" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 68.0
-offset_right = 408.0
+offset_right = 140.0
 offset_bottom = 132.0
-text = "Cool Animations"
+text = "Audio"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
-LinkedProperty = "CoolAnimations"
+MenuChange = NodePath("../../AudioMenu")
 
-[node name="DifficultyLabel" type="Label" parent="Menu/MenuContainer/SettingsMenu"]
+[node name="DifficultyLabel" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 136.0
 offset_right = 516.0
 offset_bottom = 200.0
 text = "Difficulty Settings"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
+MenuChange = NodePath("../../DifficultyMenu")
 
 [node name="DifficultyMenu" type="Node2D" parent="Menu/MenuContainer"]
 visible = false
@@ -154,17 +153,79 @@ ClampedMin = 1.0
 ClampedMax = 100.0
 LinkedProperty = "MaxHP"
 
+[node name="VideoMenu" type="Node2D" parent="Menu/MenuContainer"]
+visible = false
+script = ExtResource("2_hl0mm")
+
+[node name="CoolAnimations" type="Label" parent="Menu/MenuContainer/VideoMenu"]
+modulate = Color(1, 1, 0, 1)
+offset_right = 408.0
+offset_bottom = 64.0
+text = "Cool Animations"
+label_settings = ExtResource("1_w1fbp")
+script = ExtResource("3_rhj55")
+LinkedProperty = "CoolAnimations"
+
+[node name="AudioMenu" type="Node2D" parent="Menu/MenuContainer"]
+visible = false
+script = ExtResource("2_hl0mm")
+
+[node name="MasterVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
+modulate = Color(1, 1, 0, 1)
+offset_right = 356.0
+offset_bottom = 64.0
+text = "Master Volume"
+label_settings = ExtResource("1_w1fbp")
+script = ExtResource("3_rhj55")
+SideOption = true
+DirMultiplier = 0.01
+MultiplyShown = 100.0
+ClampedMax = 1.0
+LinkedProperty = "MasterBus"
+
+[node name="SoundVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
+modulate = Color(1, 1, 0, 1)
+offset_top = 68.0
+offset_right = 328.0
+offset_bottom = 132.0
+text = "Sfx Volume"
+label_settings = ExtResource("1_w1fbp")
+script = ExtResource("3_rhj55")
+SideOption = true
+DirMultiplier = 0.01
+MultiplyShown = 100.0
+ClampedMax = 1.0
+LinkedProperty = "SfxBus"
+
+[node name="MusicVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
+modulate = Color(1, 1, 0, 1)
+offset_top = 136.0
+offset_right = 328.0
+offset_bottom = 200.0
+text = "Music Volume"
+label_settings = ExtResource("1_w1fbp")
+script = ExtResource("3_rhj55")
+SideOption = true
+DirMultiplier = 0.01
+MultiplyShown = 100.0
+ClampedMax = 1.0
+LinkedProperty = "MusicBus"
+
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")
+bus = &"SoundEffects"
 
 [node name="MenuSelect" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_vws4m")
+bus = &"SoundEffects"
 
 [node name="Flash" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("5_16xtt")
+bus = &"SoundEffects"
 
 [node name="LogoAppear" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("7_x23ft")
+bus = &"SoundEffects"
 
 [node name="SoulSelector" type="Node2D" parent="."]
 unique_name_in_owner = true

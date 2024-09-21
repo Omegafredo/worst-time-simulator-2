@@ -11,7 +11,7 @@ var CurrentLabel : Object:
 var Menus : Array
 var SideOptions : Array
 var SettingsSelections : Array
-var MenuHistory : Array = ["FirstMenu"]
+var MenuHistory : Array
 var MenuLabelHistory : Array
 var IndexHistory : Array
 @onready var MenuCursorSound : Object = $MenuCursor
@@ -44,6 +44,8 @@ func _ready() -> void:
 	
 	# Sets the first menu as the Current Menu
 	CurrentMenu = Menus[0]
+	
+	MenuHistory.append(CurrentMenu)
 	
 	
 	if Globals.ShowIntro:
@@ -124,15 +126,13 @@ func CancelAction() -> void:
 func ConfirmAction() -> void:
 	if CurrentLabel.SideOption == false and CurrentLabel.DeactiveState == false:
 		match CurrentLabel.get_name():
-			"Settings":
-				ChangeMenu("SettingsMenu")
-			"DifficultyLabel":
-				ChangeMenu("DifficultyMenu")
 			"Start":
 				InitiateBattle()
 			_:
 				if !CurrentLabel.LinkedProperty.is_empty():
-					Globals.set(CurrentLabel.LinkedProperty, !Globals.get(CurrentLabel.LinkedProperty))
+					get_node(CurrentLabel.PropertyObject).set(CurrentLabel.LinkedProperty, !get_node(CurrentLabel.PropertyObject).get(CurrentLabel.LinkedProperty))
+				elif CurrentLabel.MenuChange != null:
+					ChangeMenu(CurrentLabel.MenuChange.name)
 		
 		UpdateLabels()
 		MenuSelectSound.play()
@@ -163,7 +163,7 @@ func ChangeMenu(MenuTo : String) -> void:
 	
 func ReturnMenu() -> void:
 	NewMenuOut()
-	CurrentMenu = MainContainer.get_node(MenuHistory[-2])
+	CurrentMenu = MenuHistory[-2]
 	OldMenuIn()
 	#for menu in Menus:
 		#menu.visible = false
@@ -173,8 +173,8 @@ func ReturnMenu() -> void:
 	
 func SideOption(Direction : int) -> void:
 	if CurrentLabel in SideOptions:
-		if !CurrentLabel.LinkedProperty.is_empty() and CurrentLabel.CheckIfClamp(Direction):
-			Globals.set(CurrentLabel.LinkedProperty, Globals.get(CurrentLabel.LinkedProperty) + CurrentLabel.LowerIfNearEdge(Direction))
+		if !CurrentLabel.LinkedProperty.is_empty() and CurrentLabel.CheckIfClamp(Direction * CurrentLabel.DirMultiplier) and !CurrentLabel.DeactiveState:
+			get_node(CurrentLabel.PropertyObject).set(CurrentLabel.LinkedProperty, get_node(CurrentLabel.PropertyObject).get(CurrentLabel.LinkedProperty) + CurrentLabel.LowerIfNearEdge(Direction * CurrentLabel.DirMultiplier))
 			MenuSelectSound.play()
 		
 		UpdateLabels()
@@ -275,7 +275,7 @@ func MenuSwayStop() -> void:
 	MenuSwayTween.kill()
 	
 func AppendHistory() -> void:
-	MenuHistory.append(CurrentMenu.to_string())
+	MenuHistory.append(CurrentMenu)
 	IndexHistory.append(MoveIndex)
 
 func PopHistory() -> void:
@@ -355,23 +355,24 @@ func NewMenuIn() -> void:
 	
 func NewMenuOut() -> void:
 	var Total_Gap : float = 0
-	var i : int
+	var i : int = 0
 	if Globals.CoolAnimations:
 		for child in CurrentMenu.get_children():
 			if child != MenuLabelHistory[-1]:
 				InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		for Option in CurrentMenu.get_children():
+		for Option in MenuHistory[-2].get_children():
+			print(MenuLabelHistory[-1], " ", IndexHistory[-1], " ", i)
+			if i == IndexHistory[-1]:
+				InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 			Total_Gap += Option.size.y + 4
 			i += 1
-			if i <= IndexHistory[-1]:
-				InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 	else:
 		for child in CurrentMenu.get_children():
 			if child != MenuLabelHistory[-1]:
 				child.modulate.a = 0
 		for Option in CurrentMenu.get_children():
+			if i == IndexHistory[-1]:
+				MenuLabelHistory[-1].position.y = Total_Gap
 			Total_Gap += Option.size.y + 4
 			i += 1
-			if i <= IndexHistory[-1]:
-				MenuLabelHistory[-1].position.y = Total_Gap
