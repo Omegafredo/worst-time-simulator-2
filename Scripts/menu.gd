@@ -154,76 +154,17 @@ func UpdateLabels() -> void:
 	
 
 func ChangeMenu(MenuTo : String) -> void:
-	if Globals.CoolAnimations:
-		for child in CurrentMenu.get_children():
-			if child != CurrentLabel:
-				InterpolateObject(child, "position:x", -500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		InterpolateObject(CurrentLabel, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
-	else:
-		CurrentLabel.position.y = -75
-		for child in CurrentMenu.get_children():
-			if child != CurrentLabel:
-				child.modulate.a = 0
-	MenuLabelHistory.append(CurrentLabel)
+	OldMenuOut()
 	CurrentMenu = MainContainer.get_node(MenuTo)
 	CurrentMenu.visible = true
-	if Globals.CoolAnimations:
-		for child in CurrentMenu.get_children():
-			child.modulate.a = 0
-			child.position.x = 300
-			InterpolateObject(child, "position:x", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-			InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		if MenuLabelHistory.size() >= 2:
-			InterpolateObject(MenuLabelHistory[-2], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	else:
-		for child in CurrentMenu.get_children():
-			child.modulate.a = 1
-			child.position.x = 0
-		if MenuLabelHistory.size() >= 2:
-			MenuLabelHistory[-2].modulate.a = 0
+	NewMenuIn()
 	AppendHistory()
 	MoveSoul(0)
 	
 func ReturnMenu() -> void:
-	var Total_Gap : float = 0
-	var i : int
-	if Globals.CoolAnimations:
-		for child in CurrentMenu.get_children():
-			if child != MenuLabelHistory[-1]:
-				InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		for Option in CurrentMenu.get_children():
-			Total_Gap += Option.size.y + 4
-			i += 1
-			if i <= IndexHistory[-1]:
-				InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
-	else:
-		for child in CurrentMenu.get_children():
-			if child != MenuLabelHistory[-1]:
-				child.modulate.a = 0
-		for Option in CurrentMenu.get_children():
-			Total_Gap += Option.size.y + 4
-			i += 1
-			if i <= IndexHistory[-1]:
-				MenuLabelHistory[-1].position.y = Total_Gap
+	NewMenuOut()
 	CurrentMenu = MainContainer.get_node(MenuHistory[-2])
-	if Globals.CoolAnimations:
-		for child in CurrentMenu.get_children():
-			if child != MenuLabelHistory[-1]:
-				child.modulate.a = 0
-				child.position.x = -300
-				InterpolateObject(child, "position:x", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-				InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		if MenuLabelHistory.size() >= 2:
-			InterpolateObject(MenuLabelHistory[-2], "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	else:
-		for child in CurrentMenu.get_children():
-			if child != MenuLabelHistory[-1]:
-				child.modulate.a = 1
-				child.position.x = 0
-		if MenuLabelHistory.size() >= 2:
-			MenuLabelHistory[-2].modulate.a = 1
+	OldMenuIn()
 	#for menu in Menus:
 		#menu.visible = false
 	#CurrentMenu.visible = true
@@ -363,3 +304,74 @@ func Flash(Toggle : bool) -> void:
 		BottomGradient.show()
 		BottomParticles.show()
 	await Globals.Wait(0.0766)
+	
+func OldMenuOut() -> void:
+	if Globals.CoolAnimations:
+		for child in CurrentMenu.get_children():
+			if child != CurrentLabel:
+				InterpolateObject(child, "position:x", -500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(CurrentLabel, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+		if MenuLabelHistory.size() >= 1:
+			InterpolateObject(MenuLabelHistory[-1], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	else:
+		CurrentLabel.position.y = -75
+		for child in CurrentMenu.get_children():
+			if child != CurrentLabel:
+				child.modulate.a = 0
+		if MenuLabelHistory.size() >= 2:
+			MenuLabelHistory[-1].modulate.a = 0
+	MenuLabelHistory.append(CurrentLabel)
+
+func OldMenuIn() -> void:
+	if Globals.CoolAnimations:
+		for child in CurrentMenu.get_children():
+			if child != MenuLabelHistory[-1]:
+				child.modulate.a = 0
+				child.position.x = -300
+				InterpolateObject(child, "position:x", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+				InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		if MenuLabelHistory.size() >= 2:
+			InterpolateObject(MenuLabelHistory[-2], "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	else:
+		for child in CurrentMenu.get_children():
+			if child != MenuLabelHistory[-1]:
+				child.modulate.a = 1
+				child.position.x = 0
+		if MenuLabelHistory.size() >= 2:
+			MenuLabelHistory[-2].modulate.a = 1
+
+func NewMenuIn() -> void:
+	if Globals.CoolAnimations:
+		for child in CurrentMenu.get_children():
+			child.modulate.a = 0
+			child.position.x = 300
+			InterpolateObject(child, "position:x", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	else:
+		for child in CurrentMenu.get_children():
+			child.modulate.a = 1
+			child.position.x = 0
+	
+func NewMenuOut() -> void:
+	var Total_Gap : float = 0
+	var i : int
+	if Globals.CoolAnimations:
+		for child in CurrentMenu.get_children():
+			if child != MenuLabelHistory[-1]:
+				InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		for Option in CurrentMenu.get_children():
+			Total_Gap += Option.size.y + 4
+			i += 1
+			if i <= IndexHistory[-1]:
+				InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+	else:
+		for child in CurrentMenu.get_children():
+			if child != MenuLabelHistory[-1]:
+				child.modulate.a = 0
+		for Option in CurrentMenu.get_children():
+			Total_Gap += Option.size.y + 4
+			i += 1
+			if i <= IndexHistory[-1]:
+				MenuLabelHistory[-1].position.y = Total_Gap
