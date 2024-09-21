@@ -36,6 +36,7 @@ func _process(_delta: float) -> void:
 		Skipping = true
 		sendSkip.emit()
 func setText(text : String) -> void:
+	Skipping = false
 	
 	TextLabel.text = text
 	TextLabel.visible_characters = 0
@@ -68,13 +69,12 @@ func continueText(addedText : String, Delay : float = 0.0) -> void:
 	await textDone
 	if !Skipping:
 		await Globals.Wait(Delay) or self.sendSkip
-	else:
-		Skipping = false
 	Waiting = false
 	# append_text() doesn't work for some reason
 	TextLabel.text += addedText
 	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 		displayChar()
+	Skipping = false
 		
 func changeMode(modeChange : int) -> void:
 	CurrentMode = modeChange

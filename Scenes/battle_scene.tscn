@@ -198,7 +198,6 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("6_piuie")
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
-text = "Should be burning in hell"
 scroll_active = false
 shortcut_keys_enabled = false
 
@@ -238,12 +237,16 @@ centered = false
 
 [node name="Name" type="Label" parent="Battle Controller"]
 texture_filter = 1
-offset_left = 96.0
-offset_top = 1206.0
-offset_right = 320.0
-offset_bottom = 1246.0
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.816
+anchor_right = 0.05
+anchor_bottom = 0.816
+offset_top = 30.96
+offset_right = 224.0
+offset_bottom = 70.96
 scale = Vector2(2.5, 2.5)
-pivot_offset = Vector2(0, 18)
+pivot_offset = Vector2(0, 21)
 text = "Chara LV19"
 label_settings = SubResource("LabelSettings_ndomo")
 uppercase = true
