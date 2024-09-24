@@ -35,13 +35,21 @@ func _process(delta: float) -> void:
 		# Get the input direction and handle the movement/deceleration.
 		var h_direction := Input.get_axis("left", "right")
 		var v_direction := Input.get_axis("up", "down")
-			
-		var CombatBoxRotation = CombatBox.rotation
-		CombatBox.rotation = 0
 		
-		position = position.clamp(CombatBox.CboxTopLeft.global_position.rotated(CombatBox.CboxTopLeft.global_rotation) + CombatBox.CornerSize * 3, CombatBox.CboxBottomRight.global_position.rotated(CombatBox.CboxBottomRight.global_rotation))
 		
-		CombatBox.rotation = CombatBoxRotation
+		# Aligns the values to the rotaton of the combatbox before clamping
+		var heart_local_position = CombatBox.to_local(global_position)
+		
+		heart_local_position = heart_local_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position - CombatBox.CornerSize * 1.5)
+		
+		global_position = CombatBox.to_global(heart_local_position)
+		
+		#var local_heart_position = CombatBox.transform.basis_xform_inv(global_position)
+		#local_heart_position = local_heart_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position - CombatBox.CornerSize * 1.5)
+		#
+		#position = CombatBox.global_transform.basis_xform(local_heart_position)
+		
+		#position = position.clamp(CombatBox.CboxTopLeft.global_position + CombatBox.CornerSize * 3, CombatBox.CboxBottomRight.global_position)
 		
 		match Soul_Type:
 			SOUL_RED:
