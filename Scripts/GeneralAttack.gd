@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name Attack
 
 var Masked : bool = false:
@@ -10,16 +10,13 @@ var Masked : bool = false:
 		Masked = d
 		print(MaskedNode)
 		print(AttacksNode)
-var MaskedNode
-var AttacksNode
+@onready var MaskedNode := $"/root/Main Node/Battle Controller/CombatZone/Mask/Attacks"
+@onready var AttacksNode := $"/root/Main Node/Battle Controller/Attacks"
 
 
-## Get reparent to work
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	MaskedNode = $"/root/Main Node/Battle Controller/CombatZone/Mask/Attacks"
-	AttacksNode = $"/root/Main Node/Battle Controller/Attacks"
 	pass # Replace with function body.
 
 

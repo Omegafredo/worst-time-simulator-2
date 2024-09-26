@@ -19,11 +19,12 @@ region = Rect2(0, 16, 0, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqr6a"]
 size = Vector2(10, 24)
 
-[node name="AttackNode" type="Node"]
+[node name="AttackNode" type="Node2D"]
 script = ExtResource("1_blx3e")
 
 [node name="BoneV" type="Node2D" parent="."]
 texture_filter = 1
+scale = Vector2(3, 3)
 script = ExtResource("1_qkg15")
 
 [node name="BoneTop" type="Sprite2D" parent="BoneV"]

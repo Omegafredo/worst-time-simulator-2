@@ -176,6 +176,7 @@ script = ExtResource("2_taess")
 position = Vector2(856, 1103)
 
 [node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZone"]
+clip_children = 1
 texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 

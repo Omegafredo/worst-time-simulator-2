@@ -31,14 +31,14 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
 	
 
-func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float) -> Object:
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Object:
 	var newBone = BonePath.instantiate().get_child(0)
 	newBone.position = StartPos
 	newBone.Height = NewHeight
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
-	add_child(newBone)
-	newBone.get_parent().Masked = true
+	add_child(newBone.get_parent())
+	newBone.get_parent().Masked = MaskedState
 	return newBone
 	
 func SoulMode(NewSoulType : int):
@@ -76,10 +76,11 @@ func _ready():
 	#SoulSlam(2)
 	#await Globals.Wait(1)
 	#SoulMode(0)
-	CombatBox(Rect2(111, 720, 700, 1152))
+	CombatBox(Rect2(400, 720, 900, 1152))
 	
 	await Globals.Wait(2)
-	Bone(Vector2(700, 800), 50, 180, 100)
+	Bone(Vector2(1100, 750), 30, 180, 150)
+	Bone(Vector2(1100, 950), 30, 180, 150, false)
 	##
 	#await Globals.Wait(1)
 	##
@@ -100,6 +101,9 @@ func InitialiseBattle():
 	request_ready()
 	CombatBoxInstant(Rect2(111, 720, 1839, 1152))
 	$Name.text = str(Globals.PlayerName + "  LV19")
+	
+func InitializeAttack():
+	pass
 	
 func ReturnToMenu():
 	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)

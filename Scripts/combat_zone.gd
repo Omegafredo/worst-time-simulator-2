@@ -117,6 +117,7 @@ func _process(delta: float) -> void:
 	
 	self.global_position.x = move_toward(global_position.x, CenterPos.x, scale.x * Speed * delta)
 	self.global_position.y = move_toward(global_position.y, CenterPos.y, scale.x * Speed * delta)
+	
 
 	MoveObject(CboxTopLeft, TopLeftOffset, Speed * delta)
 	MoveObject(CboxTopRight, TopRightOffset, Speed * delta)
@@ -129,6 +130,8 @@ func _process(delta: float) -> void:
 	CboxBottomMiddle.scale.x = move_toward(CboxBottomMiddle.scale.x, HorizontalScale, (Speed * delta) / 2.5)
 	MoveObject(CboxLeftMiddle, LeftMiddleOffset, Speed * delta)
 	CboxLeftMiddle.scale.y = move_toward(CboxLeftMiddle.scale.y, VerticalScale, (Speed * delta) / 2.5)
+	if CboxLeftMiddle.position < LeftMiddleOffset and RightMiddleOffset < CboxRightMiddle.position:
+		MoveObject(CboxLeftMiddle, LeftMiddleOffset, Speed * delta)
 	MoveObject(CboxRightMiddle, RightMiddleOffset, Speed * delta)
 	CboxRightMiddle.scale.y = move_toward(CboxRightMiddle.scale.y, VerticalScale, (Speed * delta) / 2.5)
 
