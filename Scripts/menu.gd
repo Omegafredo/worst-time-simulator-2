@@ -69,9 +69,10 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_released("left") or Input.is_action_just_released("right") or (Input.is_action_pressed("left") and Input.is_action_pressed("right")):
 			held_time = 0
 		
-		if Input.is_action_just_pressed("up") or Input.is_action_just_pressed("down"):
-			@warning_ignore("narrowing_conversion")
-			MoveAction(Input.get_axis("up", "down"))
+		if Input.is_action_just_pressed("up"):
+			MoveAction(-1)
+		elif Input.is_action_just_pressed("down"):
+			MoveAction(1)
 		if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("right"):
 			@warning_ignore("narrowing_conversion")
 			SideOption(Input.get_axis("left", "right"))

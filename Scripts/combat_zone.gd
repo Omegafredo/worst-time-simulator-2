@@ -2,6 +2,9 @@ extends Node2D
 
 var Speed: float = 200.0
 
+signal DoneMoving
+var Moving := false
+
 var BoxSize: Rect2
 
 var Width: float:
@@ -98,7 +101,7 @@ var VerticalHitboxScale: float:
 	get():
 		return Height / 3
 
-var CornerSize := Vector2(6, 6)
+const CornerSize := Vector2(6, 6)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -132,6 +135,13 @@ func _process(delta: float) -> void:
 	LeftHitBox.shape.size.y = move_toward(LeftHitBox.shape.size.y, VerticalHitboxScale, (Speed * delta) * 2)
 	MoveObject(RightHitBoxBody, RightHitboxOffset, Speed * delta)
 	RightHitBox.shape.size.y = move_toward(RightHitBox.shape.size.y, VerticalHitboxScale, (Speed * delta) * 2)
+	
+	
+	# Check if the box has reached it's destination
+	if CboxTopLeft.position == TopLeftOffset and CboxBottomRight.position == BottomRightOffset and Moving:
+		Moving = false
+		DoneMoving.emit()
+		print(2)
 
 
 func SetPos() -> void:
