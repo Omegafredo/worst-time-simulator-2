@@ -252,10 +252,10 @@ bus = &"SoundEffects"
 
 [node name="BoxText" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
 visible = true
-position = Vector2(150, 750)
+position = Vector2(150, 765)
 scale = Vector2(1, 1)
 CurrentMode = 2
-CharacterInterval = 0.02
+CharacterInterval = 0.035
 AskForInput = false
 
 [node name="RichText" type="RichTextLabel" parent="Battle Controller/BoxText"]
@@ -264,14 +264,15 @@ anchor_left = 0.058
 anchor_top = 0.5
 anchor_right = 0.058
 anchor_bottom = 0.5
-offset_top = 15.0
 offset_right = 1650.0
-offset_bottom = 367.0
+offset_bottom = 335.0
 theme_override_fonts/normal_font = ExtResource("19_suyt8")
 theme_override_font_sizes/normal_font_size = 96
 bbcode_enabled = true
+text = "* You feel like you're going to[indent]have the worst time of your
+life"
 scroll_active = false
-tab_size = 5
+tab_size = 6
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

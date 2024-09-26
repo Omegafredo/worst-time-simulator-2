@@ -1,7 +1,7 @@
 [gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://yf5bvn4e6wey"]
 
-[ext_resource type="FontFile" uid="uid://cwt2tg2yamfvk" path="res://Resources/Fonts/8bitoperator_jve.ttf" id="1_x6oqx"]
+[ext_resource type="FontFile" uid="uid://difp5n5tpw25b" path="res://Resources/Fonts/determinationmonoweb-webfont.ttf" id="1_dssoh"]
 
 [resource]
-font = ExtResource("1_x6oqx")
+font = ExtResource("1_dssoh")
 font_size = 64

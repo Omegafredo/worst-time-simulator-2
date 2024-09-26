@@ -1,7 +1,8 @@
 [gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://cenrcotcahvop"]
 
-[ext_resource type="FontFile" uid="uid://cwt2tg2yamfvk" path="res://Resources/Fonts/8bitoperator_jve.ttf" id="1_tf3l0"]
+[ext_resource type="FontFile" uid="uid://hgekl6svwifd" path="res://Resources/Fonts/determinationsansweb-webfont.ttf" id="1_eklpl"]
 
 [resource]
-base_font = ExtResource("1_tf3l0")
-spacing_glyph = 10
+base_font = ExtResource("1_eklpl")
+spacing_glyph = 6
+spacing_space = 25
