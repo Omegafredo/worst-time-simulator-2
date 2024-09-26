@@ -98,7 +98,7 @@ func changeMode(modeChange : int) -> void:
 			TextLabel.add_theme_font_size_override("normal_font_size", 16)
 		modes.TextBox:
 			TextLabel.add_theme_font_override("normal_font", boxText)
-			TextLabel.add_theme_font_size_override("normal_font_size", 104)
+			TextLabel.add_theme_font_size_override("normal_font_size", 96)
 	
 	
 
