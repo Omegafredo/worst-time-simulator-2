@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://djr8tudb1kart"]
+[gd_scene load_steps=8 format=3 uid="uid://djr8tudb1kart"]
 
+[ext_resource type="Script" path="res://Scripts/GeneralAttack.gd" id="1_blx3e"]
 [ext_resource type="Script" path="res://Scripts/bone_v.gd" id="1_qkg15"]
 [ext_resource type="Texture2D" uid="uid://bvd5emw4mqfox" path="res://Resources/Sprites/BoneV.png" id="2_r4hna"]
 
@@ -18,27 +19,29 @@ region = Rect2(0, 16, 0, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqr6a"]
 size = Vector2(10, 24)
 
-[node name="BoneV" type="Node2D"]
+[node name="AttackNode" type="Node"]
+script = ExtResource("1_blx3e")
+
+[node name="BoneV" type="Node2D" parent="."]
 texture_filter = 1
-scale = Vector2(3, 3)
 script = ExtResource("1_qkg15")
 
-[node name="BoneTop" type="Sprite2D" parent="."]
+[node name="BoneTop" type="Sprite2D" parent="BoneV"]
 texture = SubResource("AtlasTexture_diw3u")
 centered = false
 
-[node name="BoneMiddle" type="Sprite2D" parent="."]
+[node name="BoneMiddle" type="Sprite2D" parent="BoneV"]
 position = Vector2(0, 8)
 texture = SubResource("AtlasTexture_46aou")
 centered = false
 
-[node name="BoneBottom" type="Sprite2D" parent="."]
+[node name="BoneBottom" type="Sprite2D" parent="BoneV"]
 position = Vector2(0, 16)
 texture = SubResource("AtlasTexture_mwqxj")
 centered = false
 
-[node name="BoneHitreg" type="Area2D" parent="."]
+[node name="BoneHitreg" type="Area2D" parent="BoneV"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BoneHitreg"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoneV/BoneHitreg"]
 position = Vector2(5, 12)
 shape = SubResource("RectangleShape2D_qqr6a")

@@ -29,7 +29,7 @@ func _ready() -> void:
 func Update() -> void:
 	if !LinkedProperty.is_empty():
 		if SideOption:
-			text = str(Original_Text, " : ", snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown)
+			text = str(Original_Text, ": ", snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown)
 		else:
 			if Inverted:
 				ActiveState = !Globals.get(LinkedProperty)

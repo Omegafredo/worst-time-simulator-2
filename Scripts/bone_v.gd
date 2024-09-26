@@ -12,6 +12,7 @@ var Direction : float
 @onready var BoneBottom := $BoneBottom
 @onready var BoneReg := $BoneHitreg
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var BoneHitbox := CollisionShape2D.new()
@@ -31,5 +32,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	
 	position = position + Vector2(Speed * delta, 0).rotated(deg_to_rad(Direction))
+	
 	
 	pass

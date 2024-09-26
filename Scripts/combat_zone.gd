@@ -13,6 +13,8 @@ var Width: float:
 var Height: float:
 	get():
 		return BoxSize.size.y
+		
+@onready var Mask := $Mask
 
 @onready var CboxTopLeft := $CboxTopLeft
 @onready var CboxTopMiddle := $CboxTopMiddle
@@ -110,6 +112,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	Mask.position = CboxTopLeft.position
+	Mask.texture.size = CboxBottomRight.position + abs(CboxTopLeft.position) + CornerSize 
+	
 	self.global_position.x = move_toward(global_position.x, CenterPos.x, scale.x * Speed * delta)
 	self.global_position.y = move_toward(global_position.y, CenterPos.y, scale.x * Speed * delta)
 
@@ -141,7 +146,6 @@ func _process(delta: float) -> void:
 	if CboxTopLeft.position == TopLeftOffset and CboxBottomRight.position == BottomRightOffset and Moving:
 		Moving = false
 		DoneMoving.emit()
-		print(2)
 
 
 func SetPos() -> void:

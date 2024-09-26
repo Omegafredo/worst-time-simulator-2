@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=29 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -18,6 +18,9 @@
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
+size = Vector2(17, 17)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -172,6 +175,14 @@ script = ExtResource("2_taess")
 [node name="CombatZone" parent="Battle Controller" instance=ExtResource("3_agmmr")]
 position = Vector2(856, 1103)
 
+[node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZone"]
+texture = SubResource("PlaceholderTexture2D_4i75k")
+centered = false
+
+[node name="Attacks" type="Node2D" parent="Battle Controller/CombatZone/Mask"]
+position = Vector2(-285.333, -367.667)
+scale = Vector2(0.333333, 0.333333)
+
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
 position = Vector2(960, 672)
 scale = Vector2(6, 6)
@@ -252,7 +263,7 @@ bus = &"SoundEffects"
 
 [node name="BoxText" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
 visible = true
-position = Vector2(150, 765)
+position = Vector2(150, 770)
 scale = Vector2(1, 1)
 CurrentMode = 2
 CharacterInterval = 0.035
@@ -269,10 +280,13 @@ offset_bottom = 335.0
 theme_override_fonts/normal_font = ExtResource("19_suyt8")
 theme_override_font_sizes/normal_font_size = 96
 bbcode_enabled = true
-text = "* You feel like you're going to[indent]have the worst time of your
-life"
 scroll_active = false
 tab_size = 6
+
+[node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
+remote_path = NodePath("../CombatZone/Mask/Attacks")
+
+[node name="Attacks" type="Node" parent="Battle Controller"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

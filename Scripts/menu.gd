@@ -363,7 +363,6 @@ func NewMenuOut() -> void:
 				InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		for Option in MenuHistory[-2].get_children():
-			print(MenuLabelHistory[-1], " ", IndexHistory[-1], " ", i)
 			if i == IndexHistory[-1]:
 				InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 			Total_Gap += Option.size.y + 4

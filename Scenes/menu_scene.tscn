@@ -62,32 +62,32 @@ script = ExtResource("2_hl0mm")
 
 [node name="Start" type="Label" parent="Menu/MenuContainer/FirstMenu"]
 offset_right = 600.0
-offset_bottom = 64.0
+offset_bottom = 66.0
 text = "Start"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
 [node name="Settings" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
-offset_top = 68.0
+offset_top = 70.0
 offset_right = 600.0
-offset_bottom = 132.0
+offset_bottom = 136.0
 text = "Settings"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 MenuChange = NodePath("../../SettingsMenu")
 
 [node name="Credits" type="Label" parent="Menu/MenuContainer/FirstMenu"]
-offset_top = 136.0
+offset_top = 140.0
 offset_right = 600.0
-offset_bottom = 200.0
+offset_bottom = 206.0
 text = "Credits"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
 [node name="Custom Attacks" type="Label" parent="Menu/MenuContainer/FirstMenu"]
-offset_top = 204.0
+offset_top = 210.0
 offset_right = 600.0
-offset_bottom = 268.0
+offset_bottom = 276.0
 text = "Custom Attacks"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -97,26 +97,26 @@ visible = false
 script = ExtResource("2_hl0mm")
 
 [node name="Video" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
-offset_right = 140.0
-offset_bottom = 64.0
+offset_right = 160.0
+offset_bottom = 66.0
 text = "Video"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 MenuChange = NodePath("../../VideoMenu")
 
 [node name="Audio" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
-offset_top = 68.0
-offset_right = 140.0
-offset_bottom = 132.0
+offset_top = 70.0
+offset_right = 160.0
+offset_bottom = 136.0
 text = "Audio"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 MenuChange = NodePath("../../AudioMenu")
 
 [node name="DifficultyLabel" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
-offset_top = 136.0
-offset_right = 516.0
-offset_bottom = 200.0
+offset_top = 140.0
+offset_right = 608.0
+offset_bottom = 206.0
 text = "Difficulty Settings"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -127,24 +127,24 @@ visible = false
 script = ExtResource("2_hl0mm")
 
 [node name="HardMode" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
-offset_right = 240.0
-offset_bottom = 64.0
+offset_right = 288.0
+offset_bottom = 66.0
 text = "Hard Mode"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
 [node name="NoDeath" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
-offset_top = 68.0
-offset_right = 208.0
-offset_bottom = 132.0
+offset_top = 70.0
+offset_right = 256.0
+offset_bottom = 136.0
 text = "No Death"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
 [node name="MaxHP" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
-offset_top = 136.0
+offset_top = 140.0
 offset_right = 208.0
-offset_bottom = 200.0
+offset_bottom = 206.0
 text = "Max HP"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -159,8 +159,8 @@ script = ExtResource("2_hl0mm")
 
 [node name="CoolAnimations" type="Label" parent="Menu/MenuContainer/VideoMenu"]
 modulate = Color(1, 1, 0, 1)
-offset_right = 408.0
-offset_bottom = 64.0
+offset_right = 480.0
+offset_bottom = 66.0
 text = "Cool Animations"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -172,8 +172,8 @@ script = ExtResource("2_hl0mm")
 
 [node name="MasterVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
 modulate = Color(1, 1, 0, 1)
-offset_right = 356.0
-offset_bottom = 64.0
+offset_right = 416.0
+offset_bottom = 66.0
 text = "Master Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -185,9 +185,9 @@ LinkedProperty = "MasterBus"
 
 [node name="SoundVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
 modulate = Color(1, 1, 0, 1)
-offset_top = 68.0
+offset_top = 70.0
 offset_right = 328.0
-offset_bottom = 132.0
+offset_bottom = 136.0
 text = "Sfx Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
@@ -199,9 +199,9 @@ LinkedProperty = "SfxBus"
 
 [node name="MusicVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
 modulate = Color(1, 1, 0, 1)
-offset_top = 136.0
-offset_right = 328.0
-offset_bottom = 200.0
+offset_top = 140.0
+offset_right = 384.0
+offset_bottom = 206.0
 text = "Music Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")

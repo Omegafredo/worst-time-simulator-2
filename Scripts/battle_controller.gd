@@ -16,7 +16,8 @@ const SoulOffset := Vector2(49, 64)
 
 func CombatBox(NewRect : Rect2):
 	CombatZone.Moving = true
-	CombatZone.BoxSize = NewRect
+	CombatZone.BoxSize.position = NewRect.position
+	CombatZone.BoxSize.end = NewRect.size
 	
 func CombatBoxInstant(NewRect : Rect2):
 	CombatBox(NewRect)
@@ -31,12 +32,13 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	
 
 func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float) -> Object:
-	var newBone = BonePath.instantiate()
+	var newBone = BonePath.instantiate().get_child(0)
 	newBone.position = StartPos
 	newBone.Height = NewHeight
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
 	add_child(newBone)
+	newBone.get_parent().Masked = true
 	return newBone
 	
 func SoulMode(NewSoulType : int):
@@ -74,18 +76,18 @@ func _ready():
 	#SoulSlam(2)
 	#await Globals.Wait(1)
 	#SoulMode(0)
-	CombatBox(Rect2(111, 720, 700 - 111, 1152 - 720))
-	#
-	#await Globals.Wait(2)
-	##Bone(Vector2(700, 800), 50, 180, 100)
-	#
+	CombatBox(Rect2(111, 720, 700, 1152))
+	
+	await Globals.Wait(2)
+	Bone(Vector2(700, 800), 50, 180, 100)
+	##
 	#await Globals.Wait(1)
+	##
+	#CombatBoxRotate(780)
 	#
-	CombatBoxRotate(780)
-	
-	await Globals.Wait(2.5)
-	
-	ReturnToMenu()
+	#await Globals.Wait(2.5)
+	#
+	#ReturnToMenu()
 	
 func _process(_delta) -> void:
 	if MenuMode and AllowControls:
@@ -96,12 +98,12 @@ func _process(_delta) -> void:
 	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxInstant(Rect2(111, 720, 1839 - 111, 1152 - 720))
+	CombatBoxInstant(Rect2(111, 720, 1839, 1152))
 	$Name.text = str(Globals.PlayerName + "  LV19")
 	
 func ReturnToMenu():
 	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-	CombatBox(Rect2(111, 720, 1839 - 111, 1152 - 720))
+	CombatBox(Rect2(111, 720, 1839, 1152))
 	MoveMenu(0)
 	MenuMode = true
 	await CombatZone.DoneMoving
