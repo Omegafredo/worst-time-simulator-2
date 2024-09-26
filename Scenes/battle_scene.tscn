@@ -4,9 +4,8 @@
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
-[ext_resource type="Script" path="res://Scripts/speech_bubble.gd" id="5_pb5ae"]
+[ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
-[ext_resource type="AudioStream" uid="uid://13gpiwhn3i43" path="res://Resources/Sounds/SansSpeak.ogg" id="7_rkth3"]
 [ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/FightActive.png" id="8_p1agq"]
 [ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/Fight.png" id="9_1vr6p"]
 [ext_resource type="Texture2D" uid="uid://b84jsn40th0h6" path="res://Resources/Sprites/UI/MercyActive.png" id="10_juirh"]
@@ -18,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
+[ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -181,38 +181,24 @@ unique_name_in_owner = true
 z_index = 6
 position = Vector2(1000, 1000)
 
-[node name="SpeechBubble" type="Sprite2D" parent="Battle Controller"]
-visible = false
-texture_filter = 1
-position = Vector2(1152, 321)
-scale = Vector2(3, 3)
+[node name="SpeechBubble" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
+
+[node name="Sprite2D" type="Sprite2D" parent="Battle Controller/SpeechBubble"]
 texture = ExtResource("4_kn0io")
 centered = false
-script = ExtResource("5_pb5ae")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Battle Controller/SpeechBubble"]
+[node name="RichText" type="RichTextLabel" parent="Battle Controller/SpeechBubble"]
 texture_filter = 1
-anchors_preset = -1
-anchor_left = 0.137
-anchor_top = 0.069
-anchor_right = 0.137
-anchor_bottom = 0.069
-offset_left = 1.19767
-offset_top = -0.509333
-offset_right = 196.198
-offset_bottom = 88.4907
+offset_left = 32.6667
+offset_top = 6.66666
+offset_right = 227.667
+offset_bottom = 95.6667
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("6_piuie")
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 scroll_active = false
 shortcut_keys_enabled = false
-
-[node name="SansSpeak" type="AudioStreamPlayer" parent="Battle Controller/SpeechBubble"]
-stream = ExtResource("7_rkth3")
-
-[node name="ContinueDelay" type="Timer" parent="Battle Controller/SpeechBubble"]
-one_shot = true
 
 [node name="MenuButtons" type="Node" parent="Battle Controller"]
 
@@ -264,6 +250,28 @@ uppercase = true
 stream = ExtResource("17_xl1g0")
 bus = &"SoundEffects"
 
+[node name="BoxText" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
+visible = true
+position = Vector2(150, 750)
+scale = Vector2(1, 1)
+CurrentMode = 2
+CharacterInterval = 0.02
+AskForInput = false
+
+[node name="RichText" type="RichTextLabel" parent="Battle Controller/BoxText"]
+anchors_preset = -1
+anchor_left = 0.058
+anchor_top = 0.5
+anchor_right = 0.058
+anchor_bottom = 0.5
+offset_right = 1650.0
+offset_bottom = 352.0
+theme_override_fonts/normal_font = ExtResource("19_suyt8")
+theme_override_font_sizes/normal_font_size = 104
+bbcode_enabled = true
+scroll_active = false
+tab_size = 5
+
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
 z_index = 5
@@ -279,5 +287,3 @@ libraries = {
 "": SubResource("AnimationLibrary_tcdjl")
 }
 autoplay = "fade"
-
-[connection signal="textDone" from="Battle Controller/SpeechBubble" to="Battle Controller/SpeechBubble" method="_on_text_done"]

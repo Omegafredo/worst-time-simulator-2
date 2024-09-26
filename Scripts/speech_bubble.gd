@@ -1,12 +1,14 @@
-extends Sprite2D
+extends Node2D
 
-enum {Default, Serious}
+enum modes {Default, Serious, TextBox}
 
 var sansFont = preload("res://Resources/Fonts/styles/comicSansVariant.tres")
-var eightbit = preload("res://Resources/Fonts/styles/8bitVariant.tres")
+var sansSerious = preload("res://Resources/Fonts/styles/SansSeriousVariant.tres")
+var boxText = preload("res://Resources/Fonts/styles/boxText.tres")
 
-@onready var TextLabel := $RichTextLabel
+@onready var TextLabel := $RichText
 @onready var SansSpeak := $SansSpeak
+@onready var BattleText := $BattleText
 @onready var ContinueDelay := $ContinueDelay
 
 signal sendInput
@@ -14,9 +16,9 @@ signal clearedText
 signal receivedInput
 signal textDone
 
-var CurrentMode : int = Default
-var CharacterInterval : float = 0.07
-var AskForInput := true
+@export var CurrentMode : modes
+@export var CharacterInterval : float = 0.07
+@export var AskForInput := true
 var SkippableText := true
 var Skipping := false
 var Waiting := false
@@ -34,7 +36,7 @@ func _process(_delta: float) -> void:
 		TextLabel.visible_ratio = 0
 		TextLabel.visible_ratio = 1.0
 		Skipping = true
-		ContinueDelay.wait_time = 0
+		ContinueDelay.stop()
 		ContinueDelay.timeout.emit()
 		
 func setText(text : String) -> void:
@@ -51,8 +53,12 @@ func displayChar() -> void:
 	if !Skipping:
 		TextLabel.visible_characters += 1
 		
-		if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " " and CurrentMode == Default:
-			SansSpeak.play()
+		if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " ":
+			match CurrentMode:
+				modes.Default:
+					SansSpeak.play()
+				modes.TextBox:
+					BattleText.play()
 		if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 			await Globals.Wait(CharacterInterval)
 			displayChar()
@@ -74,7 +80,8 @@ func continueText(addedText : String, Delay : float = 0.0) -> void:
 		await ContinueDelay.timeout
 	Waiting = false
 	# append_text() doesn't work for some reason
-	TextLabel.text += addedText
+	TextLabel.append_text(addedText)
+	#TextLabel.text += addedText
 	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 		displayChar()
 	Skipping = false
@@ -83,12 +90,15 @@ func changeMode(modeChange : int) -> void:
 	CurrentMode = modeChange
 	
 	match modeChange:
-		Default:
+		modes.Default:
 			TextLabel.add_theme_font_override("normal_font", sansFont)
 			TextLabel.add_theme_font_size_override("normal_font_size", 14)
-		Serious:
-			TextLabel.add_theme_font_override("normal_font", eightbit)
+		modes.Serious:
+			TextLabel.add_theme_font_override("normal_font", sansSerious)
 			TextLabel.add_theme_font_size_override("normal_font_size", 16)
+		modes.TextBox:
+			TextLabel.add_theme_font_override("normal_font", boxText)
+			TextLabel.add_theme_font_size_override("normal_font_size", 104)
 	
 	
 

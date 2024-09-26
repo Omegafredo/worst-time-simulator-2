@@ -8,8 +8,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u50k1"]
 size = Vector2(15, 15)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p7h2k"]
-size = Vector2(48, 48)
+[sub_resource type="CircleShape2D" id="CircleShape2D_t81ya"]
+radius = 24.0
 
 [node name="Node2D" type="CharacterBody2D"]
 texture_filter = 1
@@ -32,7 +32,7 @@ texture = ExtResource("2_ab1kl")
 shape = SubResource("RectangleShape2D_u50k1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_p7h2k")
+shape = SubResource("CircleShape2D_t81ya")
 
 [node name="CoyoteTime" type="Timer" parent="."]
 wait_time = 0.3

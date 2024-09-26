@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://wf7oo7q1il3f"]
+
+[ext_resource type="Script" path="res://Scripts/speech_bubble.gd" id="2_0kl1p"]
+[ext_resource type="AudioStream" uid="uid://djpmgoil75h2g" path="res://Resources/Sounds/BattleText.ogg" id="3_xqd1f"]
+[ext_resource type="AudioStream" uid="uid://13gpiwhn3i43" path="res://Resources/Sounds/SansSpeak.ogg" id="4_lxrgq"]
+
+[node name="TextSystem" type="Node2D"]
+visible = false
+texture_filter = 1
+position = Vector2(1152, 321)
+scale = Vector2(3, 3)
+script = ExtResource("2_0kl1p")
+
+[node name="SansSpeak" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_lxrgq")
+bus = &"SoundEffects"
+
+[node name="BattleText" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_xqd1f")
+bus = &"SoundEffects"
+
+[node name="ContinueDelay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="textDone" from="." to="." method="_on_text_done"]

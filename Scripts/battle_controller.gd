@@ -4,6 +4,7 @@ var BonePath := load("res://Scenes/bone_v.tscn")
 @onready var CombatZone := $CombatZone
 @onready var Soul := %Player
 @onready var SpeechBubble := $SpeechBubble
+@onready var MenuText := $BoxText
 @onready var MenuButtons := $MenuButtons
 @onready var MenuCursor := $MenuCursor
 
@@ -12,12 +13,11 @@ var SelectIndex : int = 0
 
 const SoulOffset := Vector2(49, 64)
 
-func CombatBox(TopLeft : Vector2, BottomRight : Vector2):
-	CombatZone.TopLeft = TopLeft
-	CombatZone.BottomRight = BottomRight
+func CombatBox(NewRect : Rect2):
+	CombatZone.BoxSize = NewRect
 	
-func CombatBoxInstant(TopLeft : Vector2, BottomRight : Vector2):
-	CombatBox(TopLeft, BottomRight)
+func CombatBoxInstant(NewRect : Rect2):
+	CombatBox(NewRect)
 	CombatZone.SetPos()
 
 func CombatBoxSpeed(NewSpeed : float):
@@ -49,30 +49,30 @@ func _ready():
 	InitialiseBattle()
 	
 	
-	#SpeechBubble.AskForInput = true
-	#SpeechBubble.setText("Waiting system")
-	#
-	#SpeechBubble.continueText(" You can continue text", 1)
-	#
-	#await SpeechBubble.receivedInput
-	#SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
-	#await SpeechBubble.receivedInput
-	#await Globals.Wait(1.5)
-	#SpeechBubble.changeMode(1)
-	#SpeechBubble.setText("Serious text as well")
-	#
-	#await SpeechBubble.receivedInput
-	#await Globals.Wait(1)
-	#SoulMode(1)
-	#await Globals.Wait(1)
-	#SoulSlam(2)
-	#await Globals.Wait(0.5)
-	#SoulSlam(0)
-	#await Globals.Wait(0.5)
-	#SoulSlam(2)
-	#await Globals.Wait(1)
-	#SoulMode(0)
-	CombatBox(Vector2(111, 720), Vector2(700, 1152))
+	SpeechBubble.AskForInput = true
+	SpeechBubble.setText("Waiting system")
+	
+	SpeechBubble.continueText(" You can continue text", 1)
+	
+	await SpeechBubble.receivedInput
+	SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
+	await SpeechBubble.receivedInput
+	await Globals.Wait(1.5)
+	SpeechBubble.changeMode(1)
+	SpeechBubble.setText("Serious text as well")
+	
+	await SpeechBubble.receivedInput
+	await Globals.Wait(1)
+	SoulMode(1)
+	await Globals.Wait(1)
+	SoulSlam(2)
+	await Globals.Wait(0.5)
+	SoulSlam(0)
+	await Globals.Wait(0.5)
+	SoulSlam(2)
+	await Globals.Wait(1)
+	SoulMode(0)
+	CombatBox(Rect2(111, 720, 700 - 111, 1152 - 720))
 	
 	await Globals.Wait(2)
 	#Bone(Vector2(700, 800), 50, 180, 100)
@@ -83,7 +83,7 @@ func _ready():
 	
 	await Globals.Wait(5)
 	
-	ReturnToMenu()
+	#ReturnToMenu()
 	
 func _process(_delta) -> void:
 	if MenuMode:
@@ -93,14 +93,15 @@ func _process(_delta) -> void:
 	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxInstant(Vector2(111, 720), Vector2(1839, 1152))
+	CombatBoxInstant(Rect2(111, 720, 1839 - 111, 1152 - 720))
 	$Name.text = str(Globals.PlayerName + "  LV19")
 	
 func ReturnToMenu():
-	CombatBoxRotate(720)
-	CombatBox(Vector2(111, 720), Vector2(1839, 1152))
+	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0)
+	CombatBox(Rect2(111, 720, 1839 - 111, 1152 - 720))
 	MoveMenu(0)
 	MenuMode = true
+	MenuText.setText("* You feel like you're going to \n[indent]have the worst time of your \nlife.")
 
 func MoveMenu(Direction : int) -> void:
 	SelectIndex += Direction

@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 		# Aligns the values to the rotaton of the combatbox before clamping
 		var heart_local_position = CombatBox.to_local(global_position)
 		
-		heart_local_position = heart_local_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position - CombatBox.CornerSize * 1.5)
+		heart_local_position = heart_local_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position)
 		
 		global_position = CombatBox.to_global(heart_local_position)
 		
