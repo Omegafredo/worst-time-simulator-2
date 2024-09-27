@@ -48,100 +48,105 @@ size = Vector2(5, 5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_63kwq"]
 size = Vector2(5, 5)
 
-[node name="CombatZone" type="Node2D"]
+[node name="CornerPoint" type="Node2D"]
+
+[node name="CombatZone" type="Node2D" parent="."]
 texture_filter = 1
 scale = Vector2(3, 3)
 script = ExtResource("1_uo0hj")
 
-[node name="CboxTopLeft" type="Sprite2D" parent="."]
+[node name="CboxTopLeft" type="Sprite2D" parent="CombatZone"]
 position = Vector2(1.49012e-08, 0)
 texture = SubResource("AtlasTexture_spnsn")
 centered = false
 
-[node name="CboxTopMiddle" type="Sprite2D" parent="."]
+[node name="CboxTopMiddle" type="Sprite2D" parent="CombatZone"]
 position = Vector2(6, 0)
 texture = SubResource("AtlasTexture_qsmvu")
 centered = false
 
-[node name="CboxTopRight" type="Sprite2D" parent="."]
+[node name="CboxTopRight" type="Sprite2D" parent="CombatZone"]
 position = Vector2(11, 0)
 texture = SubResource("AtlasTexture_r4itc")
 centered = false
 
-[node name="CboxLeftMiddle" type="Sprite2D" parent="."]
+[node name="CboxLeftMiddle" type="Sprite2D" parent="CombatZone"]
 position = Vector2(1.49012e-08, 6)
 texture = SubResource("AtlasTexture_i0w5y")
 centered = false
 
-[node name="CboxRightMiddle" type="Sprite2D" parent="."]
+[node name="CboxRightMiddle" type="Sprite2D" parent="CombatZone"]
 position = Vector2(12, 6)
 texture = SubResource("AtlasTexture_qu7d2")
 centered = false
 
-[node name="CboxBottomLeft" type="Sprite2D" parent="."]
+[node name="CboxBottomLeft" type="Sprite2D" parent="CombatZone"]
 position = Vector2(1.49012e-08, 11)
 texture = SubResource("AtlasTexture_ik3wi")
 centered = false
 
-[node name="CboxBottomMiddle" type="Sprite2D" parent="."]
+[node name="CboxBottomMiddle" type="Sprite2D" parent="CombatZone"]
 position = Vector2(6, 12)
 texture = SubResource("AtlasTexture_lrice")
 centered = false
 
-[node name="CboxBottomRight" type="Sprite2D" parent="."]
+[node name="CboxBottomRight" type="Sprite2D" parent="CombatZone"]
 position = Vector2(11, 11)
 texture = SubResource("AtlasTexture_15d25")
 centered = false
 
-[node name="Center" type="Sprite2D" parent="."]
-visible = false
+[node name="Center" type="Sprite2D" parent="CombatZone"]
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xh81c")
 
-[node name="BottomHitboxBody" type="AnimatableBody2D" parent="."]
+[node name="BottomHitboxBody" type="AnimatableBody2D" parent="CombatZone"]
 collision_layer = 2
 sync_to_physics = false
 
-[node name="BottomHitbox" type="CollisionShape2D" parent="BottomHitboxBody"]
+[node name="BottomHitbox" type="CollisionShape2D" parent="CombatZone/BottomHitboxBody"]
 shape = SubResource("RectangleShape2D_gu5u8")
 
-[node name="Center" type="Sprite2D" parent="BottomHitboxBody/BottomHitbox"]
+[node name="Center" type="Sprite2D" parent="CombatZone/BottomHitboxBody/BottomHitbox"]
 visible = false
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xh81c")
 
-[node name="TopHitboxBody" type="AnimatableBody2D" parent="."]
+[node name="TopHitboxBody" type="AnimatableBody2D" parent="CombatZone"]
 collision_layer = 2
 sync_to_physics = false
 
-[node name="TopHitbox" type="CollisionShape2D" parent="TopHitboxBody"]
+[node name="TopHitbox" type="CollisionShape2D" parent="CombatZone/TopHitboxBody"]
 shape = SubResource("RectangleShape2D_0pdpm")
 
-[node name="Center" type="Sprite2D" parent="TopHitboxBody/TopHitbox"]
+[node name="Center" type="Sprite2D" parent="CombatZone/TopHitboxBody/TopHitbox"]
 visible = false
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xh81c")
 
-[node name="LeftHitboxBody" type="AnimatableBody2D" parent="."]
+[node name="LeftHitboxBody" type="AnimatableBody2D" parent="CombatZone"]
 collision_layer = 2
 sync_to_physics = false
 
-[node name="LeftHitbox" type="CollisionShape2D" parent="LeftHitboxBody"]
+[node name="LeftHitbox" type="CollisionShape2D" parent="CombatZone/LeftHitboxBody"]
 shape = SubResource("RectangleShape2D_18er7")
 
-[node name="Center" type="Sprite2D" parent="LeftHitboxBody/LeftHitbox"]
+[node name="Center" type="Sprite2D" parent="CombatZone/LeftHitboxBody/LeftHitbox"]
 visible = false
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xh81c")
 
-[node name="RightHitboxBody" type="AnimatableBody2D" parent="."]
+[node name="RightHitboxBody" type="AnimatableBody2D" parent="CombatZone"]
 collision_layer = 2
 sync_to_physics = false
 
-[node name="RightHitbox" type="CollisionShape2D" parent="RightHitboxBody"]
+[node name="RightHitbox" type="CollisionShape2D" parent="CombatZone/RightHitboxBody"]
 shape = SubResource("RectangleShape2D_63kwq")
 
-[node name="Center" type="Sprite2D" parent="RightHitboxBody/RightHitbox"]
+[node name="Center" type="Sprite2D" parent="CombatZone/RightHitboxBody/RightHitbox"]
 visible = false
 scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_xh81c")
+
+[node name="Corner" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("3_xh81c")

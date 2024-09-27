@@ -181,8 +181,7 @@ texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 
 [node name="Attacks" type="Node2D" parent="Battle Controller/CombatZone/Mask"]
-position = Vector2(-285.333, -367.667)
-scale = Vector2(0.333333, 0.333333)
+position = Vector2(-856, -1103)
 
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
 position = Vector2(960, 672)

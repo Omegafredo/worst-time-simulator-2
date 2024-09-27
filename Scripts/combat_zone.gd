@@ -14,7 +14,7 @@ var Height: float:
 	get():
 		return BoxSize.size.y
 		
-@onready var Mask := $Mask
+@onready var Mask := $"/root/Main Node/Battle Controller/CombatZone/Mask"
 
 @onready var CboxTopLeft := $CboxTopLeft
 @onready var CboxTopMiddle := $CboxTopMiddle
@@ -115,8 +115,15 @@ func _process(delta: float) -> void:
 	Mask.position = CboxTopLeft.position
 	Mask.texture.size = CboxBottomRight.position + abs(CboxTopLeft.position) + CornerSize 
 	
-	self.global_position.x = move_toward(global_position.x, CenterPos.x, scale.x * Speed * delta)
-	self.global_position.y = move_toward(global_position.y, CenterPos.y, scale.x * Speed * delta)
+	get_parent().global_position.x = move_toward(get_parent().global_position.x, BoxSize.position.x, scale.x * Speed * delta)
+	get_parent().global_position.y = move_toward(get_parent().global_position.y, BoxSize.position.y, scale.x * Speed * delta)
+	
+	#get_parent().global_position = BoxSize.position
+	
+	#self.global_position.x = move_toward(global_position.x, CenterPos.x, scale.x * Speed * delta)
+	#self.global_position.y = move_toward(global_position.y, CenterPos.y, scale.x * Speed * delta)
+	
+	self.position = abs(CboxTopLeft.position) * scale.x
 	
 
 	MoveObject(CboxTopLeft, TopLeftOffset, Speed * delta)
@@ -130,8 +137,6 @@ func _process(delta: float) -> void:
 	CboxBottomMiddle.scale.x = move_toward(CboxBottomMiddle.scale.x, HorizontalScale, (Speed * delta) / 2.5)
 	MoveObject(CboxLeftMiddle, LeftMiddleOffset, Speed * delta)
 	CboxLeftMiddle.scale.y = move_toward(CboxLeftMiddle.scale.y, VerticalScale, (Speed * delta) / 2.5)
-	if CboxLeftMiddle.position < LeftMiddleOffset and RightMiddleOffset < CboxRightMiddle.position:
-		MoveObject(CboxLeftMiddle, LeftMiddleOffset, Speed * delta)
 	MoveObject(CboxRightMiddle, RightMiddleOffset, Speed * delta)
 	CboxRightMiddle.scale.y = move_toward(CboxRightMiddle.scale.y, VerticalScale, (Speed * delta) / 2.5)
 
@@ -152,7 +157,9 @@ func _process(delta: float) -> void:
 
 
 func SetPos() -> void:
-	self.global_position = CenterPos
+	get_parent().global_position = BoxSize.position
+	
+	self.position = abs(CboxTopLeft.position) * scale.x
 	CboxTopLeft.position = TopLeftOffset
 	CboxTopRight.position = TopRightOffset
 	CboxBottomRight.position = BottomRightOffset

@@ -8,8 +8,6 @@ var Masked : bool = false:
 		else:
 			reparent(AttacksNode)
 		Masked = d
-		print(MaskedNode)
-		print(AttacksNode)
 @onready var MaskedNode := $"/root/Main Node/Battle Controller/CombatZone/Mask/Attacks"
 @onready var AttacksNode := $"/root/Main Node/Battle Controller/Attacks"
 
