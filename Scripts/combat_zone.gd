@@ -187,5 +187,23 @@ func SetPos() -> void:
 
 
 func MoveObject(MovableObject: Object, MoveTo: Vector2, DeltaSpeed: float) -> void:
-	MovableObject.position.x = move_toward(MovableObject.position.x, MoveTo.x, DeltaSpeed)
-	MovableObject.position.y = move_toward(MovableObject.position.y, MoveTo.y, DeltaSpeed)
+	var originMovement = get_parent().global_position.move_toward(BoxSize.position, 1) - get_parent().global_position
+	var currentMovement = MovableObject.position.move_toward(MoveTo, 1) - MovableObject.position
+	
+	var SetSpeed = Vector2(DeltaSpeed, DeltaSpeed)
+	
+	#if MovableObject == CboxTopRight:
+		#print(currentMovement.x, "|", originMovement.x)
+	
+	#if currentMovement.x == originMovement.x:
+		#SetSpeed.x = DeltaSpeed * 0
+	#elif currentMovement.x == -originMovement.x:
+		#SetSpeed.x = DeltaSpeed * 2
+		#
+	#if currentMovement.y == originMovement.y:
+		#SetSpeed.y = DeltaSpeed * 2
+	#elif currentMovement.y == -originMovement.y:
+		#SetSpeed.y = DeltaSpeed * 0.5
+
+	MovableObject.position.x = move_toward(MovableObject.position.x, MoveTo.x, SetSpeed.x)
+	MovableObject.position.y = move_toward(MovableObject.position.y, MoveTo.y, SetSpeed.y)
