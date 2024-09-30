@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
-[ext_resource type="PackedScene" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
+[ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
 [ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/FightActive.png" id="8_p1agq"]
 [ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/Fight.png" id="9_1vr6p"]
@@ -17,7 +17,7 @@
 [ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
-[ext_resource type="FontVariation" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
+[ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
 size = Vector2(17, 17)

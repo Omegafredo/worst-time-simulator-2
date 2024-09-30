@@ -56,7 +56,6 @@ scale = Vector2(3, 3)
 script = ExtResource("1_uo0hj")
 
 [node name="CboxTopLeft" type="Sprite2D" parent="CombatZone"]
-position = Vector2(1.49012e-08, 0)
 texture = SubResource("AtlasTexture_spnsn")
 centered = false
 
