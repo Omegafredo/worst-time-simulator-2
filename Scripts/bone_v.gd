@@ -11,21 +11,14 @@ var Direction : float
 @onready var BoneMiddle := $BoneMiddle
 @onready var BoneBottom := $BoneBottom
 @onready var BoneReg := $BoneHitreg
+@onready var CollisionShape := $BoneHitreg/CollisionShape2D
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var BoneHitbox := CollisionShape2D.new()
-	var Shape := RectangleShape2D.new()
-	BoneReg.add_child(BoneHitbox)
-	BoneMiddle.scale.y = (OGBoneMiddleHeight + Height) / 8
-	BoneBottom.position.y = OGBoneBottomY + Height
+	pass
 	
-	Shape.set_size(Vector2(10, OGBoneHitboxHeight + Height))
-	BoneHitbox.position = Vector2(5, (OGBoneHitboxHeight + Height) / 2)
-	BoneHitbox.set_shape(Shape)
-	
-	
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,5 +26,10 @@ func _process(delta: float) -> void:
 	
 	position = position + Vector2(Speed * delta, 0).rotated(deg_to_rad(Direction))
 	
+	BoneMiddle.scale.y = (OGBoneMiddleHeight + Height) / 8
+	BoneBottom.position.y = OGBoneBottomY + Height
 	
-	pass
+	CollisionShape.shape.set_size(Vector2(10, OGBoneHitboxHeight + Height))
+	CollisionShape.position = Vector2(5, (OGBoneHitboxHeight + Height) / 2)
+	
+	

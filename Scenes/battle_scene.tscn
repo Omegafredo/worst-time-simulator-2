@@ -172,15 +172,14 @@ _data = {
 [node name="Battle Controller" type="Node" parent="."]
 script = ExtResource("2_taess")
 
-[node name="CombatZone" parent="Battle Controller" instance=ExtResource("3_agmmr")]
+[node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
 position = Vector2(856, 1103)
 
-[node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZone"]
-clip_children = 1
+[node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZoneCorner"]
 texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 
-[node name="Attacks" type="Node2D" parent="Battle Controller/CombatZone/Mask"]
+[node name="Attacks" type="Node2D" parent="Battle Controller/CombatZoneCorner/Mask"]
 position = Vector2(-856, -1103)
 
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
@@ -284,7 +283,7 @@ scroll_active = false
 tab_size = 6
 
 [node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
-remote_path = NodePath("../CombatZone/Mask/Attacks")
+remote_path = NodePath("../CombatZoneCorner/Mask/Attacks")
 
 [node name="Attacks" type="Node" parent="Battle Controller"]
 

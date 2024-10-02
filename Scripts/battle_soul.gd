@@ -13,7 +13,7 @@ var gravity : float = 980
 
 @onready var SoulSprite := $SoulSprite
 @onready var FadeSprite := $SoulSprite/FadeSprite
-@onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZone/CombatZone"
+@onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZoneCorner/CombatZone"
 @onready var CoyoteTime := $CoyoteTime
 @onready var JumpRemember := $JumpRemember
 

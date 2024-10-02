@@ -1,7 +1,7 @@
 extends Node
 
 var BonePath := load("res://Scenes/bone_v.tscn")
-@onready var CombatZone := $CombatZone/CombatZone
+@onready var CombatZone := $CombatZoneCorner/CombatZone
 @onready var Soul := %Player
 @onready var SpeechBubble := $SpeechBubble
 @onready var MenuText := $BoxText

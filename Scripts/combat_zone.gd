@@ -14,7 +14,7 @@ var Height: float:
 	get():
 		return BoxSize.size.y
 		
-@onready var Mask := $"/root/Main Node/Battle Controller/CombatZone/Mask"
+@onready var Mask := $"/root/Main Node/Battle Controller/CombatZoneCorner/Mask"
 
 @onready var CboxTopLeft := $CboxTopLeft
 @onready var CboxTopMiddle := $CboxTopMiddle
@@ -135,8 +135,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	Mask.position = CboxTopLeft.position
-	Mask.texture.size = CboxBottomRight.position + abs(CboxTopLeft.position) + CornerSize 
+	Mask.global_transform = CboxTopLeft.global_transform
+	Mask.texture.size = (CboxBottomRight.global_position.rotated(-rotation) - CboxTopLeft.global_position.rotated(-rotation)) / scale.x + CornerSize + Vector2(1, 1)
 	
 	#get_parent().global_position.x = move_toward(get_parent().global_position.x, BoxSize.position.x, scale.x * Speed * delta)
 	#get_parent().global_position.y = move_toward(get_parent().global_position.y, BoxSize.position.y, scale.x * Speed * delta)
