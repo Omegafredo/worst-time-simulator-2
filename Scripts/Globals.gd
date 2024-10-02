@@ -34,6 +34,7 @@ var MusicBus:
 
 var HP := 92
 var MaxHP := 92
+var KR := 0
 
 # Functions
 

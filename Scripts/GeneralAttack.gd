@@ -8,7 +8,7 @@ var Masked : bool = false:
 		else:
 			reparent(AttacksNode)
 		Masked = d
-@onready var MaskedNode := $"/root/Main Node/Battle Controller/CombatZone/Mask/Attacks"
+@onready var MaskedNode := $"/root/Main Node/Battle Controller/CombatZoneCorner/Mask/Attacks"
 @onready var AttacksNode := $"/root/Main Node/Battle Controller/Attacks"
 
 

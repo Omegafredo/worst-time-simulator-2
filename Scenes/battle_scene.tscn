@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=30 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -14,9 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://cwmbovj4biki" path="res://Resources/Sprites/UI/Item.png" id="13_mtp18"]
 [ext_resource type="Texture2D" uid="uid://ck3eof4kjy527" path="res://Resources/Sprites/UI/ActActive.png" id="14_yhw15"]
 [ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/Act.png" id="15_e83yw"]
-[ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="16_ppebc"]
+[ext_resource type="LabelSettings" uid="uid://bi2amwoie3dph" path="res://Resources/Fonts/styles/battle_label.tres" id="16_2glsd"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
+[ext_resource type="Script" path="res://Scripts/health_bar.gd" id="19_khccm"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
@@ -98,13 +99,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="FontVariation" id="FontVariation_qavlf"]
-base_font = ExtResource("16_ppebc")
-spacing_glyph = 6
+[sub_resource type="Gradient" id="Gradient_wbbb5"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_ndomo"]
-font = SubResource("FontVariation_qavlf")
-font_size = 20
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x0od1"]
+gradient = SubResource("Gradient_wbbb5")
+width = 1
 
 [sub_resource type="Animation" id="Animation_mnjtw"]
 length = 0.001
@@ -176,6 +176,7 @@ script = ExtResource("2_taess")
 position = Vector2(856, 1103)
 
 [node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZoneCorner"]
+clip_children = 1
 texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 
@@ -253,7 +254,7 @@ offset_bottom = 70.96
 scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(0, 21)
 text = "Chara LV19"
-label_settings = SubResource("LabelSettings_ndomo")
+label_settings = ExtResource("16_2glsd")
 uppercase = true
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller"]
@@ -286,6 +287,34 @@ tab_size = 6
 remote_path = NodePath("../CombatZoneCorner/Mask/Attacks")
 
 [node name="Attacks" type="Node" parent="Battle Controller"]
+
+[node name="HealthBar" type="Sprite2D" parent="Battle Controller"]
+self_modulate = Color(0.454902, 0, 0, 1)
+clip_children = 2
+position = Vector2(850, 1200)
+scale = Vector2(350, 60)
+texture = SubResource("GradientTexture1D_x0od1")
+centered = false
+script = ExtResource("19_khccm")
+
+[node name="YellowBar" type="Sprite2D" parent="Battle Controller/HealthBar"]
+self_modulate = Color(1, 1, 0, 1)
+texture = SubResource("GradientTexture1D_x0od1")
+centered = false
+
+[node name="Krbar" type="Sprite2D" parent="Battle Controller/HealthBar"]
+self_modulate = Color(0.81, 0, 0.81, 1)
+texture = SubResource("GradientTexture1D_x0od1")
+centered = false
+
+[node name="Health" type="Label" parent="Battle Controller"]
+offset_left = 1300.0
+offset_top = 1175.0
+offset_right = 1424.0
+offset_bottom = 1215.0
+scale = Vector2(2.5, 2.5)
+text = "92/92"
+label_settings = ExtResource("16_2glsd")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

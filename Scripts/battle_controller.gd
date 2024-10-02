@@ -7,6 +7,8 @@ var BonePath := load("res://Scenes/bone_v.tscn")
 @onready var MenuText := $BoxText
 @onready var MenuButtons := $MenuButtons
 @onready var MenuCursor := $MenuCursor
+@onready var HealthText := $Health
+@onready var HealthBar: Sprite2D = $HealthBar
 
 var AllowControls := false
 var MenuMode := false
@@ -97,10 +99,13 @@ func _process(_delta) -> void:
 		elif Input.is_action_just_pressed("right"):
 			MoveMenu(1)
 	
+	$Name.text = str(Globals.PlayerName + "  LV19")
+	HealthText.position.x = HealthBar.position.x + HealthBar.scale.x + 100
+	HealthText.text = str(str(Globals.HP) + "/" + str(Globals.MaxHP))
+	
 func InitialiseBattle():
 	request_ready()
 	CombatBoxInstant(Rect2(111, 720, 1839, 1152))
-	$Name.text = str(Globals.PlayerName + "  LV19")
 	
 func InitializeAttack():
 	pass

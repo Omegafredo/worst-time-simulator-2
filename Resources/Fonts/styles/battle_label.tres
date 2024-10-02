@@ -1,0 +1,11 @@
+[gd_resource type="LabelSettings" load_steps=3 format=3 uid="uid://bi2amwoie3dph"]
+
+[ext_resource type="FontFile" uid="uid://df6horrttdwu" path="res://Resources/Fonts/undertale-in-game-hud-font.ttf" id="1_bi21k"]
+
+[sub_resource type="FontVariation" id="FontVariation_qavlf"]
+base_font = ExtResource("1_bi21k")
+spacing_glyph = 6
+
+[resource]
+font = SubResource("FontVariation_qavlf")
+font_size = 20

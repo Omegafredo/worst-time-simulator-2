@@ -37,7 +37,7 @@ var Height: float:
 
 var CenterPos: Vector2:
 	get():
-		return BoxSize.position + (BoxSize.size / 2) - Vector2(CornerSize.x * 3, 0)
+		return BoxSize.get_center()
 
 var TopLeftOffset: Vector2:
 	get():
@@ -141,10 +141,11 @@ func _process(delta: float) -> void:
 	#get_parent().global_position.x = move_toward(get_parent().global_position.x, BoxSize.position.x, scale.x * Speed * delta)
 	#get_parent().global_position.y = move_toward(get_parent().global_position.y, BoxSize.position.y, scale.x * Speed * delta)
 	
+	
 	#get_parent().global_position = BoxSize.position
 	
-	self.global_position.x = move_toward(global_position.x, BoxSize.get_center().x, scale.x * Speed * delta)
-	self.global_position.y = move_toward(global_position.y, BoxSize.get_center().y, scale.x * Speed * delta)
+	self.global_position.x = move_toward(global_position.x, CenterPos.x, scale.x * Speed * delta)
+	self.global_position.y = move_toward(global_position.y, CenterPos.y, scale.x * Speed * delta)
 	
 
 	MoveObject(CboxTopLeft, TopLeftOffset, Speed * delta)
@@ -190,7 +191,9 @@ func _process(delta: float) -> void:
 
 
 func SetPos() -> void:
-	self.global_position = BoxSize.get_center()
+	#get_parent().global_position = BoxSize.position
+	
+	self.global_position = CenterPos
 	
 	CboxTopLeft.position =  to_local(TopLeftOffset).rotated(rotation)
 	CboxTopRight.position =  to_local(TopRightOffset).rotated(rotation) 
@@ -216,26 +219,27 @@ func SetPos() -> void:
 	TopHitBox.shape.size.x = HorizontalHitboxScale
 	LeftHitBox.shape.size.y = VerticalHitboxScale
 	RightHitBox.shape.size.y = VerticalHitboxScale
+	
 
 
 func MoveObject(MovableObject: Object, MoveTo: Vector2, DeltaSpeed: float) -> void:
-	var originMovement = global_position.move_toward(BoxSize.get_center(), 1) - global_position
+	var originMovement = global_position.move_toward(CenterPos, 1) - global_position
 	var currentMovement = MovableObject.position.move_toward(to_local(MoveTo).rotated(rotation), 1) - MovableObject.position
 	
 	var SetSpeed = Vector2(DeltaSpeed, DeltaSpeed)
 	
-	#if MovableObject == CboxTopRight:
+	#if MovableObject == CboxTopLeft:
 		#print(currentMovement.x, "|", originMovement.x)
 	
-	if currentMovement.x == originMovement.x:
+	if (currentMovement.x < 0 and originMovement.x < 0) or (currentMovement.x > 0 and originMovement.x > 0):
 		SetSpeed.x = DeltaSpeed * 0
-	elif currentMovement.x == -originMovement.x:
+	elif (currentMovement.x < 0 and originMovement.x > 0) or (currentMovement.x > 0 and originMovement.x < 0):
 		SetSpeed.x = DeltaSpeed * 2
 		
-	if currentMovement.y == originMovement.y:
+	if (currentMovement.y < 0 and originMovement.y < 0) or (currentMovement.y > 0 and originMovement.y > 0):
 		SetSpeed.y = DeltaSpeed * 2
-	elif currentMovement.y == -originMovement.y:
-		SetSpeed.y = DeltaSpeed * 0.5
+	elif (currentMovement.y < 0 and originMovement.y > 0) or (currentMovement.y > 0 and originMovement.y < 0):
+		SetSpeed.y = DeltaSpeed * 0
 		
 	MovableObject.position.x = move_toward(MovableObject.position.x, to_local(MoveTo).rotated(rotation).x, SetSpeed.x)
 	MovableObject.position.y = move_toward(MovableObject.position.y, to_local(MoveTo).rotated(rotation).y, SetSpeed.y)
