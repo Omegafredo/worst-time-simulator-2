@@ -184,8 +184,12 @@ func _process(delta: float) -> void:
 	RightHitBox.shape.size.y = VerticalHitboxScale
 	
 	
-	# Check if the box has reached it's destination
-	if CboxTopLeft.position == TopLeftOffset and CboxBottomRight.position == BottomRightOffset and Moving:
+	
+	# If the top left corner, bottom right corner and the middle are moving, send a signal.
+	if CboxTopLeft.position.move_toward(to_local(TopLeftOffset).rotated(rotation), 1) - CboxTopLeft.position == Vector2.ZERO \
+			and CboxBottomRight.position.move_toward(to_local(BottomRightOffset).rotated(rotation), 1) - CboxBottomRight.position == Vector2.ZERO \
+			and global_position.move_toward(CenterPos, 1) - global_position == Vector2.ZERO \
+			and Moving:
 		Moving = false
 		DoneMoving.emit()
 

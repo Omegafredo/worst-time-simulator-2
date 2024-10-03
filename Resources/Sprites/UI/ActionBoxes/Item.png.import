@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4r23exsby2qu"
-path="res://.godot/imported/Act.png-2df60b4d84385d6f95c2f512df91ccac.ctex"
+uid="uid://cwmbovj4biki"
+path="res://.godot/imported/Item.png-8acec7890221526a0765b7a7b8d8001b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/UI/Act.png"
-dest_files=["res://.godot/imported/Act.png-2df60b4d84385d6f95c2f512df91ccac.ctex"]
+source_file="res://Resources/Sprites/UI/ActionBoxes/Item.png"
+dest_files=["res://.godot/imported/Item.png-8acec7890221526a0765b7a7b8d8001b.ctex"]
 
 [params]
 

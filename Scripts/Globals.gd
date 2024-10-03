@@ -32,9 +32,14 @@ var MusicBus:
 
 # Gameplay
 
-var HP := 92
+var HP := 92:
+	get():
+		if HP > MaxHP:
+			return MaxHP
+		return HP
 var MaxHP := 92
 var KR := 0
+var Items : Array
 
 # Functions
 

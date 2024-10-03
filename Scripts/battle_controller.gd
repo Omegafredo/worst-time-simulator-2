@@ -4,17 +4,14 @@ var BonePath := load("res://Scenes/bone_v.tscn")
 @onready var CombatZone := $CombatZoneCorner/CombatZone
 @onready var Soul := %Player
 @onready var SpeechBubble := $SpeechBubble
-@onready var MenuText := $BoxText
-@onready var MenuButtons := $MenuButtons
-@onready var MenuCursor := $MenuCursor
-@onready var HealthText := $Health
-@onready var HealthBar: Sprite2D = $HealthBar
-
-var AllowControls := false
-var MenuMode := false
-var SelectIndex : int = 0
-
-const SoulOffset := Vector2(49, 64)
+@onready var MenuText := $UI/BoxText
+@onready var MenuButtons := $UI/MenuButtons
+@onready var MenuCursor := $Audio/MenuCursor
+@onready var HealthText := $UI/Health
+@onready var HealthBar: Sprite2D = $UI/HealthBar
+#@onready var HpIcon: Sprite2D = $UI/HpIcon
+@onready var KrIcon: Sprite2D = $UI/KrIcon
+@onready var PlayerName: Label = $UI/Name
 
 func CombatBox(NewRect : Rect2):
 	CombatZone.Moving = true
@@ -78,11 +75,11 @@ func _ready():
 	#SoulSlam(2)
 	#await Globals.Wait(1)
 	#SoulMode(0)
-	CombatBox(Rect2(400, 720, 900, 1152))
-	
-	await Globals.Wait(2)
-	Bone(Vector2(1100, 750), 30, 180, 150)
-	Bone(Vector2(1100, 950), 30, 180, 150, false)
+	#CombatBox(Rect2(400, 720, 900, 1152))
+	#
+	#await Globals.Wait(2)
+	#Bone(Vector2(1100, 750), 30, 180, 150)
+	#Bone(Vector2(1100, 950), 30, 180, 150, false)
 	##
 	#await Globals.Wait(1)
 	##
@@ -90,18 +87,7 @@ func _ready():
 	#
 	#await Globals.Wait(2.5)
 	#
-	#ReturnToMenu()
-	
-func _process(_delta) -> void:
-	if MenuMode and AllowControls:
-		if Input.is_action_just_pressed("left"):
-			MoveMenu(-1)
-		elif Input.is_action_just_pressed("right"):
-			MoveMenu(1)
-	
-	$Name.text = str(Globals.PlayerName + "  LV19")
-	HealthText.position.x = HealthBar.position.x + HealthBar.scale.x + 100
-	HealthText.text = str(str(Globals.HP) + "/" + str(Globals.MaxHP))
+	ReturnToMenu()
 	
 func InitialiseBattle():
 	request_ready()
@@ -109,6 +95,22 @@ func InitialiseBattle():
 	
 func InitializeAttack():
 	pass
+	
+func _process(_delta) -> void:
+	if MenuMode and AllowControls:
+		if Input.is_action_just_pressed("left"):
+			MoveMenu(-1)
+		elif Input.is_action_just_pressed("right"):
+			MoveMenu(1)
+		if Input.is_action_just_pressed("accept"):
+			SelectMenu()
+		elif Input.is_action_just_pressed("cancel"):
+			ReturnMenu()
+	
+	PlayerName.text = str(Globals.PlayerName + "  LV19")
+	HealthText.position.x = HealthBar.position.x + HealthBar.scale.x + 100
+	HealthText.text = str(str(Globals.HP) + "/" + str(Globals.MaxHP))
+	KrIcon.position.x = HealthBar.position.x + HealthBar.scale.x + 50
 	
 func ReturnToMenu():
 	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
@@ -119,15 +121,93 @@ func ReturnToMenu():
 	AllowControls = true
 	MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
 
+@onready var SelectableOptions: Node2D = $UI/BoxText/SelectableOptions
+var SelectedMenu = "Main"
+var OptionsArray : Array:
+	get():
+		return SelectableOptions.get_children()
+var CurrentOption : RichTextLabel:
+	get():
+		for option in OptionsArray:
+			if option.get_meta("ID") == SelectIndex:
+				return option
+		return null
+var MenuHistory := Array(["Main"], TYPE_STRING, "", null)
+const OptionSoulOffset : Vector2 = Vector2(-50, 55)
+
+var AllowControls := false
+var MenuMode := false
+var SelectIndex : int = 0
+
+const MenuSoulOffset := Vector2(49, 64)
+
+
 func MoveMenu(Direction : int) -> void:
 	SelectIndex += Direction
 	MenuCursor.play()
-	if SelectIndex > 3:
-		SelectIndex = 0
-	elif SelectIndex < 0:
-		SelectIndex = 3
-	Soul.position = MenuButtons.get_child(SelectIndex).position + SoulOffset
 	for menu in MenuButtons.get_children():
 		menu.play("default")
-	MenuButtons.get_child(SelectIndex).play("active")
+	if SelectedMenu == "Main":
+		if SelectIndex > 3:
+			SelectIndex = 0
+		elif SelectIndex < 0:
+			SelectIndex = 3
+		Soul.position = MenuButtons.get_child(SelectIndex).position + MenuSoulOffset
+		MenuButtons.get_child(SelectIndex).play("active")
+	else:
+		if SelectIndex > SelectableOptions.get_child_count() - 1:
+			SelectIndex = 0
+		elif SelectIndex < 0:
+			SelectIndex = SelectableOptions.get_child_count() - 1
+		Soul.position = CurrentOption.global_position + OptionSoulOffset
 	
+func SelectMenu() -> void:
+	if SelectedMenu == "Main":
+		ChangeMenu(MenuButtons.get_child(SelectIndex).name)
+	
+func ChangeMenu(MenuType: String) -> void:
+	if SelectedMenu == "Main":
+		MenuText.hideText()
+	SelectedMenu = MenuType
+	MenuHistory.append(MenuType)
+	SetMenuOptions()
+	SelectIndex = 0
+	MoveMenu(0)
+
+func ReturnMenu() -> void:
+	if SelectedMenu != "Main":
+		SelectedMenu = MenuHistory[-2]
+		if SelectedMenu == "Main":
+			for menu in MenuButtons.get_children():
+				if menu.name == MenuHistory[-1]:
+					SelectIndex = menu.get_index()
+		MenuHistory.pop_back()
+		SetMenuOptions()
+		if SelectedMenu != "Main":
+			SelectIndex = 0
+		MoveMenu(0)
+
+func SetMenuOptions() -> void:
+	for option in OptionsArray:
+		option.queue_free()
+	if SelectedMenu in ["Fight", "Act"]:
+		EnemySelect()
+	if SelectedMenu == "Main":
+		MenuText.unhideText()
+		MenuText.DontSkipDuringThisParticularFrame()
+	
+func EnemySelect() -> void:
+	CreateTextInput("Sans", 0)
+	
+const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
+
+func CreateTextInput(SetText: String, ID: int) -> void:
+	var RichText : RichTextLabel = RichTextLabel.new()
+	RichText.text = SetText
+	RichText.position = Vector2(150, 0)
+	RichText.size = Vector2(900, 100)
+	RichText.scroll_active = false
+	RichText.add_theme_font_override("normal_font", TextFont)
+	RichText.add_theme_font_size_override("normal_font_size", 96)
+	RichText.set_meta("ID", ID)
+	SelectableOptions.add_child(RichText)

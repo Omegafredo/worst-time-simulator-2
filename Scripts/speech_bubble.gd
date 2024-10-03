@@ -2,9 +2,9 @@ extends Node2D
 
 enum modes {Default, Serious, TextBox}
 
-var sansFont = preload("res://Resources/Fonts/styles/comicSansVariant.tres")
-var sansSerious = preload("res://Resources/Fonts/styles/SansSeriousVariant.tres")
-var boxText = preload("res://Resources/Fonts/styles/boxText.tres")
+const sansFont = preload("res://Resources/Fonts/styles/comicSansVariant.tres")
+const sansSerious = preload("res://Resources/Fonts/styles/SansSeriousVariant.tres")
+const boxText = preload("res://Resources/Fonts/styles/boxText.tres")
 
 @onready var TextLabel := $RichText
 @onready var SansSpeak := $SansSpeak
@@ -22,6 +22,7 @@ signal textDone
 var SkippableText := true
 var Skipping := false
 var Waiting := false
+var DontSkipThisFrame := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -32,12 +33,16 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
 		sendInput.emit()
-	if Input.is_action_just_pressed("cancel") and SkippableText:
-		TextLabel.visible_ratio = 0
-		TextLabel.visible_ratio = 1.0
+	if Input.is_action_just_pressed("cancel") and SkippableText and !DontSkipThisFrame:
+		TextLabel.visible_characters = -1
 		Skipping = true
 		ContinueDelay.stop()
 		ContinueDelay.timeout.emit()
+	
+	DontSkipThisFrame = false
+		
+func DontSkipDuringThisParticularFrame() -> void:
+	DontSkipThisFrame = true
 		
 func setText(text : String) -> void:
 	Skipping = false
@@ -51,15 +56,15 @@ func setText(text : String) -> void:
 	
 func displayChar() -> void:
 	if !Skipping:
-		TextLabel.visible_characters += 1
-		
-		if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " ":
-			match CurrentMode:
-				modes.Default:
-					SansSpeak.play()
-				modes.TextBox:
-					BattleText.play()
-		if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
+		if TextLabel.visible_ratio != 1:
+			TextLabel.visible_characters += 1
+			
+			if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " ":
+				match CurrentMode:
+					modes.Default:
+						SansSpeak.play()
+					modes.TextBox:
+						BattleText.play()
 			await Globals.Wait(CharacterInterval)
 			displayChar()
 		else:
@@ -71,6 +76,15 @@ func displayChar() -> void:
 func clearText() -> void:
 	self.hide()
 	clearedText.emit()
+
+func hideText() -> void:
+	TextLabel.hide()
+	TextLabel.visible_characters = -1
+
+func unhideText() -> void:
+	TextLabel.show()
+	TextLabel.visible_characters = 0
+	displayChar()
 
 func continueText(addedText : String, Delay : float = 0.0) -> void:
 	Waiting = true

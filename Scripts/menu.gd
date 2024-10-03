@@ -189,6 +189,7 @@ func InitiateBattle() -> void:
 		Flash(true)
 		var tween = Soul.InterpolateMovement(Vector2(1000, 1000))
 		await tween.finished
+	Globals.HP = Globals.MaxHP
 	request_ready()
 	get_tree().change_scene_to_file("res://Scenes/battle_scene.tscn")
 	

@@ -95,6 +95,7 @@ texture = SubResource("AtlasTexture_15d25")
 centered = false
 
 [node name="Center" type="Sprite2D" parent="CombatZone"]
+visible = false
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xh81c")
 

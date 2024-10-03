@@ -22,11 +22,15 @@ var CurrentColor : Color = Default
 var ActiveState : bool = false
 var DeactiveState : bool = false
 
+
 func _ready() -> void:
 	Original_Text = text
+	if LinkedProperty == "MaxHP":
+		Globals.MaxHP = clampi(Globals.MaxHP, ClampedMin, ClampedMax)
 	
 
 func Update() -> void:
+	
 	if !LinkedProperty.is_empty():
 		if SideOption:
 			text = str(Original_Text, ": ", snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown)
@@ -45,7 +49,7 @@ func Update() -> void:
 	modulate = Color(CurrentColor, modulate.a)
 	
 func CheckIfClamp(Direction : float) -> bool:
-	if ClampedMin != 0 or ClampedMax != 0:
+	if ClampsSet():
 		if get_node(PropertyObject).get(LinkedProperty) <= ClampedMin and Direction <= 0:
 			return false
 		if get_node(PropertyObject).get(LinkedProperty) >= ClampedMax and Direction >= 0:
@@ -53,9 +57,12 @@ func CheckIfClamp(Direction : float) -> bool:
 	return true
 
 func LowerIfNearEdge(Direction : float) -> float:
-	if ClampedMin != 0 or ClampedMax != 0:
+	if ClampsSet():
 		if get_node(PropertyObject).get(LinkedProperty) + Direction < ClampedMin:
 			return -abs(ClampedMin - get_node(PropertyObject).get(LinkedProperty))
 		if get_node(PropertyObject).get(LinkedProperty) + Direction > ClampedMax:
 			return abs(ClampedMax - get_node(PropertyObject).get(LinkedProperty))
 	return Direction
+
+func ClampsSet() -> bool:
+	return ClampedMin != 0 or ClampedMax != 0

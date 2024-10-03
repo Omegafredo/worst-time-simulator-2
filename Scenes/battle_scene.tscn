@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=32 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -6,19 +6,21 @@
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
 [ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
-[ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/FightActive.png" id="8_p1agq"]
-[ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/Fight.png" id="9_1vr6p"]
-[ext_resource type="Texture2D" uid="uid://b84jsn40th0h6" path="res://Resources/Sprites/UI/MercyActive.png" id="10_juirh"]
-[ext_resource type="Texture2D" uid="uid://bow6juiucml11" path="res://Resources/Sprites/UI/Mercy.png" id="11_1auo4"]
-[ext_resource type="Texture2D" uid="uid://d3n58oo2idn28" path="res://Resources/Sprites/UI/ItemActive.png" id="12_mcuwc"]
-[ext_resource type="Texture2D" uid="uid://cwmbovj4biki" path="res://Resources/Sprites/UI/Item.png" id="13_mtp18"]
-[ext_resource type="Texture2D" uid="uid://ck3eof4kjy527" path="res://Resources/Sprites/UI/ActActive.png" id="14_yhw15"]
-[ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/Act.png" id="15_e83yw"]
+[ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/ActionBoxes/FightActive.png" id="8_p1agq"]
+[ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/ActionBoxes/Fight.png" id="9_1vr6p"]
+[ext_resource type="Texture2D" uid="uid://b84jsn40th0h6" path="res://Resources/Sprites/UI/ActionBoxes/MercyActive.png" id="10_juirh"]
+[ext_resource type="Texture2D" uid="uid://bow6juiucml11" path="res://Resources/Sprites/UI/ActionBoxes/Mercy.png" id="11_1auo4"]
+[ext_resource type="Texture2D" uid="uid://d3n58oo2idn28" path="res://Resources/Sprites/UI/ActionBoxes/ItemActive.png" id="12_mcuwc"]
+[ext_resource type="Texture2D" uid="uid://cwmbovj4biki" path="res://Resources/Sprites/UI/ActionBoxes/Item.png" id="13_mtp18"]
+[ext_resource type="Texture2D" uid="uid://ck3eof4kjy527" path="res://Resources/Sprites/UI/ActionBoxes/ActActive.png" id="14_yhw15"]
+[ext_resource type="Texture2D" uid="uid://b4r23exsby2qu" path="res://Resources/Sprites/UI/ActionBoxes/Act.png" id="15_e83yw"]
 [ext_resource type="LabelSettings" uid="uid://bi2amwoie3dph" path="res://Resources/Fonts/styles/battle_label.tres" id="16_2glsd"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
 [ext_resource type="Script" path="res://Scripts/health_bar.gd" id="19_khccm"]
+[ext_resource type="Texture2D" uid="uid://2ktqwwedgms0" path="res://Resources/Sprites/UI/HPText.png" id="19_rwh8x"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
+[ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
 size = Vector2(17, 17)
@@ -170,6 +172,7 @@ _data = {
 [node name="Main Node" type="Node"]
 
 [node name="Battle Controller" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("2_taess")
 
 [node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
@@ -211,37 +214,44 @@ bbcode_enabled = true
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="MenuButtons" type="Node" parent="Battle Controller"]
+[node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
+remote_path = NodePath("../CombatZoneCorner/Mask/Attacks")
 
-[node name="Fight" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
+[node name="Attacks" type="Node" parent="Battle Controller"]
+
+[node name="UI" type="Node" parent="Battle Controller"]
+
+[node name="MenuButtons" type="Node" parent="Battle Controller/UI"]
+
+[node name="Fight" type="AnimatedSprite2D" parent="Battle Controller/UI/MenuButtons"]
 texture_filter = 1
 position = Vector2(96, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_c56tm")
 centered = false
 
-[node name="Act" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
+[node name="Act" type="AnimatedSprite2D" parent="Battle Controller/UI/MenuButtons"]
 texture_filter = 1
 position = Vector2(552, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_qixrn")
 centered = false
 
-[node name="Item" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
+[node name="Item" type="AnimatedSprite2D" parent="Battle Controller/UI/MenuButtons"]
 texture_filter = 1
 position = Vector2(1032, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_uamvm")
 centered = false
 
-[node name="Mercy" type="AnimatedSprite2D" parent="Battle Controller/MenuButtons"]
+[node name="Mercy" type="AnimatedSprite2D" parent="Battle Controller/UI/MenuButtons"]
 texture_filter = 1
 position = Vector2(1488, 1296)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_71xtk")
 centered = false
 
-[node name="Name" type="Label" parent="Battle Controller"]
+[node name="Name" type="Label" parent="Battle Controller/UI"]
 texture_filter = 1
 anchors_preset = -1
 anchor_left = 0.05
@@ -249,7 +259,7 @@ anchor_top = 0.816
 anchor_right = 0.05
 anchor_bottom = 0.816
 offset_top = 30.96
-offset_right = 224.0
+offset_right = 238.0
 offset_bottom = 70.96
 scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(0, 21)
@@ -257,11 +267,7 @@ text = "Chara LV19"
 label_settings = ExtResource("16_2glsd")
 uppercase = true
 
-[node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller"]
-stream = ExtResource("17_xl1g0")
-bus = &"SoundEffects"
-
-[node name="BoxText" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
+[node name="BoxText" parent="Battle Controller/UI" instance=ExtResource("5_hr8wr")]
 visible = true
 position = Vector2(150, 770)
 scale = Vector2(1, 1)
@@ -269,7 +275,7 @@ CurrentMode = 2
 CharacterInterval = 0.035
 AskForInput = false
 
-[node name="RichText" type="RichTextLabel" parent="Battle Controller/BoxText"]
+[node name="RichText" type="RichTextLabel" parent="Battle Controller/UI/BoxText"]
 anchors_preset = -1
 anchor_left = 0.058
 anchor_top = 0.5
@@ -283,12 +289,9 @@ bbcode_enabled = true
 scroll_active = false
 tab_size = 6
 
-[node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
-remote_path = NodePath("../CombatZoneCorner/Mask/Attacks")
+[node name="SelectableOptions" type="Node2D" parent="Battle Controller/UI/BoxText"]
 
-[node name="Attacks" type="Node" parent="Battle Controller"]
-
-[node name="HealthBar" type="Sprite2D" parent="Battle Controller"]
+[node name="HealthBar" type="Sprite2D" parent="Battle Controller/UI"]
 self_modulate = Color(0.454902, 0, 0, 1)
 clip_children = 2
 position = Vector2(850, 1200)
@@ -297,17 +300,17 @@ texture = SubResource("GradientTexture1D_x0od1")
 centered = false
 script = ExtResource("19_khccm")
 
-[node name="YellowBar" type="Sprite2D" parent="Battle Controller/HealthBar"]
+[node name="YellowBar" type="Sprite2D" parent="Battle Controller/UI/HealthBar"]
 self_modulate = Color(1, 1, 0, 1)
 texture = SubResource("GradientTexture1D_x0od1")
 centered = false
 
-[node name="Krbar" type="Sprite2D" parent="Battle Controller/HealthBar"]
+[node name="Krbar" type="Sprite2D" parent="Battle Controller/UI/HealthBar"]
 self_modulate = Color(0.81, 0, 0.81, 1)
 texture = SubResource("GradientTexture1D_x0od1")
 centered = false
 
-[node name="Health" type="Label" parent="Battle Controller"]
+[node name="Health" type="Label" parent="Battle Controller/UI"]
 offset_left = 1300.0
 offset_top = 1175.0
 offset_right = 1424.0
@@ -315,6 +318,22 @@ offset_bottom = 1215.0
 scale = Vector2(2.5, 2.5)
 text = "92/92"
 label_settings = ExtResource("16_2glsd")
+
+[node name="HpIcon" type="Sprite2D" parent="Battle Controller/UI"]
+position = Vector2(790, 1230)
+scale = Vector2(3, 3)
+texture = ExtResource("19_rwh8x")
+
+[node name="KrIcon" type="Sprite2D" parent="Battle Controller/UI"]
+position = Vector2(1250, 1230)
+scale = Vector2(3, 3)
+texture = ExtResource("20_aac14")
+
+[node name="Audio" type="Node" parent="Battle Controller"]
+
+[node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller/Audio"]
+stream = ExtResource("17_xl1g0")
+bus = &"SoundEffects"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

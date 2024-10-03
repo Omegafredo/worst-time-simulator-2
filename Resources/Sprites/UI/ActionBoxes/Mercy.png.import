@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b84jsn40th0h6"
-path="res://.godot/imported/MercyActive.png-09a79ecddc78b3f656055ea220a4bcb1.ctex"
+uid="uid://bow6juiucml11"
+path="res://.godot/imported/Mercy.png-c067c286c8f8cdc1f71d792e2b780e94.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/UI/MercyActive.png"
-dest_files=["res://.godot/imported/MercyActive.png-09a79ecddc78b3f656055ea220a4bcb1.ctex"]
+source_file="res://Resources/Sprites/UI/ActionBoxes/Mercy.png"
+dest_files=["res://.godot/imported/Mercy.png-c067c286c8f8cdc1f71d792e2b780e94.ctex"]
 
 [params]
 
