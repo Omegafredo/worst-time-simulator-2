@@ -4,7 +4,6 @@
 
 [sub_resource type="FontVariation" id="FontVariation_qavlf"]
 base_font = ExtResource("1_bi21k")
-spacing_glyph = 6
 
 [resource]
 font = SubResource("FontVariation_qavlf")

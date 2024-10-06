@@ -39,7 +39,7 @@ var HP := 92:
 		return HP
 var MaxHP := 92
 var KR := 0
-var Items : Array
+const CodedItems : Dictionary = {"Pie": 99, "I.Noodles": 90, "Steak": 60, "L.Hero": 40}
 
 # Functions
 

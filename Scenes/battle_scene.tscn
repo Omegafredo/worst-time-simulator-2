@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
-[ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
+[ext_resource type="PackedScene" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
 [ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/ActionBoxes/FightActive.png" id="8_p1agq"]
 [ext_resource type="Texture2D" uid="uid://dixswxvutcno4" path="res://Resources/Sprites/UI/ActionBoxes/Fight.png" id="9_1vr6p"]
@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
 [ext_resource type="Script" path="res://Scripts/health_bar.gd" id="19_khccm"]
 [ext_resource type="Texture2D" uid="uid://2ktqwwedgms0" path="res://Resources/Sprites/UI/HPText.png" id="19_rwh8x"]
-[ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
+[ext_resource type="FontVariation" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 [ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
@@ -183,7 +183,7 @@ clip_children = 1
 texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 
-[node name="Attacks" type="Node2D" parent="Battle Controller/CombatZoneCorner/Mask"]
+[node name="MaskedAttacks" type="Node2D" parent="Battle Controller/CombatZoneCorner/Mask"]
 position = Vector2(-856, -1103)
 
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
@@ -215,9 +215,9 @@ scroll_active = false
 shortcut_keys_enabled = false
 
 [node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
-remote_path = NodePath("../CombatZoneCorner/Mask/Attacks")
+remote_path = NodePath("../CombatZoneCorner/Mask/MaskedAttacks")
 
-[node name="Attacks" type="Node" parent="Battle Controller"]
+[node name="VisibleAttacks" type="Node" parent="Battle Controller"]
 
 [node name="UI" type="Node" parent="Battle Controller"]
 
@@ -258,12 +258,13 @@ anchor_left = 0.05
 anchor_top = 0.816
 anchor_right = 0.05
 anchor_bottom = 0.816
+offset_left = -10.0
 offset_top = 30.96
-offset_right = 238.0
+offset_right = 228.0
 offset_bottom = 70.96
-scale = Vector2(2.5, 2.5)
+scale = Vector2(2.3, 2.3)
 pivot_offset = Vector2(0, 21)
-text = "Chara LV19"
+text = "Merg     LV  19"
 label_settings = ExtResource("16_2glsd")
 uppercase = true
 
@@ -294,7 +295,7 @@ tab_size = 6
 [node name="HealthBar" type="Sprite2D" parent="Battle Controller/UI"]
 self_modulate = Color(0.454902, 0, 0, 1)
 clip_children = 2
-position = Vector2(850, 1200)
+position = Vector2(790, 1200)
 scale = Vector2(350, 60)
 texture = SubResource("GradientTexture1D_x0od1")
 centered = false
@@ -312,15 +313,15 @@ centered = false
 
 [node name="Health" type="Label" parent="Battle Controller/UI"]
 offset_left = 1300.0
-offset_top = 1175.0
+offset_top = 1180.0
 offset_right = 1424.0
-offset_bottom = 1215.0
+offset_bottom = 1220.0
 scale = Vector2(2.5, 2.5)
 text = "92/92"
 label_settings = ExtResource("16_2glsd")
 
 [node name="HpIcon" type="Sprite2D" parent="Battle Controller/UI"]
-position = Vector2(790, 1230)
+position = Vector2(730, 1230)
 scale = Vector2(3, 3)
 texture = ExtResource("19_rwh8x")
 

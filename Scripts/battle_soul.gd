@@ -16,6 +16,10 @@ var gravity : float = 980
 @onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZoneCorner/CombatZone"
 @onready var CoyoteTime := $CoyoteTime
 @onready var JumpRemember := $JumpRemember
+@onready var SlamSfx = $Slam
+@onready var DingSfx = $Ding
+@onready var PlayerDamagedSfx = $PlayerDamaged
+
 
 const SPEED := 450.0
 const JUMP_STRENGTH := 700.0
@@ -24,6 +28,8 @@ var MaxFallSpeed := 2000.0
 
 var Slammed := false
 var SlamDamage := 1
+
+var KR_Counter : float = 0
 
 
 func _process(delta: float) -> void:
@@ -105,13 +111,34 @@ func _process(delta: float) -> void:
 		
 		if Slammed and is_on_floor():
 			SlamHitGround()
+		
+		
+		if Globals.KR == 0:
+			KR_Counter = 0
+		else:
+			KR_Counter += delta
 			
-	
+		if Globals.KR >= 40 and KR_Counter >= 1.0/30.0:
+			KarmaDamage()
+		elif Globals.KR >= 30 and KR_Counter >= 2.0/30.0:
+			KarmaDamage()
+		elif Globals.KR >= 20 and KR_Counter >= 5.0/30.0:
+			KarmaDamage()
+		elif Globals.KR >= 10 and KR_Counter >= 15.0/30.0:
+			KarmaDamage()
+		elif KR_Counter >= 1.0:
+			KarmaDamage()
+		
+
+func KarmaDamage() -> void:
+	Globals.KR -= 1
+	Globals.HP -= 1
+	KR_Counter = 0
 
 func Change_Soul(Type) -> void:
 	# TODO Implement additional reasons to not do the animation (such as when flashes are added)
 	if Soul_Type != Type:
-		$Ding.play()
+		DingSfx.play()
 		if Globals.CoolAnimations:
 			FadeSoulAnim()
 	Soul_Type = Type
@@ -126,14 +153,19 @@ func Change_Soul(Type) -> void:
 			
 func SlamHitGround() -> void:
 	Slammed = false
-	$Slam.play()
+	SlamSfx.play()
 	if Globals.HP > 0:
 		if Globals.HP - SlamDamage > 0:
-			Globals.HP = SlamDamage
+			if Globals.HP > 1:
+				PlayerDamagedSfx.play()
+			Globals.HP -= SlamDamage
 		else:
+			if Globals.HP > 1:
+				PlayerDamagedSfx.play()
 			Globals.HP = 1
 	else:
-		Globals.HP = SlamDamage
+		PlayerDamagedSfx.play()
+		Globals.HP -= SlamDamage
 	
 func FadeSoulAnim():
 	FadeSprite.scale = Vector2(1, 1)
@@ -142,3 +174,13 @@ func FadeSoulAnim():
 	tween.tween_property(FadeSprite, "scale", Vector2(4, 4), 1.5)
 	tween.parallel().tween_property(FadeSprite, "self_modulate:a", 0, 1.5)
 	
+func TakeDamage(Damage : int, Karma : int):
+	Globals.KR += Karma
+	Globals.HP -= Damage
+	if Damage > 0 or (Karma > 0 and Globals.HP > 1):
+		PlayerDamagedSfx.play()
+	
+	if Globals.KR >= Globals.HP:
+		Globals.KR = Globals.HP - 1
+	if Globals.KR > 40:
+		Globals.KR = 40

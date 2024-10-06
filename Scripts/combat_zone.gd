@@ -136,7 +136,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	Mask.global_transform = CboxTopLeft.global_transform
-	Mask.texture.size = (CboxBottomRight.global_position.rotated(-rotation) - CboxTopLeft.global_position.rotated(-rotation)) / scale.x + CornerSize + Vector2(1, 1)
+	Mask.texture.size = (CboxBottomRight.global_position.rotated(-rotation) - CboxTopLeft.global_position.rotated(-rotation)) / scale.x + CornerSize
 	
 	#get_parent().global_position.x = move_toward(get_parent().global_position.x, BoxSize.position.x, scale.x * Speed * delta)
 	#get_parent().global_position.y = move_toward(get_parent().global_position.y, BoxSize.position.y, scale.x * Speed * delta)

@@ -30,7 +30,7 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
 	
 
-func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Object:
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Node2D:
 	var newBone = BonePath.instantiate().get_child(0)
 	newBone.position = StartPos
 	newBone.Height = NewHeight
@@ -75,6 +75,8 @@ func _ready():
 	#SoulSlam(2)
 	#await Globals.Wait(1)
 	#SoulMode(0)
+	#await Globals.Wait(2)
+	Bone(Vector2(1200, 1000),50,180,70,true)
 	#CombatBox(Rect2(400, 720, 900, 1152))
 	#
 	#await Globals.Wait(2)
@@ -87,7 +89,8 @@ func _ready():
 	#
 	#await Globals.Wait(2.5)
 	#
-	ReturnToMenu()
+	#ReturnToMenu()
+	
 	
 func InitialiseBattle():
 	request_ready()
@@ -102,15 +105,28 @@ func _process(_delta) -> void:
 			MoveMenu(-1)
 		elif Input.is_action_just_pressed("right"):
 			MoveMenu(1)
+		if Input.is_action_just_pressed("up"):
+			MoveMenu(0, -1)
+		elif Input.is_action_just_pressed("down"):
+			MoveMenu(0, 1)
 		if Input.is_action_just_pressed("accept"):
 			SelectMenu()
 		elif Input.is_action_just_pressed("cancel"):
 			ReturnMenu()
 	
-	PlayerName.text = str(Globals.PlayerName + "  LV19")
-	HealthText.position.x = HealthBar.position.x + HealthBar.scale.x + 100
-	HealthText.text = str(str(Globals.HP) + "/" + str(Globals.MaxHP))
-	KrIcon.position.x = HealthBar.position.x + HealthBar.scale.x + 50
+	PlayerName.text = str(Globals.PlayerName + "     LV  19")
+	HealthText.position.x = HealthBar.position.x + HealthBar.scale.x + 150
+	HealthText.text = str(str(Globals.HP) + "  /  " + str(Globals.MaxHP))
+	KrIcon.position.x = HealthBar.position.x + HealthBar.scale.x + 68
+	
+	if Globals.KR > 0:
+		HealthText.modulate = Color("#ff00ff")
+	else:
+		HealthText.modulate = Color(1, 1, 1)
+	
+	# Godot has a bug with it not updating the scale, current workaround:
+	$"Attack Origin Point".update_scale = false
+	$"Attack Origin Point".update_scale = true
 	
 func ReturnToMenu():
 	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
@@ -135,19 +151,57 @@ var CurrentOption : RichTextLabel:
 var MenuHistory := Array(["Main"], TYPE_STRING, "", null)
 const OptionSoulOffset : Vector2 = Vector2(-50, 55)
 
+
+
 var AllowControls := false
 var MenuMode := false
 var SelectIndex : int = 0
 
+var IndexPosition : Vector2i:
+	get():
+		var x : int
+		var y : int
+		
+		if SelectIndex % 4 in [2, 3]:
+			y = 1
+		else:
+			y = 0
+		
+		#x = int(SelectIndex / 2) % 2 + 2 * int(SelectIndex / 4)
+		#x = SelectIndex - y * 2
+		
+		
+		for i in range(SelectIndex):
+			if SelectIndex % 4 in [0, 1]:
+				if i % 4 in [0, 1]:
+					x += 1
+			elif SelectIndex % 4 in [2, 3]:
+				if i % 4 in [2, 3]:
+					x += 1
+		
+		if SelectIndex % 4 in [0, 2]:
+			x - 1
+		
+		return Vector2i(x, y)
+	set(value):
+		var n : int
+		
+		if value.x % 2 == 0:
+			n = value.x * 2
+		else:
+			n = (value.x - 1) * 2 + 1
+		SelectIndex = n + value.y * 2
+		
+
 const MenuSoulOffset := Vector2(49, 64)
 
 
-func MoveMenu(Direction : int) -> void:
-	SelectIndex += Direction
-	MenuCursor.play()
+func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
+	var TempIndex = SelectIndex
 	for menu in MenuButtons.get_children():
 		menu.play("default")
 	if SelectedMenu == "Main":
+		SelectIndex += HDirection
 		if SelectIndex > 3:
 			SelectIndex = 0
 		elif SelectIndex < 0:
@@ -155,15 +209,58 @@ func MoveMenu(Direction : int) -> void:
 		Soul.position = MenuButtons.get_child(SelectIndex).position + MenuSoulOffset
 		MenuButtons.get_child(SelectIndex).play("active")
 	else:
-		if SelectIndex > SelectableOptions.get_child_count() - 1:
-			SelectIndex = 0
-		elif SelectIndex < 0:
-			SelectIndex = SelectableOptions.get_child_count() - 1
+		# WARNING Might crash if there's only 2 or 3 options
+		if SelectableOptions.get_child_count() > 1:
+			#if SelectIndex == 0 and HDirection == -1:
+				#SelectIndex = SelectableOptions.get_child_count() - 3
+			#elif SelectIndex == 2 and HDirection == -1:
+				#SelectIndex = SelectableOptions.get_child_count() - 1
+			#elif SelectIndex == SelectableOptions.get_child_count() - 3 and HDirection == 1:
+				#SelectIndex = 0
+			#elif SelectIndex == SelectableOptions.get_child_count() -1 and HDirection == 1:
+				#SelectIndex = 2
+			#elif SelectIndex % 4 in [0, 1] and VDirection == 1:
+				#SelectIndex += 2
+				#MenuCursor.play()
+			#elif SelectIndex % 4 in [2, 3] and VDirection == -1:
+				#SelectIndex -= 2
+				#MenuCursor.play()
+			#elif SelectIndex % 4 in [1, 3] and HDirection == 1:
+				#SelectIndex += 3
+			#elif SelectIndex % 4 in [0, 2] and HDirection == -1:
+				#SelectIndex -= 3
+			#else:
+				#SelectIndex += HDirection
+			if IndexPosition in [Vector2i(0, 1), Vector2i(0, 0)] and HDirection == -1:
+				IndexPosition.x = SelectableOptions.get_child_count()
+				while true:
+					IndexPosition.x -= 1
+					if SelectIndex < SelectableOptions.get_child_count():
+						break
+			else:
+				if VDirection + IndexPosition.y in [0, 1] and VDirection != 0:
+					if VDirection == 1 and SelectIndex + 2 < SelectableOptions.get_child_count():
+						IndexPosition = Vector2(IndexPosition.x, IndexPosition.y + VDirection)
+					elif VDirection == -1:
+						IndexPosition = Vector2(IndexPosition.x, IndexPosition.y + VDirection)
+				else:
+					IndexPosition = Vector2(IndexPosition.x + HDirection, IndexPosition.y)
+				
+				if SelectIndex > SelectableOptions.get_child_count() - 1:
+					IndexPosition.x = 0
 		Soul.position = CurrentOption.global_position + OptionSoulOffset
+		for option in OptionsArray:
+			if option.get_index()/4 == SelectIndex/4:
+				option.show()
+			else:
+				option.hide()
+	if TempIndex != SelectIndex:
+		MenuCursor.play()
 	
 func SelectMenu() -> void:
 	if SelectedMenu == "Main":
 		ChangeMenu(MenuButtons.get_child(SelectIndex).name)
+	MenuCursor.play()
 	
 func ChangeMenu(MenuType: String) -> void:
 	if SelectedMenu == "Main":
@@ -190,21 +287,27 @@ func ReturnMenu() -> void:
 func SetMenuOptions() -> void:
 	for option in OptionsArray:
 		option.queue_free()
-	if SelectedMenu in ["Fight", "Act"]:
-		EnemySelect()
-	if SelectedMenu == "Main":
-		MenuText.unhideText()
-		MenuText.DontSkipDuringThisParticularFrame()
-	
-func EnemySelect() -> void:
-	CreateTextInput("Sans", 0)
-	
+	match SelectedMenu:
+		"Fight", "Act":
+			CreateTextInput("Sans", 0)
+		"Item":
+			CreateTextInput("Test1", 0)
+			CreateTextInput("Test2", 1)
+			CreateTextInput("Test3", 2)
+			CreateTextInput("Test4", 3)
+			CreateTextInput("Test5", 4)
+		"Main":
+			MenuText.unhideText()
+			MenuText.DontSkipDuringThisParticularFrame()
+		
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
 func CreateTextInput(SetText: String, ID: int) -> void:
 	var RichText : RichTextLabel = RichTextLabel.new()
 	RichText.text = SetText
-	RichText.position = Vector2(150, 0)
+	RichText.position = Vector2(192 + (ID%2)*768, 0)
+	if ID%4 in [2, 3] :
+		RichText.position.y = 96
 	RichText.size = Vector2(900, 100)
 	RichText.scroll_active = false
 	RichText.add_theme_font_override("normal_font", TextFont)
