@@ -23,6 +23,7 @@ var SkippableText := true
 var Skipping := false
 var Waiting := false
 var DontSkipThisFrame := false
+var CurrentlyTyping := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -53,10 +54,12 @@ func setText(text : String) -> void:
 		displayChar()
 	await get_tree().process_frame
 	self.show()
-	
+
+
 func displayChar() -> void:
 	if !Skipping:
 		if TextLabel.visible_ratio != 1:
+			CurrentlyTyping = true
 			TextLabel.visible_characters += 1
 			
 			if TextLabel.get_parsed_text()[TextLabel.visible_characters - 1] != " ":
@@ -69,9 +72,12 @@ func displayChar() -> void:
 			displayChar()
 		else:
 			textDone.emit()
+			CurrentlyTyping = false
 	else:
 		await get_tree().process_frame
 		textDone.emit()
+		CurrentlyTyping = false
+	
 
 func clearText() -> void:
 	self.hide()
@@ -84,7 +90,9 @@ func hideText() -> void:
 func unhideText() -> void:
 	TextLabel.show()
 	TextLabel.visible_characters = 0
-	displayChar()
+	Skipping = false
+	if !CurrentlyTyping:
+		displayChar()
 
 func continueText(addedText : String, Delay : float = 0.0) -> void:
 	Waiting = true

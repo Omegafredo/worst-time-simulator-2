@@ -76,7 +76,7 @@ func _ready():
 	#await Globals.Wait(1)
 	#SoulMode(0)
 	#await Globals.Wait(2)
-	Bone(Vector2(1200, 1000),50,180,70,true)
+	#Bone(Vector2(1200, 1000),50,180,70,true)
 	#CombatBox(Rect2(400, 720, 900, 1152))
 	#
 	#await Globals.Wait(2)
@@ -89,7 +89,7 @@ func _ready():
 	#
 	#await Globals.Wait(2.5)
 	#
-	#ReturnToMenu()
+	ReturnToMenu()
 	
 	
 func InitialiseBattle():
@@ -231,7 +231,7 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 				#SelectIndex -= 3
 			#else:
 				#SelectIndex += HDirection
-			if IndexPosition in [Vector2i(0, 1), Vector2i(0, 0)] and HDirection == -1:
+			if IndexPosition.x == 0 and HDirection == -1:
 				IndexPosition.x = SelectableOptions.get_child_count()
 				while true:
 					IndexPosition.x -= 1
@@ -240,11 +240,11 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 			else:
 				if VDirection + IndexPosition.y in [0, 1] and VDirection != 0:
 					if VDirection == 1 and SelectIndex + 2 < SelectableOptions.get_child_count():
-						IndexPosition = Vector2(IndexPosition.x, IndexPosition.y + VDirection)
+						IndexPosition.y += VDirection
 					elif VDirection == -1:
-						IndexPosition = Vector2(IndexPosition.x, IndexPosition.y + VDirection)
+						IndexPosition.y += VDirection
 				else:
-					IndexPosition = Vector2(IndexPosition.x + HDirection, IndexPosition.y)
+					IndexPosition.x += HDirection
 				
 				if SelectIndex > SelectableOptions.get_child_count() - 1:
 					IndexPosition.x = 0
