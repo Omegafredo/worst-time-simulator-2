@@ -7,15 +7,14 @@ var Masked : bool = false:
 			reparent(MaskedNode)
 		else:
 			reparent(AttacksNode)
-		print(get_parent())
 		Masked = d
 
 @onready var Player : CharacterBody2D = get_tree().root.get_node("Main Node").find_child("Player")
 @onready var MaskedNode : Node2D = get_tree().root.get_node("Main Node").find_child("MaskedAttacks")
 @onready var AttacksNode : Node = get_tree().root.get_node("Main Node").find_child("VisibleAttacks")
-@onready var Hitbox : Area2D = get_child(0).AttackHitbox
-@onready var Damage : int = get_child(0).Damage
-@onready var Karma : int = get_child(0).Karma
+@export var Hitbox : Area2D
+@export var Damage : int
+@export var Karma : int
 var PlayerHitboxIn : bool = false
 var Counter : float = 0
 

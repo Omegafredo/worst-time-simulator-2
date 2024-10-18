@@ -7,9 +7,6 @@ var Height : float
 var Speed : float
 var Direction : float
 
-var Damage : int = 1
-var Karma : int = 2
-
 @onready var BoneTop := $BoneTop
 @onready var BoneMiddle := $BoneMiddle
 @onready var BoneBottom := $BoneBottom

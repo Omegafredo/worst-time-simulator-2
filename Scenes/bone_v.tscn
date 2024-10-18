@@ -19,8 +19,11 @@ region = Rect2(0, 16, 0, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqr6a"]
 size = Vector2(10, 24)
 
-[node name="AttackNode" type="Node2D"]
+[node name="AttackNode" type="Node2D" node_paths=PackedStringArray("Hitbox")]
 script = ExtResource("1_blx3e")
+Hitbox = NodePath("BoneV/BoneHitreg")
+Damage = 1
+Karma = 2
 
 [node name="BoneV" type="Node2D" parent="."]
 texture_filter = 1

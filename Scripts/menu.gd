@@ -260,7 +260,7 @@ func on_cool_anims_changed():
 		#Soul.InterpolateMovement(CurrentMenu.get_child(MoveIndex).global_position + SoulOffset)
 		MenuSwayStop()
 	
-var MenuSwayTween : Object
+var MenuSwayTween : Tween
 var MenuSwayTime : float = 3
 var MenuSwayAmount : float = 2.5
 	

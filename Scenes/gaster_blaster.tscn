@@ -1,0 +1,109 @@
+[gd_scene load_steps=15 format=3 uid="uid://bbjbm8mfopl45"]
+
+[ext_resource type="Script" path="res://Scripts/GeneralAttack.gd" id="1_bowtf"]
+[ext_resource type="Script" path="res://Scripts/gaster_blaster.gd" id="2_fmef2"]
+[ext_resource type="Texture2D" uid="uid://c7lckuhb8fett" path="res://Resources/Sprites/Gaster Blaster/Default.png" id="2_mfxnm"]
+[ext_resource type="Texture2D" uid="uid://cmhanq8pitj1c" path="res://Resources/Sprites/Gaster Blaster/Fire0.png" id="4_3y8f7"]
+[ext_resource type="Texture2D" uid="uid://b6v7si5c5b7bd" path="res://Resources/Sprites/Gaster Blaster/Fire1.png" id="5_2rrxl"]
+[ext_resource type="Texture2D" uid="uid://c3dxodbbrq1ea" path="res://Resources/Sprites/Gaster Blaster/Fire2.png" id="6_g0f7r"]
+[ext_resource type="Texture2D" uid="uid://uvutpkbqiypk" path="res://Resources/Sprites/Gaster Blaster/Fire3.png" id="7_njko1"]
+[ext_resource type="Texture2D" uid="uid://cewsncbg82y4l" path="res://Resources/Sprites/Gaster Blaster/Fire4.png" id="8_qrbuu"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2yo2r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_mfxnm")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_3y8f7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_2rrxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_g0f7r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_njko1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_qrbuu")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yetjb"]
+size = Vector2(5000, 18)
+
+[sub_resource type="Gradient" id="Gradient_bbpdk"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yd0ay"]
+gradient = SubResource("Gradient_bbpdk")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_frcsk"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f5gr8"]
+gradient = SubResource("Gradient_frcsk")
+width = 1
+
+[node name="Attack Node" type="Node2D" node_paths=PackedStringArray("Hitbox")]
+script = ExtResource("1_bowtf")
+Hitbox = NodePath("Gaster Blaster/Area2D")
+Damage = 1
+Karma = 2
+
+[node name="Gaster Blaster" type="Node2D" parent="."]
+scale = Vector2(3, 3)
+script = ExtResource("2_fmef2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Gaster Blaster"]
+sprite_frames = SubResource("SpriteFrames_2yo2r")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Gaster Blaster/AnimatedSprite2D"]
+position = Vector2(6.5, -1.19209e-07)
+scale = Vector2(3.41667, 2)
+
+[node name="Area2D" type="Area2D" parent="Gaster Blaster"]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gaster Blaster/Area2D"]
+z_index = 1
+position = Vector2(2535, 0)
+shape = SubResource("RectangleShape2D_yetjb")
+
+[node name="Blast" type="Node2D" parent="Gaster Blaster"]
+visible = false
+
+[node name="Blast1" type="Sprite2D" parent="Gaster Blaster/Blast"]
+position = Vector2(25, -11.25)
+scale = Vector2(5, 22.5)
+texture = SubResource("GradientTexture1D_yd0ay")
+centered = false
+
+[node name="Blast2" type="Sprite2D" parent="Gaster Blaster/Blast"]
+position = Vector2(30, -13.75)
+scale = Vector2(5, 27.5)
+texture = SubResource("GradientTexture1D_f5gr8")
+centered = false
+
+[node name="Blast3" type="Sprite2D" parent="Gaster Blaster/Blast"]
+position = Vector2(35, -16.5)
+scale = Vector2(5000, 33)
+texture = SubResource("GradientTexture1D_f5gr8")
+centered = false
+
+[connection signal="animation_looped" from="Gaster Blaster/AnimatedSprite2D" to="Gaster Blaster" method="_on_animated_sprite_2d_animation_looped"]
+[connection signal="frame_changed" from="Gaster Blaster/AnimatedSprite2D" to="Gaster Blaster" method="_on_animated_sprite_2d_frame_changed"]
+[connection signal="screen_entered" from="Gaster Blaster/AnimatedSprite2D/VisibleOnScreenNotifier2D" to="Gaster Blaster" method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="Gaster Blaster/AnimatedSprite2D/VisibleOnScreenNotifier2D" to="Gaster Blaster" method="_on_visible_on_screen_notifier_2d_screen_exited"]
