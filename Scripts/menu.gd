@@ -2,25 +2,24 @@ extends Node2D
 
 var MoveIndex : int = 0
 var ControlsAllowed : bool = false
-@onready var Soul : Object = %SoulSelector
-var CurrentMenu : Object
-var CurrentLabel : Object:
+@onready var Soul : Node2D = %SoulSelector
+var CurrentMenu : Menu
+var CurrentLabel : SettingSelection:
 	get():
 		return CurrentMenu.get_child(MoveIndex)
 @onready var MainContainer : Object = $MenuContainer
-var Menus : Array
-var SideOptions : Array
-var SettingsSelections : Array
-var MenuHistory : Array
-var MenuLabelHistory : Array
-var IndexHistory : Array
-@onready var MenuCursorSound : Object = $MenuCursor
-@onready var MenuSelectSound : Object = $MenuSelect
-@onready var MenuLogoSound := $LogoAppear
-@onready var FlashSound : Object = $Flash
-@onready var WTSLogo : Object = $"/root/Menu Scene/WTS"
-@onready var BottomParticles : Object = $"/root/Menu Scene/BottomParticles"
-@onready var BottomGradient : Object = $"/root/Menu Scene/BottomGradient"
+var Menus : Array[Menu]
+var SideOptions : Array[SettingSelection]
+var MenuHistory : Array[Menu]
+var MenuLabelHistory : Array[SettingSelection]
+var IndexHistory : Array[int]
+@onready var MenuCursorSound : AudioStreamPlayer = $MenuCursor
+@onready var MenuSelectSound : AudioStreamPlayer = $MenuSelect
+@onready var MenuLogoSound : AudioStreamPlayer = $LogoAppear
+@onready var FlashSound : AudioStreamPlayer = $Flash
+@onready var WTSLogo : TextureRect = $"/root/Menu Scene/WTS"
+@onready var BottomParticles : GPUParticles2D = $"/root/Menu Scene/BottomParticles"
+@onready var BottomGradient : TextureRect = $"/root/Menu Scene/BottomGradient"
 const SoulOffset : Vector2 = Vector2(-60, 35)
 
 const WTSLogoPosition := Vector2(-625, 25)

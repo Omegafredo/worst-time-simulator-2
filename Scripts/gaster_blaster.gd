@@ -106,7 +106,7 @@ func Shoot() -> void:
 	CurrentState = STATE_FIRE
 	Blast.show()
 	var tween = Blast.create_tween()
-	tween.tween_property(Blast, "scale:y", 1, 0.5)
+	tween.tween_property(Blast, "scale:y", 1, 0.2)
 	await tween.finished
 	SineTween = Blast.create_tween()
 	SineTween.set_ease(Tween.EASE_IN_OUT)
