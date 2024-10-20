@@ -26,6 +26,7 @@ var DeactiveState : bool = false
 func _ready() -> void:
 	Original_Text = text
 	if LinkedProperty == "MaxHP":
+		@warning_ignore("narrowing_conversion")
 		Globals.MaxHP = clampi(Globals.MaxHP, ClampedMin, ClampedMax)
 	
 
