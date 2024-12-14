@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cufjf3qipsr4s"
-path="res://.godot/imported/CombatZoneRound.png-f1dc8edee1ffb1dfcf91fcc99f6a06bd.ctex"
+uid="uid://uvutpkbqiypk"
+path="res://.godot/imported/Fire3.png-437eebcc246ae7317b7b56983b283b41.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/CombatZoneRound.png"
-dest_files=["res://.godot/imported/CombatZoneRound.png-f1dc8edee1ffb1dfcf91fcc99f6a06bd.ctex"]
+source_file="res://Resources/Sprites/Attacks/Gaster Blaster/Fire3.png"
+dest_files=["res://.godot/imported/Fire3.png-437eebcc246ae7317b7b56983b283b41.ctex"]
 
 [params]
 

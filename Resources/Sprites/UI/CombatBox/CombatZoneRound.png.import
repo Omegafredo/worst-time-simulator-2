@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bodo7kbx1c1ef"
-path="res://.godot/imported/CombatZone.png-e6fae8b2b090aadf7e0108e10bf450a0.ctex"
+uid="uid://cufjf3qipsr4s"
+path="res://.godot/imported/CombatZoneRound.png-3d434d76a27d279fe1e97c08e955f10b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/CombatZone.png"
-dest_files=["res://.godot/imported/CombatZone.png-e6fae8b2b090aadf7e0108e10bf450a0.ctex"]
+source_file="res://Resources/Sprites/UI/CombatBox/CombatZoneRound.png"
+dest_files=["res://.godot/imported/CombatZoneRound.png-3d434d76a27d279fe1e97c08e955f10b.ctex"]
 
 [params]
 

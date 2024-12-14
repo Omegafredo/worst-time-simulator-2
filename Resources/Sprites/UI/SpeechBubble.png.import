@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3dxodbbrq1ea"
-path="res://.godot/imported/Fire2.png-3e6f13f443ea690de7533ee74c367880.ctex"
+uid="uid://tpdj2mae3iil"
+path="res://.godot/imported/SpeechBubble.png-8464114f56a84a4c6b0edf61a5e35147.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/Gaster Blaster/Fire2.png"
-dest_files=["res://.godot/imported/Fire2.png-3e6f13f443ea690de7533ee74c367880.ctex"]
+source_file="res://Resources/Sprites/UI/SpeechBubble.png"
+dest_files=["res://.godot/imported/SpeechBubble.png-8464114f56a84a4c6b0edf61a5e35147.ctex"]
 
 [params]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://tmovq4tcmgda"]
 
-[ext_resource type="Texture2D" uid="uid://bodo7kbx1c1ef" path="res://Resources/Sprites/CombatZone.png" id="1_6n413"]
+[ext_resource type="Texture2D" uid="uid://bodo7kbx1c1ef" path="res://Resources/Sprites/UI/CombatBox/CombatZone.png" id="1_6n413"]
 [ext_resource type="Script" path="res://Scripts/combat_zone.gd" id="1_uo0hj"]
 [ext_resource type="Texture2D" uid="uid://dkqv73ghmhhx0" path="res://Resources/Sprites/icon.svg" id="3_xh81c"]
 

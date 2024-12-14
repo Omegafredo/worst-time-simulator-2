@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cewsncbg82y4l"
-path="res://.godot/imported/Fire4.png-4a7cba81e65866b2610f21f4c89dc12b.ctex"
+uid="uid://bvd5emw4mqfox"
+path="res://.godot/imported/BoneV.png-22d1104063c7f00fd1dee7933d8fdad9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/Gaster Blaster/Fire4.png"
-dest_files=["res://.godot/imported/Fire4.png-4a7cba81e65866b2610f21f4c89dc12b.ctex"]
+source_file="res://Resources/Sprites/Attacks/BoneV.png"
+dest_files=["res://.godot/imported/BoneV.png-22d1104063c7f00fd1dee7933d8fdad9.ctex"]
 
 [params]
 

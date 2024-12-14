@@ -42,16 +42,13 @@ func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed 
 	newBone.get_parent().Masked = MaskedState
 	return newBone
 	
-func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : float, DelayTime : float, ShootTime : float) -> Node2D:
-	var newBlaster = BlasterPath.instantiate().get_child(0)
+func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : float, DelayTime : float, ShootTime : float) -> Gaster_Blaster:
+	var newBlaster : Gaster_Blaster = BlasterPath.instantiate().get_child(0)
 	newBlaster.Size = Size
 	newBlaster.position = StartPos
-	newBlaster.Moves.append(EndPos)
 	newBlaster.rotation_degrees = 90
-	newBlaster.Angles.append(Angle)
-	newBlaster.Delays.append(DelayTime)
-	newBlaster.Shoots.append(ShootTime)
 	add_child(newBlaster.get_parent())
+	newBlaster.BlasterMove(EndPos, Angle, DelayTime, ShootTime)
 	newBlaster.get_parent().Masked = false
 	newBlaster.Enter()
 	return newBlaster
@@ -111,8 +108,10 @@ func _ready():
 	GasterBlaster(0, Vector2(0,0), Vector2(435, 684), 0, 1, 2)
 	GasterBlaster(2, Vector2(0,0), Vector2(435, 400), 0, 1, 2)
 	var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
-	BlasterMove(test1, Vector2(400,600), 120, 0, 2)
-	await Globals.Wait(3.7)
+	test1.BlasterMoveManual(Vector2(400,600), 120)
+	test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
+	await Globals.Wait(4)
+	test1.ForceFire(2)
 	#ReturnToMenu()
 	
 	

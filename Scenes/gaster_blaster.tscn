@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://Scripts/GeneralAttack.gd" id="1_bowtf"]
 [ext_resource type="Script" path="res://Scripts/gaster_blaster.gd" id="2_fmef2"]
-[ext_resource type="Texture2D" uid="uid://c7lckuhb8fett" path="res://Resources/Sprites/Gaster Blaster/Default.png" id="2_mfxnm"]
-[ext_resource type="Texture2D" uid="uid://cmhanq8pitj1c" path="res://Resources/Sprites/Gaster Blaster/Fire0.png" id="4_3y8f7"]
-[ext_resource type="Texture2D" uid="uid://b6v7si5c5b7bd" path="res://Resources/Sprites/Gaster Blaster/Fire1.png" id="5_2rrxl"]
-[ext_resource type="Texture2D" uid="uid://c3dxodbbrq1ea" path="res://Resources/Sprites/Gaster Blaster/Fire2.png" id="6_g0f7r"]
-[ext_resource type="Texture2D" uid="uid://uvutpkbqiypk" path="res://Resources/Sprites/Gaster Blaster/Fire3.png" id="7_njko1"]
-[ext_resource type="Texture2D" uid="uid://cewsncbg82y4l" path="res://Resources/Sprites/Gaster Blaster/Fire4.png" id="8_qrbuu"]
+[ext_resource type="Texture2D" uid="uid://c7lckuhb8fett" path="res://Resources/Sprites/Attacks/Gaster Blaster/Default.png" id="2_mfxnm"]
+[ext_resource type="Texture2D" uid="uid://cmhanq8pitj1c" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire0.png" id="4_3y8f7"]
+[ext_resource type="Texture2D" uid="uid://b6v7si5c5b7bd" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire1.png" id="5_2rrxl"]
+[ext_resource type="Texture2D" uid="uid://c3dxodbbrq1ea" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire2.png" id="6_g0f7r"]
+[ext_resource type="Texture2D" uid="uid://uvutpkbqiypk" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire3.png" id="7_njko1"]
+[ext_resource type="Texture2D" uid="uid://cewsncbg82y4l" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire4.png" id="8_qrbuu"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2yo2r"]
 animations = [{
@@ -58,6 +58,7 @@ gradient = SubResource("Gradient_frcsk")
 width = 1
 
 [node name="Attack Node" type="Node2D" node_paths=PackedStringArray("Hitbox")]
+z_index = 1
 script = ExtResource("1_bowtf")
 Hitbox = NodePath("Gaster Blaster/Area2D")
 Damage = 1
@@ -103,7 +104,7 @@ scale = Vector2(5000, 33)
 texture = SubResource("GradientTexture1D_f5gr8")
 centered = false
 
+[connection signal="animation_changed" from="Gaster Blaster/AnimatedSprite2D" to="Gaster Blaster" method="_on_animated_sprite_2d_animation_changed"]
 [connection signal="animation_looped" from="Gaster Blaster/AnimatedSprite2D" to="Gaster Blaster" method="_on_animated_sprite_2d_animation_looped"]
-[connection signal="frame_changed" from="Gaster Blaster/AnimatedSprite2D" to="Gaster Blaster" method="_on_animated_sprite_2d_frame_changed"]
 [connection signal="screen_entered" from="Gaster Blaster/AnimatedSprite2D/VisibleOnScreenNotifier2D" to="Gaster Blaster" method="_on_visible_on_screen_notifier_2d_screen_entered"]
 [connection signal="screen_exited" from="Gaster Blaster/AnimatedSprite2D/VisibleOnScreenNotifier2D" to="Gaster Blaster" method="_on_visible_on_screen_notifier_2d_screen_exited"]

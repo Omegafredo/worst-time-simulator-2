@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmhanq8pitj1c"
-path="res://.godot/imported/Fire0.png-74ec4c85ee5610f22c28257a95252396.ctex"
+path="res://.godot/imported/Fire0.png-a64cb9a18599dbc855f89b36f4cb8e2e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/Gaster Blaster/Fire0.png"
-dest_files=["res://.godot/imported/Fire0.png-74ec4c85ee5610f22c28257a95252396.ctex"]
+source_file="res://Resources/Sprites/Attacks/Gaster Blaster/Fire0.png"
+dest_files=["res://.godot/imported/Fire0.png-a64cb9a18599dbc855f89b36f4cb8e2e.ctex"]
 
 [params]
 

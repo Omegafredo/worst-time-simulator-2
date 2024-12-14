@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
-[ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/SpeechBubble.png" id="4_kn0io"]
+[ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
 [ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
 [ext_resource type="Texture2D" uid="uid://djveown85plq7" path="res://Resources/Sprites/UI/ActionBoxes/FightActive.png" id="8_p1agq"]

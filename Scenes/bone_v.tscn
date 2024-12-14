@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/GeneralAttack.gd" id="1_blx3e"]
 [ext_resource type="Script" path="res://Scripts/bone_v.gd" id="1_qkg15"]
-[ext_resource type="Texture2D" uid="uid://bvd5emw4mqfox" path="res://Resources/Sprites/BoneV.png" id="2_r4hna"]
+[ext_resource type="Texture2D" uid="uid://bvd5emw4mqfox" path="res://Resources/Sprites/Attacks/BoneV.png" id="2_r4hna"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_diw3u"]
 atlas = ExtResource("2_r4hna")

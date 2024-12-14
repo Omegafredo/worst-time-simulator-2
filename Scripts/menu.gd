@@ -321,7 +321,7 @@ func OldMenuOut() -> void:
 		for child in CurrentMenu.get_children():
 			if child != CurrentLabel:
 				child.modulate.a = 0
-		if MenuLabelHistory.size() >= 2:
+		if MenuLabelHistory.size() >= 1:
 			MenuLabelHistory[-1].modulate.a = 0
 	MenuLabelHistory.append(CurrentLabel)
 
