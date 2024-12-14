@@ -8,11 +8,9 @@ var DelayTime : float
 var ShootTime : float
 var MoveTo : Vector2
 var AngleTo : float
+var WillShoot : bool
 
-var Delays : Array[float]
-var Shoots : Array[float]
-var Moves : Array[Vector2]
-var Angles : Array[float]
+var Path : Array[BlasterAttack]
 
 const ENTER_TIME : float = 0.5
 var EXIT_SPEED : float = 200
@@ -33,6 +31,9 @@ var Size : int:
 
 var on_screen : bool = true
 
+var forcedShoot : bool = false
+var forcedShootTime : float
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -47,17 +48,27 @@ func _process(delta):
 	
 	if CurrentState == STATE_WAIT:
 		if DelayTime <= 0:
-			Fire()
+			if WillShoot:
+				Fire()
+			else:
+				PopMoves()
+				Enter()
+		
 		DelayTime -= delta
 	
 	if CurrentState == STATE_FIRE:
-		if Moves.size() <= 1:
+		if Path.size() <= 1:
 			Exit()
 			
 		
 	if CurrentState in [STATE_FIRE, STATE_LEAVE]:
 		if ShootTime <= 0:
+			PopMoves()
 			Stop()
+			if !Path.size() <= 0:
+				Enter()
+			else:
+				CurrentState = STATE_DONE
 		ShootTime -= delta
 		
 	if CurrentState in [STATE_LEAVE, STATE_DONE]:
@@ -66,6 +77,12 @@ func _process(delta):
 			
 			if EXIT_SPEED <= 1800:
 				EXIT_SPEED += 2000 * delta
+	
+	if forcedShoot and forcedShootTime > 0:
+		forcedShootTime -= delta
+	elif forcedShoot:
+		forcedShoot = false
+		Stop()
 	
 	
 	#match CurrentState:
@@ -96,6 +113,11 @@ func Enter() -> void:
 func Exit() -> void:
 	CurrentState = STATE_LEAVE
 
+func ForceFire() -> void:
+	forcedShoot = true
+	forcedShootTime = ShootTime
+	Fire()
+
 func Fire() -> void:
 	BlasterSprite.play("fire")
 
@@ -103,7 +125,6 @@ var SineTween : Tween
 
 func Shoot() -> void:
 	Hitbox.monitoring = true
-	CurrentState = STATE_FIRE
 	Blast.show()
 	var tween = Blast.create_tween()
 	tween.tween_property(Blast, "scale:y", 1, 0.2)
@@ -116,15 +137,10 @@ func Shoot() -> void:
 	SineTween.tween_property(Blast, "scale:y", 1.0, 0.08)
 	
 func Stop() -> void:
-	PopMoves()
 	SineTween.kill()
 	var tween = Blast.create_tween()
 	tween.tween_property(Blast, "scale:y", 0, 0.2)
 	Hitbox.monitoring = false
-	if !Moves.size() <= 0:
-		Enter()
-	else:
-		CurrentState = STATE_DONE
 	await tween.finished
 	Blast.hide()
 
@@ -136,23 +152,32 @@ func Move(MoveTime : float) -> void:
 	tween.parallel().tween_property(self, "rotation_degrees", AngleTo, MoveTime)
 	await tween.finished
 	
-func ForceMove(MoveTime : float) -> void:
-	MoveTo = Moves[0]
-	AngleTo = Angles[0]
-	Move(MoveTime)
-	PopMoves()
-	
 func SetMoves() -> void:
-	MoveTo = Moves[0]
-	AngleTo = Angles[0]
-	DelayTime = Delays[0]
-	ShootTime = Shoots[0]
+	Path[0].AngleTo = AngleTo
+	Path[0].MoveTo = MoveTo
+	Path[0].DelayTime = DelayTime
+	Path[0].ShootTime = ShootTime
+	Path[0].Shoot = WillShoot
 
 func PopMoves() -> void:
-	Moves.pop_front()
-	Angles.pop_front()
-	Delays.pop_front()
-	Shoots.pop_front()
+	Path.pop_front()
+	
+func BlasterMove(EndPos : Vector2, Angle : float, Delay : float, ShootT: float) -> void:
+	var blasterAttack = BlasterAttack.new()
+	blasterAttack.MoveTo = EndPos
+	blasterAttack.AngleTo = Angle
+	blasterAttack.DelayTime = Delay
+	blasterAttack.ShootTime = ShootT
+	blasterAttack.Shoot = true
+	Path.push_front(blasterAttack)
+	
+	
+func BlasterMoveFireless(EndPos : Vector2, Angle : float) -> void:
+	var blasterAttack = BlasterAttack.new()
+	blasterAttack.MoveTo = EndPos
+	blasterAttack.AngleTo = Angle
+	blasterAttack.Shoot = false
+	Path.push_front(blasterAttack)
 
 func _on_animated_sprite_2d_animation_looped():
 	if BlasterSprite.animation == "fire":
@@ -161,6 +186,8 @@ func _on_animated_sprite_2d_animation_looped():
 func _on_animated_sprite_2d_frame_changed():
 	if BlasterSprite.animation == "fire":
 		if BlasterSprite.frame == 3 and CurrentState == STATE_WAIT:
+			if !forcedShoot:
+				CurrentState = STATE_FIRE
 			Shoot()
 		
 func _on_visible_on_screen_notifier_2d_screen_exited():

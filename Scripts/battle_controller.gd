@@ -55,19 +55,9 @@ func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : flo
 	newBlaster.get_parent().Masked = false
 	newBlaster.Enter()
 	return newBlaster
-
-func BlasterMove(Blaster : Node2D, EndPos : Vector2, Angle : float, Delay : float, Shoot: float) -> void:
-	Blaster.Moves.append(EndPos)
-	Blaster.Angles.append(Angle)
-	Blaster.Delays.append(Delay)
-	Blaster.Shoots.append(Shoot)
 	
-func ForceBlasterMove(Blaster : Node2D, EndPos : Vector2, Angle : float, MoveTime : float) -> void:
-	Blaster.Moves.push_front(EndPos)
-	Blaster.Angles.push_front(Angle)
-	Blaster.Delays.push_front(0)
-	Blaster.Shoots.push_front(0)
-	Blaster.ForceMove(MoveTime)
+func SendBlasterAttack(Blaster : Node2D, blasterAttack : BlasterAttack) -> void:
+	Blaster.Path.push_front(blasterAttack)
 	
 func SoulMode(NewSoulType : int):
 	Soul.Change_Soul(NewSoulType)
@@ -123,7 +113,6 @@ func _ready():
 	var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
 	BlasterMove(test1, Vector2(400,600), 120, 0, 2)
 	await Globals.Wait(3.7)
-	ForceBlasterMove(test1, Vector2(700,600), 45, 2)
 	#ReturnToMenu()
 	
 	
