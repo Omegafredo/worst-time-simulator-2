@@ -68,10 +68,8 @@ func _ready():
 	InitialiseBattle()
 	
 	
-	#SpeechBubble.AskForInput = true
-	#SpeechBubble.setText("Waiting system")
-	#
-	#SpeechBubble.continueText(" You can continue text", 1)
+	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
+	
 	#
 	#await SpeechBubble.receivedInput
 	#SpeechBubble.setText("There's also [wave amp=20.0 freq=5.0 connected=1][rainbow]BBCode![/rainbow][/wave]")
@@ -105,14 +103,14 @@ func _ready():
 	#
 	#await Globals.Wait(2.5)
 	#
-	GasterBlaster(0, Vector2(0,0), Vector2(435, 684), 0, 1, 2)
-	GasterBlaster(2, Vector2(0,0), Vector2(435, 400), 0, 1, 2)
-	var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
-	test1.BlasterMoveManual(Vector2(400,600), 120)
-	test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
-	await Globals.Wait(4)
-	test1.ForceFire(2)
-	#ReturnToMenu()
+	#GasterBlaster(0, Vector2(0,0), Vector2(435, 684), 0, 1, 2)
+	#GasterBlaster(2, Vector2(0,0), Vector2(435, 400), 0, 1, 2)
+	#var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
+	#test1.BlasterMoveManual(Vector2(400,600), 120)
+	#test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
+	#await Globals.Wait(4)
+	#test1.ForceFire(2)
+	ReturnToMenu()
 	
 	
 func InitialiseBattle():
@@ -256,7 +254,7 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 				#SelectIndex += HDirection
 			if IndexPosition.x == 0 and HDirection == -1:
 				IndexPosition.x = SelectableOptions.get_child_count()
-				while SelectIndex > SelectableOptions.get_child_count():
+				while SelectIndex > SelectableOptions.get_child_count() - 1:
 					IndexPosition.x -= 1
 			else:
 				if VDirection + IndexPosition.y in [0, 1] and VDirection != 0:
@@ -318,7 +316,6 @@ func SetMenuOptions() -> void:
 			CreateTextInput("Test5", 4)
 		"Main":
 			MenuText.unhideText()
-			MenuText.DontSkipDuringThisParticularFrame()
 		
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 

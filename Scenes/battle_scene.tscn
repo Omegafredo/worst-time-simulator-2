@@ -274,7 +274,7 @@ position = Vector2(150, 770)
 scale = Vector2(1, 1)
 CurrentMode = 2
 CharacterInterval = 0.035
-AskForInput = false
+AskForConfirmation = false
 
 [node name="RichText" type="RichTextLabel" parent="Battle Controller/UI/BoxText"]
 anchors_preset = -1

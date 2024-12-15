@@ -6,10 +6,9 @@ const sansFont = preload("res://Resources/Fonts/styles/comicSansVariant.tres")
 const sansSerious = preload("res://Resources/Fonts/styles/SansSeriousVariant.tres")
 const boxText = preload("res://Resources/Fonts/styles/boxText.tres")
 
-@onready var TextLabel := $RichText
+@onready var TextLabel : RichTextLabel = $RichText
 @onready var SansSpeak := $SansSpeak
 @onready var BattleText := $BattleText
-@onready var ContinueDelay := $ContinueDelay
 
 signal sendInput
 signal clearedText
@@ -18,12 +17,14 @@ signal textDone
 
 @export var CurrentMode : modes
 @export var CharacterInterval : float = 0.07
-@export var AskForInput := true
+@export var AskForConfirmation := true
 var SkippableText := true
+var IsConfirmable := false
 var Skipping := false
-var Waiting := false
-var DontSkipThisFrame := false
 var CurrentlyTyping := false
+
+var TimeDelay : Array[float]
+var AtCharacter : Array[int]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -34,21 +35,28 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
 		sendInput.emit()
-	if Input.is_action_just_pressed("cancel") and SkippableText and !DontSkipThisFrame:
-		TextLabel.visible_characters = -1
-		Skipping = true
-		ContinueDelay.stop()
-		ContinueDelay.timeout.emit()
-	
-	DontSkipThisFrame = false
+		Confirm()
+	if Input.is_action_just_pressed("cancel"):
+		if SkippableText and TextLabel.visible_characters > 1:
+			TextLabel.visible_characters = -1
+			Skipping = true
 		
-func DontSkipDuringThisParticularFrame() -> void:
-	DontSkipThisFrame = true
 		
 func setText(text : String) -> void:
 	Skipping = false
 	
-	TextLabel.text = text
+	var WaitSearch = RegEx.create_from_string("(?i)\\[Wait=(\\d+\\.?\\d*)\\]")
+	var ModifiedText : String = text
+	var ReduceAmount : int = 0
+	for result in WaitSearch.search_all(ModifiedText):
+		TimeDelay.append(float(result.strings[-1]))
+		AtCharacter.append(result.get_start() - ReduceAmount)
+		
+		ReduceAmount += result.get_string().length()
+		
+		ModifiedText = WaitSearch.sub(ModifiedText, "")
+	
+	TextLabel.text = ModifiedText
 	TextLabel.visible_characters = 0
 	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
 		displayChar()
@@ -68,10 +76,20 @@ func displayChar() -> void:
 						SansSpeak.play()
 					modes.TextBox:
 						BattleText.play()
-			await Globals.Wait(CharacterInterval)
+			if TextLabel.visible_characters in AtCharacter:
+				var i = 0
+				for n in AtCharacter:
+					if n == TextLabel.visible_characters:
+						await Globals.Wait(TimeDelay[i])
+						break
+					i += 1
+			else:
+				await Globals.Wait(CharacterInterval)
 			displayChar()
 		else:
 			textDone.emit()
+			if AskForConfirmation:
+				IsConfirmable = true
 			CurrentlyTyping = false
 	else:
 		await get_tree().process_frame
@@ -93,22 +111,8 @@ func unhideText() -> void:
 	Skipping = false
 	if !CurrentlyTyping:
 		displayChar()
-
-func continueText(addedText : String, Delay : float = 0.0) -> void:
-	Waiting = true
-	await textDone
-	if !Skipping:
-		ContinueDelay.start(Delay)
-		await ContinueDelay.timeout
-	Waiting = false
-	# append_text() doesn't work for some reason
-	TextLabel.append_text(addedText)
-	#TextLabel.text += addedText
-	if not TextLabel.visible_characters >= TextLabel.get_total_character_count():
-		displayChar()
-	Skipping = false
 		
-func changeMode(modeChange : int) -> void:
+func changeMode(modeChange) -> void:
 	CurrentMode = modeChange
 	
 	match modeChange:
@@ -122,13 +126,12 @@ func changeMode(modeChange : int) -> void:
 			TextLabel.add_theme_font_override("normal_font", boxText)
 			TextLabel.add_theme_font_size_override("normal_font_size", 96)
 	
-	
+func Confirm() -> void:
+	if IsConfirmable:
+		TextConfirmed()
 
-func _on_text_done() -> void:
-	if AskForInput:
-		if !Waiting:
-			await self.sendInput
-			if self.visible:
-				receivedInput.emit()
-				clearText()
+func TextConfirmed() -> void:
+	if self.visible:
+		receivedInput.emit()
+		clearText()
 			

@@ -19,7 +19,4 @@ bus = &"SoundEffects"
 stream = ExtResource("3_xqd1f")
 bus = &"SoundEffects"
 
-[node name="ContinueDelay" type="Timer" parent="."]
-one_shot = true
-
 [connection signal="textDone" from="." to="." method="_on_text_done"]
