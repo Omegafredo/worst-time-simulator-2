@@ -38,8 +38,9 @@ func _ready() -> void:
 	
 	for menu in Menus:
 		for option in menu.get_children():
-			if option.SideOption:
-				SideOptions.append(option)
+			if option is SettingSelection:
+				if option.SideOption:
+					SideOptions.append(option)
 	
 	# Sets the first menu as the Current Menu
 	CurrentMenu = Menus[0]

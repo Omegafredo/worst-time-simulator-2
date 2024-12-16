@@ -1,47 +1,81 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3shckdxsreeu"]
+[gd_scene load_steps=5 format=3 uid="uid://b3shckdxsreeu"]
 
 [ext_resource type="Script" path="res://Scripts/custom_attack_editor.gd" id="1_i7upa"]
+[ext_resource type="FontFile" uid="uid://difp5n5tpw25b" path="res://Resources/Fonts/determinationmonoweb-webfont.ttf" id="2_1axwo"]
 
-[node name="Control" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y6sa"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+anti_aliasing = false
+
+[sub_resource type="Theme" id="Theme_t813o"]
+default_font = ExtResource("2_1axwo")
+default_font_size = 16
+Button/styles/focus = SubResource("StyleBoxFlat_1y6sa")
+
+[node name="Custom Attack Editor" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_i7upa")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_right = 500.0
 offset_bottom = 600.0
+theme = SubResource("Theme_t813o")
 
-[node name="CodeEdit" type="CodeEdit" parent="Panel"]
-layout_mode = 0
-offset_top = 50.0
-offset_right = 500.0
-offset_bottom = 600.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Apply" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Apply"
+
+[node name="Import" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Import"
+
+[node name="Export" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Export"
+
+[node name="Test" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Test Button"
+
+[node name="CodeEdit" type="CodeEdit" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 text = "extends Node
 
 func TestFunction():
 	print(\"test\")"
+scroll_smooth = true
+highlight_all_occurrences = true
+highlight_current_line = true
 draw_tabs = true
 symbol_lookup_on_click = true
 gutters_draw_line_numbers = true
 code_completion_enabled = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
-layout_mode = 0
-offset_right = 500.0
-offset_bottom = 50.0
-
-[node name="Save" type="Button" parent="Panel/HBoxContainer"]
-layout_mode = 2
-text = "Save"
-
-[node name="Test" type="Button" parent="Panel/HBoxContainer"]
-layout_mode = 2
-text = "Test Button"
-
-[connection signal="pressed" from="Panel/HBoxContainer/Save" to="." method="_on_save_pressed"]
-[connection signal="pressed" from="Panel/HBoxContainer/Test" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Apply" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Test" to="." method="_on_button_pressed"]

@@ -1,6 +1,5 @@
-[gd_scene load_steps=20 format=3 uid="uid://blty1ony4m351"]
+[gd_scene load_steps=19 format=3 uid="uid://blty1ony4m351"]
 
-[ext_resource type="Script" path="res://CustomCode.gd" id="1_j2f6r"]
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
 [ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
 [ext_resource type="Script" path="res://Scripts/menu_node.gd" id="2_hl0mm"]
@@ -10,9 +9,12 @@
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
 [ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
-[ext_resource type="PackedScene" uid="uid://b3shckdxsreeu" path="res://Scenes/custom_attack_editor.tscn" id="5_c5iqe"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
+
+[sub_resource type="GDScript" id="GDScript_0masd"]
+script/source = "extends Node
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ggrs"]
 atlas = ExtResource("9_xvpl8")
@@ -51,7 +53,7 @@ gradient = SubResource("Gradient_8xh3g")
 use_hdr = true
 
 [node name="Menu Scene" type="Node"]
-script = ExtResource("1_j2f6r")
+script = SubResource("GDScript_0masd")
 
 [node name="Menu" type="Node2D" parent="."]
 texture_filter = 1
@@ -216,14 +218,8 @@ ClampedMax = 1.0
 LinkedProperty = "MusicBus"
 
 [node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer"]
+visible = false
 script = ExtResource("2_hl0mm")
-
-[node name="Control" parent="Menu" instance=ExtResource("5_c5iqe")]
-offset_left = 273.0
-offset_top = 121.0
-offset_right = 273.0
-offset_bottom = 121.0
-scale = Vector2(1.5, 1.5)
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")
@@ -266,6 +262,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(1580, 100)
+mouse_filter = 2
 texture = SubResource("AtlasTexture_0ggrs")
 
 [node name="BottomParticles" type="GPUParticles2D" parent="."]
@@ -290,4 +287,5 @@ offset_bottom = 1920.0
 grow_horizontal = 2
 grow_vertical = 0
 rotation = -1.5708
+mouse_filter = 2
 texture = SubResource("GradientTexture1D_wdhac")

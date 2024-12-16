@@ -45,16 +45,9 @@ func _process(_delta: float) -> void:
 func setText(text : String) -> void:
 	Skipping = false
 	
-	var WaitSearch = RegEx.create_from_string("(?i)\\[Wait=(\\d+\\.?\\d*)\\]")
-	var ModifiedText : String = text
-	var ReduceAmount : int = 0
-	for result in WaitSearch.search_all(ModifiedText):
-		TimeDelay.append(float(result.strings[-1]))
-		AtCharacter.append(result.get_start() - ReduceAmount)
-		
-		ReduceAmount += result.get_string().length()
-		
-		ModifiedText = WaitSearch.sub(ModifiedText, "")
+	ClearTextTags()
+	
+	var ModifiedText = ParseWaitTags(text)
 	
 	TextLabel.text = ModifiedText
 	TextLabel.visible_characters = 0
@@ -134,4 +127,20 @@ func TextConfirmed() -> void:
 	if self.visible:
 		receivedInput.emit()
 		clearText()
-			
+		
+func ClearTextTags() -> void:
+	TimeDelay.clear()
+	AtCharacter.clear()
+
+func ParseWaitTags(TextToParse : String) -> String:
+	var WaitSearch = RegEx.create_from_string("(?i)\\[Wait=(\\d+\\.?\\d*)\\]")
+	var ModifiedText : String = TextToParse
+	var ReduceAmount : int = 0
+	for result in WaitSearch.search_all(ModifiedText):
+		TimeDelay.append(float(result.strings[-1]))
+		AtCharacter.append(result.get_start() - ReduceAmount)
+		
+		ReduceAmount += result.get_string().length()
+		
+		ModifiedText = WaitSearch.sub(ModifiedText, "")
+	return ModifiedText
