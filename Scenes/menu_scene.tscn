@@ -9,12 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
 [ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
+[ext_resource type="PackedScene" uid="uid://b3shckdxsreeu" path="res://Scenes/custom_attack_editor.tscn" id="5_nty0a"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
-
-[sub_resource type="GDScript" id="GDScript_0masd"]
-script/source = "extends Node
-"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ggrs"]
 atlas = ExtResource("9_xvpl8")
@@ -53,7 +50,6 @@ gradient = SubResource("Gradient_8xh3g")
 use_hdr = true
 
 [node name="Menu Scene" type="Node"]
-script = SubResource("GDScript_0masd")
 
 [node name="Menu" type="Node2D" parent="."]
 texture_filter = 1
@@ -163,15 +159,6 @@ LinkedProperty = "MaxHP"
 visible = false
 script = ExtResource("2_hl0mm")
 
-[node name="CoolAnimations" type="Label" parent="Menu/MenuContainer/VideoMenu"]
-modulate = Color(1, 1, 0, 1)
-offset_right = 480.0
-offset_bottom = 66.0
-text = "Cool Animations"
-label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-LinkedProperty = "CoolAnimations"
-
 [node name="AudioMenu" type="Node2D" parent="Menu/MenuContainer"]
 visible = false
 script = ExtResource("2_hl0mm")
@@ -220,6 +207,20 @@ LinkedProperty = "MusicBus"
 [node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer"]
 visible = false
 script = ExtResource("2_hl0mm")
+
+[node name="Node2D" type="Label" parent="Menu/MenuContainer/CustomAttacks"]
+offset_right = 352.0
+offset_bottom = 66.0
+text = "Start Fight"
+label_settings = ExtResource("1_w1fbp")
+script = ExtResource("3_rhj55")
+
+[node name="Custom Attack Editor" parent="Menu/MenuContainer/CustomAttacks/Node2D" instance=ExtResource("5_nty0a")]
+offset_left = 267.0
+offset_top = 240.0
+offset_right = 267.0
+offset_bottom = 240.0
+scale = Vector2(1.5, 1.5)
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")

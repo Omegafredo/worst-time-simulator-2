@@ -5,10 +5,6 @@ extends Node
 signal CoolAnims_Changed
 
 var MusicEnabled : bool = true
-var CoolAnimations : bool = true:
-	set(ca):
-		CoolAnimations = ca
-		CoolAnims_Changed.emit()
 var ShowIntro : bool = true
 var PlayerName := "CHARA"
 

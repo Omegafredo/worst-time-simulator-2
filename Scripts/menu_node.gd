@@ -2,7 +2,7 @@
 extends Node2D
 class_name Menu
 
-
+var HideAfter : bool = false
 
 func _process(_delta):
 	if Engine.is_editor_hint():
@@ -11,4 +11,8 @@ func _process(_delta):
 			if Option is SettingSelection:
 				Option.position.y = Total_Gap 
 				Total_Gap += Option.size.y + 4
-		
+	else:
+		if HideAfter:
+			for child in get_children():
+				if child.modulate.a == 0:
+					hide()
