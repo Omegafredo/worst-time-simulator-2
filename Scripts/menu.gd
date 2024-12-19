@@ -282,7 +282,15 @@ func OldMenuOut() -> void:
 		if child != CurrentLabel:
 			InterpolateObject(child, "position:x", -500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	InterpolateObject(CurrentLabel, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+			
+	# Kills the old tween attached to the meta data when creating a new one
+	var oldTween = CurrentLabel.get_meta("ActiveTween")
+	if oldTween:
+		if oldTween.is_valid():
+			oldTween.kill()
+	var tween = InterpolateObject(CurrentLabel, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+	CurrentLabel.set_meta("ActiveTween", tween)
+	
 	if MenuLabelHistory.size() >= 1:
 		InterpolateObject(MenuLabelHistory[-1], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	MenuLabelHistory.append(CurrentLabel)
@@ -318,6 +326,11 @@ func NewMenuOut() -> void:
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	for Option in MenuHistory[-2].get_children():
 		if i == IndexHistory[-1]:
-			InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+			var oldTween = MenuLabelHistory[-1].get_meta("ActiveTween")
+			if oldTween:
+				if oldTween.is_valid():
+					oldTween.kill()
+			var tween = InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+			MenuLabelHistory[-1].set_meta("ActiveTween", tween)
 		Total_Gap += Option.size.y + 4
 		i += 1
