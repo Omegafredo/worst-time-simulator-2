@@ -77,5 +77,28 @@ code_completion_enabled = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 
+[node name="ImportDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(324, 180)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.gd", "*.txt")
+use_native_dialog = true
+
+[node name="ExportDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(324, 180)
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.gd", "*.txt")
+use_native_dialog = true
+
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Apply" to="." method="_on_save_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Test" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Import" to="." method="_on_import_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Export" to="." method="_on_export_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Test" to="." method="_on_test_button_pressed"]
+[connection signal="file_selected" from="ImportDialog" to="." method="_on_import_dialog_file_selected"]
+[connection signal="file_selected" from="ExportDialog" to="." method="_on_export_dialog_file_selected"]

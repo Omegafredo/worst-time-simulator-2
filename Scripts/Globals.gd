@@ -8,6 +8,8 @@ var MusicEnabled : bool = true
 var ShowIntro : bool = true
 var PlayerName := "CHARA"
 
+var CustomMode : bool
+
 var MasterBus:
 	get():
 		return db_to_linear(AudioServer.get_bus_volume_db(0))
@@ -36,6 +38,11 @@ var HP := 92:
 var MaxHP := 92
 var KR := 0
 const CodedItems : Dictionary = {"Pie": 99, "I.Noodles": 90, "Steak": 60, "L.Hero": 40}
+
+# Other
+
+var CustomAttackScript : GDScript
+
 
 # Functions
 

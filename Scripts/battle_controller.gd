@@ -4,16 +4,17 @@ var BonePath := load("res://Scenes/bone_v.tscn")
 var BlasterPath := load("res://Scenes/gaster_blaster.tscn")
 
 @onready var CombatZone := $CombatZoneCorner/CombatZone
-@onready var Soul := %Player
-@onready var SpeechBubble := $SpeechBubble
-@onready var MenuText := $UI/BoxText
-@onready var MenuButtons := $UI/MenuButtons
-@onready var MenuCursor := $Audio/MenuCursor
-@onready var HealthText := $UI/Health
-@onready var HealthBar: Sprite2D = $UI/HealthBar
-#@onready var HpIcon: Sprite2D = $UI/HpIcon
-@onready var KrIcon: Sprite2D = $UI/KrIcon
-@onready var PlayerName: Label = $UI/Name
+@export var Soul : CharacterBody2D
+@export var SpeechBubble : Node2D
+@export var MenuText : Node2D
+@export var MenuButtons : Node
+@export var MenuCursor : AudioStreamPlayer
+@export var HealthText : Label
+@export var HealthBar: Sprite2D
+#@export var HpIcon: Sprite2D = $UI/HpIcon
+@export var KrIcon: Sprite2D
+@export var PlayerName: Label
+@export var AttackList : Node
 
 func CombatBox(NewRect : Rect2):
 	CombatZone.Moving = true
@@ -66,8 +67,11 @@ func SoulSlam(SlamDirection : int):
 	
 func _ready():
 	InitialiseBattle()
+	Globals.CustomAttackScript.reload()
+	AttackList.set_script(Globals.CustomAttackScript)
 	
 	
+	AttackList.TestFunction()
 	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
 	
 	#

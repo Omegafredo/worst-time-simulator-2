@@ -127,6 +127,10 @@ func ConfirmAction() -> void:
 	if CurrentLabel.SideOption == false and CurrentLabel.DeactiveState == false:
 		match CurrentLabel.get_name():
 			"Start":
+				Globals.CustomMode = false
+				InitiateBattle()
+			"CustomStart":
+				Globals.CustomMode = true
 				InitiateBattle()
 			_:
 				if !CurrentLabel.LinkedProperty.is_empty():

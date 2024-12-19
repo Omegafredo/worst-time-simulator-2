@@ -171,9 +171,21 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="."]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "KrIcon", "PlayerName", "AttackList")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
+Soul = NodePath("Player")
+SpeechBubble = NodePath("SpeechBubble")
+MenuText = NodePath("UI/BoxText")
+MenuButtons = NodePath("UI/MenuButtons")
+MenuCursor = NodePath("Audio/MenuCursor")
+HealthText = NodePath("UI/Health")
+HealthBar = NodePath("UI/HealthBar")
+KrIcon = NodePath("UI/KrIcon")
+PlayerName = NodePath("UI/Name")
+AttackList = NodePath("AttackList")
+
+[node name="AttackList" type="Node" parent="Battle Controller"]
 
 [node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
 position = Vector2(856, 1103)
