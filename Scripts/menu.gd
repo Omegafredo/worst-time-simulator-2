@@ -37,9 +37,8 @@ func _ready() -> void:
 	
 	for menu in Menus:
 		for option in menu.get_children():
-			if option is SettingSelection:
-				if option.SideOption:
-					SideOptions.append(option)
+			if option is SettingScroll:
+				SideOptions.append(option)
 	
 	# Sets the first menu as the Current Menu
 	CurrentMenu = Menus[0]
@@ -124,22 +123,24 @@ func CancelAction() -> void:
 		
 
 func ConfirmAction() -> void:
-	if CurrentLabel.SideOption == false and CurrentLabel.DeactiveState == false:
-		match CurrentLabel.get_name():
-			"Start":
-				Globals.CustomMode = false
-				InitiateBattle()
-			"CustomStart":
-				Globals.CustomMode = true
-				InitiateBattle()
-			_:
-				if !CurrentLabel.LinkedProperty.is_empty():
-					get_node(CurrentLabel.PropertyObject).set(CurrentLabel.LinkedProperty, !get_node(CurrentLabel.PropertyObject).get(CurrentLabel.LinkedProperty))
-				elif CurrentLabel.MenuChange != null:
-					ChangeMenu(CurrentLabel.MenuChange.name)
+	if CurrentLabel is not SettingScroll and CurrentLabel.DeactiveState == false:
+		CurrentLabel.activated.emit()
+		if CurrentLabel is SettingToggler:
+			get_node(CurrentLabel.PropertyObject).set(CurrentLabel.LinkedProperty, !get_node(CurrentLabel.PropertyObject).get(CurrentLabel.LinkedProperty))
+		elif CurrentLabel is SettingMenuChanger:
+			ChangeMenu(CurrentLabel.MenuChange.name)
 		
 		UpdateLabels()
 		MenuSelectSound.play()
+
+func _on_start():
+	Globals.CustomMode = false
+	InitiateBattle()
+
+
+func _on_custom_start():
+	Globals.CustomMode = true
+	InitiateBattle()
 
 func UpdateLabels() -> void:
 	for child in find_children("*", "SettingSelection", true):

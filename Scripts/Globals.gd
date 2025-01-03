@@ -2,13 +2,13 @@ extends Node
 
 # Settings variables
 
-signal CoolAnims_Changed
-
 var MusicEnabled : bool = true
 var ShowIntro : bool = true
 var PlayerName := "CHARA"
 
 var CustomMode : bool
+var HardMode : bool = false
+var NoDeath : bool = false
 
 var MasterBus:
 	get():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://blty1ony4m351"]
+[gd_scene load_steps=22 format=3 uid="uid://blty1ony4m351"]
 
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
 [ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
@@ -8,8 +8,11 @@
 [ext_resource type="Script" path="res://Scripts/setting_selection.gd" id="3_rhj55"]
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
 [ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
+[ext_resource type="Script" path="res://Scripts/setting_scroll.gd" id="5_4cdd5"]
+[ext_resource type="Script" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
 [ext_resource type="PackedScene" uid="uid://b3shckdxsreeu" path="res://Scenes/custom_attack_editor.tscn" id="5_nty0a"]
+[ext_resource type="Script" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
 
@@ -70,11 +73,11 @@ script = ExtResource("3_rhj55")
 
 [node name="Settings" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 70.0
-offset_right = 600.0
+offset_right = 256.0
 offset_bottom = 136.0
 text = "Settings"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../SettingsMenu")
 
 [node name="Credits" type="Label" parent="Menu/MenuContainer/FirstMenu"]
@@ -85,13 +88,13 @@ text = "Credits"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
-[node name="Custom Attacks" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
+[node name="CustomAttack" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 210.0
-offset_right = 600.0
+offset_right = 416.0
 offset_bottom = 276.0
-text = "Custom Attacks"
+text = "Custom Attack"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../CustomAttacks")
 
 [node name="SettingsMenu" type="Node2D" parent="Menu/MenuContainer"]
@@ -103,7 +106,7 @@ offset_right = 160.0
 offset_bottom = 66.0
 text = "Video"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../VideoMenu")
 
 [node name="Audio" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
@@ -112,16 +115,16 @@ offset_right = 160.0
 offset_bottom = 136.0
 text = "Audio"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../AudioMenu")
 
-[node name="DifficultyLabel" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
+[node name="Difficulty" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 140.0
-offset_right = 608.0
+offset_right = 320.0
 offset_bottom = 206.0
-text = "Difficulty Settings"
+text = "Difficulty"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../DifficultyMenu")
 
 [node name="DifficultyMenu" type="Node2D" parent="Menu/MenuContainer"]
@@ -133,7 +136,8 @@ offset_right = 288.0
 offset_bottom = 66.0
 text = "Hard Mode"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("6_lglhd")
+LinkedProperty = "HardMode"
 
 [node name="NoDeath" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
 offset_top = 70.0
@@ -141,18 +145,18 @@ offset_right = 256.0
 offset_bottom = 136.0
 text = "No Death"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
+script = ExtResource("6_lglhd")
+LinkedProperty = "NoDeath"
 
 [node name="MaxHP" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
 offset_top = 140.0
-offset_right = 208.0
+offset_right = 192.0
 offset_bottom = 206.0
 text = "Max HP"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-SideOption = true
+script = ExtResource("5_4cdd5")
 ClampedMin = 1.0
-ClampedMax = 100.0
+ClampedMax = 92.0
 LinkedProperty = "MaxHP"
 
 [node name="VideoMenu" type="Node2D" parent="Menu/MenuContainer"]
@@ -164,44 +168,35 @@ visible = false
 script = ExtResource("2_hl0mm")
 
 [node name="MasterVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
-modulate = Color(1, 1, 0, 1)
-offset_right = 416.0
+offset_right = 480.0
 offset_bottom = 66.0
 text = "Master Volume"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-SideOption = true
-DirMultiplier = 0.01
+script = ExtResource("5_4cdd5")
 MultiplyShown = 100.0
-ClampedMax = 1.0
+ClampedMax = 100.0
 LinkedProperty = "MasterBus"
 
 [node name="SoundVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
-modulate = Color(1, 1, 0, 1)
 offset_top = 70.0
-offset_right = 328.0
+offset_right = 352.0
 offset_bottom = 136.0
 text = "Sfx Volume"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-SideOption = true
-DirMultiplier = 0.01
+script = ExtResource("5_4cdd5")
 MultiplyShown = 100.0
-ClampedMax = 1.0
+ClampedMax = 100.0
 LinkedProperty = "SfxBus"
 
 [node name="MusicVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
-modulate = Color(1, 1, 0, 1)
 offset_top = 140.0
-offset_right = 384.0
+offset_right = 448.0
 offset_bottom = 206.0
 text = "Music Volume"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-SideOption = true
-DirMultiplier = 0.01
+script = ExtResource("5_4cdd5")
 MultiplyShown = 100.0
-ClampedMax = 1.0
+ClampedMax = 100.0
 LinkedProperty = "MusicBus"
 
 [node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer"]
@@ -290,3 +285,6 @@ grow_vertical = 0
 rotation = -1.5708
 mouse_filter = 2
 texture = SubResource("GradientTexture1D_wdhac")
+
+[connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
+[connection signal="activated" from="Menu/MenuContainer/CustomAttacks/CustomStart" to="Menu" method="_on_custom_start"]
