@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3shckdxsreeu"]
+[gd_scene load_steps=6 format=3 uid="uid://b3shckdxsreeu"]
 
 [ext_resource type="Script" path="res://Scripts/custom_attack_editor.gd" id="1_i7upa"]
 [ext_resource type="FontFile" uid="uid://difp5n5tpw25b" path="res://Resources/Fonts/determinationmonoweb-webfont.ttf" id="2_1axwo"]
@@ -25,6 +25,12 @@ anti_aliasing = false
 default_font = ExtResource("2_1axwo")
 default_font_size = 16
 Button/styles/focus = SubResource("StyleBoxFlat_1y6sa")
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_uasxv"]
+number_color = Color(0.631373, 1, 0.878431, 1)
+symbol_color = Color(0.670588, 0.788235, 1, 1)
+function_color = Color(0.4, 0.901961, 1, 1)
+member_variable_color = Color(0.737255, 0.878431, 1, 1)
 
 [node name="Custom Attack Editor" type="Control"]
 layout_mode = 3
@@ -63,17 +69,17 @@ text = "Test Button"
 [node name="CodeEdit" type="CodeEdit" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "extends Node
-
-func TestFunction():
-	print(\"test\")"
+virtual_keyboard_enabled = false
+indent_wrapped_lines = true
 scroll_smooth = true
+syntax_highlighter = SubResource("CodeHighlighter_uasxv")
 highlight_all_occurrences = true
 highlight_current_line = true
 draw_tabs = true
 symbol_lookup_on_click = true
 gutters_draw_line_numbers = true
 code_completion_enabled = true
+indent_automatic = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 
@@ -100,5 +106,7 @@ use_native_dialog = true
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Import" to="." method="_on_import_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Export" to="." method="_on_export_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Test" to="." method="_on_test_button_pressed"]
+[connection signal="code_completion_requested" from="Panel/VBoxContainer/CodeEdit" to="." method="_on_code_edit_code_completion_requested"]
+[connection signal="text_changed" from="Panel/VBoxContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
 [connection signal="file_selected" from="ImportDialog" to="." method="_on_import_dialog_file_selected"]
 [connection signal="file_selected" from="ExportDialog" to="." method="_on_export_dialog_file_selected"]

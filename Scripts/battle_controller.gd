@@ -1,4 +1,5 @@
 extends Node
+class_name BattleController
 
 var BonePath := load("res://Scenes/bone_v.tscn")
 var BlasterPath := load("res://Scenes/gaster_blaster.tscn")
@@ -15,6 +16,8 @@ var BlasterPath := load("res://Scenes/gaster_blaster.tscn")
 @export var KrIcon: Sprite2D
 @export var PlayerName: Label
 @export var AttackList : Node
+
+#region Attack Calls
 
 func CombatBox(NewRect : Rect2):
 	CombatZone.Moving = true
@@ -54,8 +57,8 @@ func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : flo
 	newBlaster.Enter()
 	return newBlaster
 	
-func SendBlasterAttack(Blaster : Node2D, blasterAttack : BlasterAttack) -> void:
-	Blaster.Path.push_front(blasterAttack)
+#func SendBlasterAttack(Blaster : Node2D, blasterAttack : BlasterAttack) -> void:
+	#Blaster.Path.push_front(blasterAttack)
 	
 func SoulMode(NewSoulType : int):
 	Soul.Change_Soul(NewSoulType)
@@ -65,13 +68,17 @@ func SoulSlam(SlamDirection : int):
 	Soul.Slammed = true
 	Soul.gravityDir = SlamDirection
 	
+
+#endregion
+
+var AttackTurns : int = 0
+var AmountTurns : int = 0
+
 func _ready():
 	InitialiseBattle()
 	Globals.CustomAttackScript.reload()
 	AttackList.set_script(Globals.CustomAttackScript)
 	
-	
-	AttackList.TestFunction()
 	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
 	
 	#

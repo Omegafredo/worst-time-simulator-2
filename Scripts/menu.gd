@@ -51,6 +51,8 @@ func _ready() -> void:
 		InitiateIntro()
 	else:
 		InitiateMenu()
+		if Globals.CustomMode:
+			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
 	
 
 
@@ -128,7 +130,7 @@ func ConfirmAction() -> void:
 		if CurrentLabel is SettingToggler:
 			get_node(CurrentLabel.PropertyObject).set(CurrentLabel.LinkedProperty, !get_node(CurrentLabel.PropertyObject).get(CurrentLabel.LinkedProperty))
 		elif CurrentLabel is SettingMenuChanger:
-			ChangeMenu(CurrentLabel.MenuChange.name)
+			ChangeMenu(CurrentLabel.MenuChange)
 		
 		UpdateLabels()
 		MenuSelectSound.play()
@@ -148,9 +150,9 @@ func UpdateLabels() -> void:
 	
 	
 
-func ChangeMenu(MenuTo : String) -> void:
-	OldMenuOut()
-	CurrentMenu = MainContainer.get_node(MenuTo)
+func ChangeMenu(MenuTo : Menu, MenuHeader : SettingMenuChanger = CurrentLabel) -> void:
+	OldMenuOut(MenuHeader)
+	CurrentMenu = MenuTo
 	NewMenuIn()
 	AppendHistory()
 	MoveSoul(0)
@@ -282,23 +284,23 @@ func Flash(Toggle : bool) -> void:
 		BottomParticles.show()
 	await Globals.Wait(0.0766)
 	
-func OldMenuOut() -> void:
+func OldMenuOut(MovedMenu : SettingMenuChanger) -> void:
 	for child in CurrentMenu.get_children():
-		if child != CurrentLabel:
+		if child != MovedMenu:
 			InterpolateObject(child, "position:x", -500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			
 	# Kills the old tween attached to the meta data when creating a new one
-	var oldTween = CurrentLabel.get_meta("ActiveTween")
+	var oldTween = MovedMenu.get_meta("ActiveTween")
 	if oldTween:
 		if oldTween.is_valid():
 			oldTween.kill()
-	var tween = InterpolateObject(CurrentLabel, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
-	CurrentLabel.set_meta("ActiveTween", tween)
+	var tween = InterpolateObject(MovedMenu, "position:y", -75, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+	MovedMenu.set_meta("ActiveTween", tween)
 	
 	if MenuLabelHistory.size() >= 1:
 		InterpolateObject(MenuLabelHistory[-1], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	MenuLabelHistory.append(CurrentLabel)
+	MenuLabelHistory.append(MovedMenu)
 
 func OldMenuIn() -> void:
 	CurrentMenu.visible = true

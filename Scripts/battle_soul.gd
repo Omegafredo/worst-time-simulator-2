@@ -102,10 +102,7 @@ func _process(delta: float) -> void:
 					CoyoteTime.start()
 					
 					
-		if Globals.CoolAnimations:
-			SoulSprite.rotation = rotate_toward(SoulSprite.rotation, deg_to_rad(gravityDir * -90 + 90), delta * 10)
-		else:
-			SoulSprite.rotation_degrees = gravityDir * -90 + 90
+		SoulSprite.rotation = rotate_toward(SoulSprite.rotation, deg_to_rad(gravityDir * -90 + 90), delta * 10)
 				
 		move_and_slide()
 		
