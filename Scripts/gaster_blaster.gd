@@ -1,4 +1,4 @@
-extends Node2D
+extends Attack
 class_name Gaster_Blaster
 
 enum {STATE_ENTER, STATE_WAIT, STATE_FIRE, STATE_LEAVE, STATE_DONE}
@@ -28,7 +28,6 @@ var Size : int:
 
 @onready var BlasterSprite : AnimatedSprite2D = $AnimatedSprite2D
 @onready var Blast = $Blast
-@onready var Hitbox = $Area2D
 
 var on_screen : bool = true
 
@@ -47,6 +46,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	super(delta)
 	
 	if CurrentState == STATE_WAIT:
 		if DelayTime <= 0:

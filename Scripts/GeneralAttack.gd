@@ -22,8 +22,9 @@ var Counter : float = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Hitbox.body_entered.connect(_body_entered)
-	Hitbox.body_exited.connect(_body_exited)
+	if Hitbox:
+		Hitbox.body_entered.connect(_body_entered)
+		Hitbox.body_exited.connect(_body_exited)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

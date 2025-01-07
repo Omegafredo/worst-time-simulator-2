@@ -1,8 +1,9 @@
 extends Node
 class_name BattleController
 
-var BonePath := load("res://Scenes/bone_v.tscn")
-var BlasterPath := load("res://Scenes/gaster_blaster.tscn")
+var BonePath := preload("res://Scenes/bone_v.tscn")
+var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
+var PlatformPath := preload("res://Scenes/platform.tscn")
 
 @onready var CombatZone := $CombatZoneCorner/CombatZone
 @export var Soul : CharacterBody2D
@@ -36,24 +37,24 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
 	
 
-func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Node2D:
-	var newBone = BonePath.instantiate().get_child(0)
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Attack:
+	var newBone = BonePath.instantiate()
 	newBone.position = StartPos
 	newBone.Height = NewHeight
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
-	add_child(newBone.get_parent())
-	newBone.get_parent().Masked = MaskedState
+	add_child(newBone)
+	newBone.Masked = MaskedState
 	return newBone
 	
 func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : float, DelayTime : float, ShootTime : float) -> Gaster_Blaster:
-	var newBlaster : Gaster_Blaster = BlasterPath.instantiate().get_child(0)
+	var newBlaster : Gaster_Blaster = BlasterPath.instantiate()
 	newBlaster.Size = Size
 	newBlaster.position = StartPos
 	newBlaster.rotation_degrees = 90
-	add_child(newBlaster.get_parent())
+	add_child(newBlaster)
 	newBlaster.BlasterMove(EndPos, Angle, DelayTime, ShootTime)
-	newBlaster.get_parent().Masked = false
+	newBlaster.Masked = false
 	newBlaster.Enter()
 	return newBlaster
 	
@@ -67,7 +68,16 @@ func SoulSlam(SlamDirection : int):
 	Soul.Change_Soul(1)
 	Soul.Slammed = true
 	Soul.gravityDir = SlamDirection
-	
+
+func Platform(StartPos : Vector2, Width : float, Direction : float, Speed : float, MaskedState : bool = false) -> Attack:
+	var newPlatform : Attack = PlatformPath.instantiate()
+	newPlatform.position = StartPos
+	newPlatform.Width = Width
+	newPlatform.Direction = Direction
+	newPlatform.Speed = Speed
+	add_child(newPlatform)
+	newPlatform.Masked = MaskedState
+	return newPlatform
 
 #endregion
 
@@ -76,8 +86,9 @@ var AmountTurns : int = 0
 
 func _ready():
 	InitialiseBattle()
-	Globals.CustomAttackScript.reload()
-	AttackList.set_script(Globals.CustomAttackScript)
+	if Globals.CustomMode:
+		Globals.CustomAttackScript.reload()
+		AttackList.set_script(Globals.CustomAttackScript)
 	
 	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
 	
@@ -99,10 +110,11 @@ func _ready():
 	#await Globals.Wait(0.5)
 	#SoulSlam(2)
 	#await Globals.Wait(1)
-	#SoulMode(0)
+	SoulMode(1)
 	#await Globals.Wait(2)
-	#Bone(Vector2(1200, 1000),50,180,70,true)
-	#CombatBox(Rect2(400, 720, 900, 1152))
+	Bone(Vector2(1200, 1000),50,180,70,true)
+	Platform(Vector2(1200, 1000),50,180,70,true)
+	CombatBox(Rect2(400, 720, 900, 1152))
 	#
 	#await Globals.Wait(2)
 	#Bone(Vector2(1100, 750), 30, 180, 150)
@@ -121,7 +133,7 @@ func _ready():
 	#test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
 	#await Globals.Wait(4)
 	#test1.ForceFire(2)
-	ReturnToMenu()
+	#ReturnToMenu()
 	
 	
 func InitialiseBattle():

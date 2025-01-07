@@ -1,4 +1,4 @@
-extends Node2D
+extends Attack
 
 const OGBoneBottomY = 16
 const OGBoneMiddleHeight = 8
@@ -10,19 +10,13 @@ var Direction : float
 @onready var BoneTop := $BoneTop
 @onready var BoneMiddle := $BoneMiddle
 @onready var BoneBottom := $BoneBottom
-@onready var AttackHitbox := $BoneHitreg
-@onready var CollisionShape := $BoneHitreg/CollisionShape2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
-	
+@onready var CollisionShape := Hitbox.find_child("CollisionShape2D")
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	super(delta)
 	
 	position = position + Vector2(Speed * delta, 0).rotated(deg_to_rad(Direction))
 	

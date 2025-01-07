@@ -11,14 +11,14 @@ var gravityDir := 0:
 
 var gravity : float = 980
 
-@onready var SoulSprite := $SoulSprite
-@onready var FadeSprite := $SoulSprite/FadeSprite
+@export var SoulSprite : Sprite2D
+@export var FadeSprite : Sprite2D
 @onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZoneCorner/CombatZone"
-@onready var CoyoteTime := $CoyoteTime
-@onready var JumpRemember := $JumpRemember
-@onready var SlamSfx = $Slam
-@onready var DingSfx = $Ding
-@onready var PlayerDamagedSfx = $PlayerDamaged
+@export var CoyoteTime : Timer
+@export var JumpRemember : Timer
+@export var SlamSfx : AudioStreamPlayer
+@export var DingSfx : AudioStreamPlayer
+@export var PlayerDamagedSfx : AudioStreamPlayer
 
 
 const SPEED := 450.0
@@ -136,8 +136,7 @@ func Change_Soul(Type) -> void:
 	# TODO Implement additional reasons to not do the animation (such as when flashes are added)
 	if Soul_Type != Type:
 		DingSfx.play()
-		if Globals.CoolAnimations:
-			FadeSoulAnim()
+		FadeSoulAnim()
 	Soul_Type = Type
 	match Soul_Type:
 		SOUL_RED:

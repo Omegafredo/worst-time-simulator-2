@@ -192,6 +192,7 @@ position = Vector2(856, 1103)
 
 [node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZoneCorner"]
 clip_children = 1
+z_index = 3
 texture = SubResource("PlaceholderTexture2D_4i75k")
 centered = false
 
