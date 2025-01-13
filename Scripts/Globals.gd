@@ -37,7 +37,24 @@ var HP := 92:
 		return HP
 var MaxHP := 92
 var KR := 0
-const CodedItems : Dictionary = {"Pie": 99, "I.Noodles": 90, "Steak": 60, "L.Hero": 40}
+
+var CurrentItems : Array
+
+func _ready():
+	var CPie = FoodItem.new()
+	CPie.Name = "Pie"
+	CPie.Health = 90
+	var CNoodles = FoodItem.new()
+	CNoodles.Name = "I.Noodles"
+	CNoodles.Health = 90
+	var CSteak = FoodItem.new()
+	CSteak.Name = "Steak"
+	CSteak.Health = 60
+	var CHero = FoodItem.new()
+	CHero.Name = "L.Hero"
+	CHero.Health = 40
+	
+	CurrentItems = [CPie, CNoodles, CSteak, CHero]
 
 # Other
 

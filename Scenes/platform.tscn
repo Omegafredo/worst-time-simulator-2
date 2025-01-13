@@ -17,21 +17,31 @@ CS = NodePath("AnimatableBody2D/CollisionShape2D")
 
 [node name="Lower Platform" type="Node2D" parent="."]
 show_behind_parent = true
-scale = Vector2(0.333333, 0.333333)
 script = ExtResource("2_mm6su")
 texture = ExtResource("4_lb62a")
-size = Vector2(60, 30)
+size = Vector2(20, 10)
+draw_center = false
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
 
 [node name="Upper Platform" type="Node2D" parent="."]
 show_behind_parent = true
 position = Vector2(0, -4)
-scale = Vector2(0.333333, 0.333333)
 script = ExtResource("2_mm6su")
 texture = ExtResource("3_g27ym")
-size = Vector2(60, 30)
+size = Vector2(20, 10)
+draw_center = false
+region_rect = Rect2(0, 0, 16, 7)
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
-collision_mask = 4
+collision_layer = 4
+collision_mask = 0
 sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]

@@ -8,8 +8,8 @@ extends Attack
 var Width : float:
 	set(w):
 		Width = w
-		UpperPlatform.size.x = w * 3
-		LowerPlatform.size.x = w * 3
+		UpperPlatform.size.x = w
+		LowerPlatform.size.x = w
 		CS.shape.size.x = w
 		
 var Speed : float

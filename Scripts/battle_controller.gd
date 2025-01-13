@@ -18,6 +18,8 @@ var PlatformPath := preload("res://Scenes/platform.tscn")
 @export var PlayerName: Label
 @export var AttackList : Node
 
+var CurrentEnemy = "Sans"
+
 #region Attack Calls
 
 func CombatBox(NewRect : Rect2):
@@ -114,7 +116,7 @@ func _ready():
 	#await Globals.Wait(2)
 	Bone(Vector2(1200, 1000),50,180,70,true)
 	Platform(Vector2(1200, 1000),50,180,70,true)
-	CombatBox(Rect2(400, 720, 900, 1152))
+	CombatBox(Rect2(400, 720, 1400, 1152))
 	#
 	#await Globals.Wait(2)
 	#Bone(Vector2(1100, 750), 30, 180, 150)
@@ -133,7 +135,7 @@ func _ready():
 	#test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
 	#await Globals.Wait(4)
 	#test1.ForceFire(2)
-	#ReturnToMenu()
+	ReturnToMenu()
 	
 	
 func InitialiseBattle():
@@ -154,7 +156,7 @@ func _process(_delta) -> void:
 		elif Input.is_action_just_pressed("down"):
 			MoveMenu(0, 1)
 		if Input.is_action_just_pressed("accept"):
-			SelectMenu()
+			ConfirmSelect()
 		elif Input.is_action_just_pressed("cancel"):
 			ReturnMenu()
 	
@@ -298,7 +300,7 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 	if TempIndex != SelectIndex:
 		MenuCursor.play()
 	
-func SelectMenu() -> void:
+func ConfirmSelect() -> void:
 	if SelectedMenu == "Main":
 		ChangeMenu(MenuButtons.get_child(SelectIndex).name)
 	MenuCursor.play()
@@ -330,27 +332,35 @@ func SetMenuOptions() -> void:
 		option.queue_free()
 	match SelectedMenu:
 		"Fight", "Act":
-			CreateTextInput("Sans", 0)
+			CreateMenuInput(CurrentEnemy, 0)
 		"Item":
-			CreateTextInput("Test1", 0)
-			CreateTextInput("Test2", 1)
-			CreateTextInput("Test3", 2)
-			CreateTextInput("Test4", 3)
-			CreateTextInput("Test5", 4)
+			var i : int = 0
+			for item : FoodItem in Globals.CurrentItems:
+				CreateItemInput(item, i)
+				i += 1
 		"Main":
 			MenuText.unhideText()
 		
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
-func CreateTextInput(SetText: String, ID: int) -> void:
-	var RichText : RichTextLabel = RichTextLabel.new()
-	RichText.text = SetText
-	RichText.position = Vector2(192 + (ID%2)*768, 0)
+func CreateMenuInput(SetText: String, ID: int) -> void:
+	var MenuSelection : BattleMenuSelection = BattleMenuSelection.new()
+	MenuSelection.text = SetText
+	CreateTextInput(MenuSelection, ID)
+
+func CreateItemInput(Item : FoodItem, ID: int) -> void:
+	var ItemSelect : BattleMenuItem = BattleMenuItem.new()
+	ItemSelect.text = Item.Name
+	ItemSelect.Health = Item.Health
+	CreateTextInput(ItemSelect, ID)
+	
+func CreateTextInput(TextLabel : BattleMenuSelection, ID : int):
+	TextLabel.position = Vector2(192 + (ID%2)*768, 0)
 	if ID%4 in [2, 3] :
-		RichText.position.y = 96
-	RichText.size = Vector2(900, 100)
-	RichText.scroll_active = false
-	RichText.add_theme_font_override("normal_font", TextFont)
-	RichText.add_theme_font_size_override("normal_font_size", 96)
-	RichText.set_meta("ID", ID)
-	SelectableOptions.add_child(RichText)
+		TextLabel.position.y = 96
+	TextLabel.size = Vector2(900, 100)
+	TextLabel.scroll_active = false
+	TextLabel.add_theme_font_override("normal_font", TextFont)
+	TextLabel.add_theme_font_size_override("normal_font_size", 96)
+	TextLabel.set_meta("ID", ID)
+	SelectableOptions.add_child(TextLabel)
