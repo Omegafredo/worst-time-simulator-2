@@ -54,7 +54,7 @@ func _ready():
 	CHero.Name = "L.Hero"
 	CHero.Health = 40
 	
-	CurrentItems = [CPie, CNoodles, CSteak, CHero]
+	CurrentItems = [CPie, CNoodles, CSteak, CHero, CHero, CHero, CHero]
 
 # Other
 

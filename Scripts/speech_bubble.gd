@@ -6,7 +6,7 @@ const sansFont = preload("res://Resources/Fonts/styles/comicSansVariant.tres")
 const sansSerious = preload("res://Resources/Fonts/styles/SansSeriousVariant.tres")
 const boxText = preload("res://Resources/Fonts/styles/boxText.tres")
 
-@onready var TextLabel : RichTextLabel = $RichText
+@export var TextLabel : RichTextLabel
 @onready var SansSpeak := $SansSpeak
 @onready var BattleText := $BattleText
 

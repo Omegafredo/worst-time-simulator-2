@@ -208,7 +208,8 @@ unique_name_in_owner = true
 z_index = 6
 position = Vector2(1000, 1000)
 
-[node name="SpeechBubble" parent="Battle Controller" instance=ExtResource("5_hr8wr")]
+[node name="SpeechBubble" parent="Battle Controller" node_paths=PackedStringArray("TextLabel") instance=ExtResource("5_hr8wr")]
+TextLabel = NodePath("RichText")
 
 [node name="Sprite2D" type="Sprite2D" parent="Battle Controller/SpeechBubble"]
 texture = ExtResource("4_kn0io")
@@ -281,15 +282,16 @@ text = "Merg     LV  19"
 label_settings = ExtResource("16_2glsd")
 uppercase = true
 
-[node name="BoxText" parent="Battle Controller/UI" instance=ExtResource("5_hr8wr")]
+[node name="BoxText" parent="Battle Controller/UI" node_paths=PackedStringArray("TextLabel") instance=ExtResource("5_hr8wr")]
 visible = true
 position = Vector2(150, 770)
 scale = Vector2(1, 1)
+TextLabel = NodePath("BoxTextLabel")
 CurrentMode = 2
 CharacterInterval = 0.035
 AskForConfirmation = false
 
-[node name="RichText" type="RichTextLabel" parent="Battle Controller/UI/BoxText"]
+[node name="BoxTextLabel" type="RichTextLabel" parent="Battle Controller/UI/BoxText"]
 anchors_preset = -1
 anchor_left = 0.058
 anchor_top = 0.5

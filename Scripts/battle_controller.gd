@@ -188,10 +188,10 @@ var SelectedMenu = "Main"
 var OptionsArray : Array:
 	get():
 		return SelectableOptions.get_children()
-var CurrentOption : RichTextLabel:
+var CurrentOption : BattleMenuSelection:
 	get():
 		for option in OptionsArray:
-			if option.get_meta("ID") == SelectIndex:
+			if option.ID == SelectIndex:
 				return option
 		return null
 var MenuHistory := Array(["Main"], TYPE_STRING, "", null)
@@ -255,7 +255,6 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 		Soul.position = MenuButtons.get_child(SelectIndex).position + MenuSoulOffset
 		MenuButtons.get_child(SelectIndex).play("active")
 	else:
-		# WARNING Might crash if there's only 2 or 3 options
 		if SelectableOptions.get_child_count() > 1:
 			#if SelectIndex == 0 and HDirection == -1:
 				#SelectIndex = SelectableOptions.get_child_count() - 3
@@ -303,6 +302,9 @@ func MoveMenu(HDirection : int, VDirection : int = 0) -> void:
 func ConfirmSelect() -> void:
 	if SelectedMenu == "Main":
 		ChangeMenu(MenuButtons.get_child(SelectIndex).name)
+	else:
+		CurrentOption.activated.emit()
+		
 	MenuCursor.play()
 	
 func ChangeMenu(MenuType: String) -> void:
@@ -340,6 +342,14 @@ func SetMenuOptions() -> void:
 				i += 1
 		"Main":
 			MenuText.unhideText()
+			
+			
+func ItemHeal(HealAmount : int):
+	Globals.HP += HealAmount
+	print(HealAmount)
+
+func ItemActivated(Item : BattleMenuItem):
+	ItemHeal(Item.Health)
 		
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
@@ -352,9 +362,10 @@ func CreateItemInput(Item : FoodItem, ID: int) -> void:
 	var ItemSelect : BattleMenuItem = BattleMenuItem.new()
 	ItemSelect.text = Item.Name
 	ItemSelect.Health = Item.Health
-	CreateTextInput(ItemSelect, ID)
+	var NewItem = CreateTextInput(ItemSelect, ID)
+	NewItem.activated.connect(ItemActivated.bind(ItemSelect))
 	
-func CreateTextInput(TextLabel : BattleMenuSelection, ID : int):
+func CreateTextInput(TextLabel : BattleMenuSelection, ID : int) -> BattleMenuSelection:
 	TextLabel.position = Vector2(192 + (ID%2)*768, 0)
 	if ID%4 in [2, 3] :
 		TextLabel.position.y = 96
@@ -362,5 +373,6 @@ func CreateTextInput(TextLabel : BattleMenuSelection, ID : int):
 	TextLabel.scroll_active = false
 	TextLabel.add_theme_font_override("normal_font", TextFont)
 	TextLabel.add_theme_font_size_override("normal_font_size", 96)
-	TextLabel.set_meta("ID", ID)
+	TextLabel.ID = ID
 	SelectableOptions.add_child(TextLabel)
+	return TextLabel
