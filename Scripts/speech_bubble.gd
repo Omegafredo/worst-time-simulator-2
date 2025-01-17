@@ -1,4 +1,5 @@
 extends Node2D
+class_name TextSystem
 
 enum modes {Default, Serious, TextBox}
 
@@ -34,7 +35,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("accept"):
-		sendInput.emit()
 		Confirm()
 	if Input.is_action_just_pressed("cancel"):
 		if SkippableText and TextLabel.visible_characters > 1:
@@ -95,11 +95,11 @@ func clearText() -> void:
 	clearedText.emit()
 
 func hideText() -> void:
-	TextLabel.hide()
+	self.hide()
 	TextLabel.visible_characters = -1
 
 func unhideText() -> void:
-	TextLabel.show()
+	self.show()
 	TextLabel.visible_characters = 0
 	Skipping = false
 	if !CurrentlyTyping:

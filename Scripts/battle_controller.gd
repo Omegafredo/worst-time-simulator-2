@@ -7,8 +7,8 @@ var PlatformPath := preload("res://Scenes/platform.tscn")
 
 @onready var CombatZone := $CombatZoneCorner/CombatZone
 @export var Soul : CharacterBody2D
-@export var SpeechBubble : Node2D
-@export var MenuText : Node2D
+@export var SpeechBubble : TextSystem
+@export var MenuText : TextSystem
 @export var MenuButtons : Node
 @export var MenuCursor : AudioStreamPlayer
 @export var HealthText : Label
@@ -146,7 +146,7 @@ func InitializeAttack():
 	pass
 	
 func _process(_delta) -> void:
-	if MenuMode and AllowControls:
+	if MenuMode and MenuControl == ACTIONABLE:
 		if Input.is_action_just_pressed("left"):
 			MoveMenu(-1)
 		elif Input.is_action_just_pressed("right"):
@@ -180,10 +180,10 @@ func ReturnToMenu():
 	MoveMenu(0)
 	MenuMode = true
 	await CombatZone.DoneMoving
-	AllowControls = true
+	MenuControl = ACTIONABLE
 	MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
 
-@onready var SelectableOptions: Node2D = $UI/BoxText/SelectableOptions
+@export var SelectableOptions: Node2D
 var SelectedMenu = "Main"
 var OptionsArray : Array:
 	get():
@@ -197,9 +197,9 @@ var CurrentOption : BattleMenuSelection:
 var MenuHistory := Array(["Main"], TYPE_STRING, "", null)
 const OptionSoulOffset : Vector2 = Vector2(-50, 55)
 
+enum {ACTIONABLE, CONFIRMABLE, NONE}
 
-
-var AllowControls := false
+var MenuControl := NONE
 var MenuMode := false
 var SelectIndex : int = 0
 
@@ -343,13 +343,23 @@ func SetMenuOptions() -> void:
 		"Main":
 			MenuText.unhideText()
 			
-			
+func ClearMenuOptions() -> void:
+	for option in OptionsArray:
+		option.queue_free()
+	Soul.hide()
+
+func InitiateDescription(Text : String) -> void:
+	MenuControl = CONFIRMABLE
+	MenuText.show()
+	MenuText.setText(Text)
+	ClearMenuOptions()
+
 func ItemHeal(HealAmount : int):
 	Globals.HP += HealAmount
-	print(HealAmount)
 
 func ItemActivated(Item : BattleMenuItem):
 	ItemHeal(Item.Health)
+	InitiateDescription("hi hi hi hi")
 		
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 

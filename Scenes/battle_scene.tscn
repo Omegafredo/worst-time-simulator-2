@@ -171,12 +171,12 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "KrIcon", "PlayerName", "AttackList")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
 Soul = NodePath("Player")
 SpeechBubble = NodePath("SpeechBubble")
-MenuText = NodePath("UI/BoxText")
+MenuText = NodePath("UI/BoxCorner/BoxText")
 MenuButtons = NodePath("UI/MenuButtons")
 MenuCursor = NodePath("Audio/MenuCursor")
 HealthText = NodePath("UI/Health")
@@ -184,6 +184,7 @@ HealthBar = NodePath("UI/HealthBar")
 KrIcon = NodePath("UI/KrIcon")
 PlayerName = NodePath("UI/Name")
 AttackList = NodePath("AttackList")
+SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]
 
@@ -282,16 +283,19 @@ text = "Merg     LV  19"
 label_settings = ExtResource("16_2glsd")
 uppercase = true
 
-[node name="BoxText" parent="Battle Controller/UI" node_paths=PackedStringArray("TextLabel") instance=ExtResource("5_hr8wr")]
-visible = true
+[node name="BoxCorner" type="Node2D" parent="Battle Controller/UI"]
 position = Vector2(150, 770)
+
+[node name="BoxText" parent="Battle Controller/UI/BoxCorner" node_paths=PackedStringArray("TextLabel") instance=ExtResource("5_hr8wr")]
+visible = true
+position = Vector2(0, 0)
 scale = Vector2(1, 1)
 TextLabel = NodePath("BoxTextLabel")
 CurrentMode = 2
 CharacterInterval = 0.035
 AskForConfirmation = false
 
-[node name="BoxTextLabel" type="RichTextLabel" parent="Battle Controller/UI/BoxText"]
+[node name="BoxTextLabel" type="RichTextLabel" parent="Battle Controller/UI/BoxCorner/BoxText"]
 anchors_preset = -1
 anchor_left = 0.058
 anchor_top = 0.5
@@ -305,7 +309,7 @@ bbcode_enabled = true
 scroll_active = false
 tab_size = 6
 
-[node name="SelectableOptions" type="Node2D" parent="Battle Controller/UI/BoxText"]
+[node name="SelectableOptions" type="Node2D" parent="Battle Controller/UI/BoxCorner"]
 
 [node name="HealthBar" type="Sprite2D" parent="Battle Controller/UI"]
 self_modulate = Color(0.454902, 0, 0, 1)
