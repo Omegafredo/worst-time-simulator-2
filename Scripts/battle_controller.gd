@@ -348,19 +348,36 @@ func ClearMenuOptions() -> void:
 		option.queue_free()
 	Soul.hide()
 
-func InitiateDescription(Text : String) -> void:
+func InitiateDescription(Dialogue : Array[String], EndAction : Callable) -> void:
 	MenuControl = CONFIRMABLE
+	MenuText.IsConfirmable = true
 	MenuText.show()
-	MenuText.setText(Text)
 	ClearMenuOptions()
+	
+	MenuText.appendText(Dialogue)
+	await MenuText.endofdialogue
+	EndAction.call()
 
 func ItemHeal(HealAmount : int):
 	Globals.HP += HealAmount
 
 func ItemActivated(Item : BattleMenuItem):
-	ItemHeal(Item.Health)
-	InitiateDescription("hi hi hi hi")
-		
+	var HealthDesc : String
+	if Item.Food.Health + Globals.HP >= Globals.MaxHP:
+		HealthDesc = "* Your HP was maxed out."
+	else:
+		HealthDesc = "* You recovered " + str(Item.Food.Health) + " HP!"
+	
+	ItemHeal(Item.Food.Health)
+	
+	var FullDescription : Array[String] = ["* You eat the " + Item.Food.FullName + ".\n" + HealthDesc]
+	FullDescription.append_array(Item.Food.AdditionalDescription)
+	InitiateDescription(FullDescription, InitializeAttack)
+	
+	
+
+
+
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
 func CreateMenuInput(SetText: String, ID: int) -> void:
@@ -371,7 +388,7 @@ func CreateMenuInput(SetText: String, ID: int) -> void:
 func CreateItemInput(Item : FoodItem, ID: int) -> void:
 	var ItemSelect : BattleMenuItem = BattleMenuItem.new()
 	ItemSelect.text = Item.Name
-	ItemSelect.Health = Item.Health
+	ItemSelect.Food = Item
 	var NewItem = CreateTextInput(ItemSelect, ID)
 	NewItem.activated.connect(ItemActivated.bind(ItemSelect))
 	

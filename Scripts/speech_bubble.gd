@@ -11,9 +11,9 @@ const boxText = preload("res://Resources/Fonts/styles/boxText.tres")
 @onready var SansSpeak := $SansSpeak
 @onready var BattleText := $BattleText
 
-signal sendInput
 signal clearedText
 signal receivedInput
+signal endofdialogue
 signal textDone
 
 @export var CurrentMode : modes
@@ -26,6 +26,7 @@ var CurrentlyTyping := false
 
 var TimeDelay : Array[float]
 var AtCharacter : Array[int]
+var DialogueQueue : Array[String]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -42,6 +43,12 @@ func _process(_delta: float) -> void:
 			Skipping = true
 		
 		
+func appendText(Dialogue : Array[String]) -> void:
+	DialogueQueue.append_array(Dialogue)
+	if !self.visible:
+		setText(DialogueQueue.pop_front())
+		
+	
 func setText(text : String) -> void:
 	Skipping = false
 	
@@ -55,7 +62,6 @@ func setText(text : String) -> void:
 		displayChar()
 	await get_tree().process_frame
 	self.show()
-
 
 func displayChar() -> void:
 	if !Skipping:
@@ -126,7 +132,11 @@ func Confirm() -> void:
 func TextConfirmed() -> void:
 	if self.visible:
 		receivedInput.emit()
-		clearText()
+		if DialogueQueue.size() > 0:
+			setText(DialogueQueue.pop_front())
+		else:
+			endofdialogue.emit()
+			clearText()
 		
 func ClearTextTags() -> void:
 	TimeDelay.clear()

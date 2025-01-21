@@ -42,19 +42,24 @@ var CurrentItems : Array
 
 func _ready():
 	var CPie = FoodItem.new()
+	CPie.FullName = "Butterscotch Pie"
 	CPie.Name = "Pie"
 	CPie.Health = 90
+	CPie.AdditionalDescription.append("hi hi hi hi")
 	var CNoodles = FoodItem.new()
+	CNoodles.FullName = "Instant Noodles"
 	CNoodles.Name = "I.Noodles"
 	CNoodles.Health = 90
 	var CSteak = FoodItem.new()
+	CSteak.FullName = "Face Steak"
 	CSteak.Name = "Steak"
 	CSteak.Health = 60
 	var CHero = FoodItem.new()
+	CHero.FullName = "Legendary Hero"
 	CHero.Name = "L.Hero"
 	CHero.Health = 40
 	
-	CurrentItems = [CPie, CNoodles, CSteak, CHero, CHero, CHero, CHero]
+	CurrentItems = [CPie, CNoodles, CSteak, CHero, CHero, CHero, CHero, CHero]
 
 # Other
 
