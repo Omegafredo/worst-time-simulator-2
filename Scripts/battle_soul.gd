@@ -110,21 +110,21 @@ func _process(delta: float) -> void:
 			SlamHitGround()
 		
 		
-		if Globals.KR == 0:
-			KR_Counter = 0
-		else:
-			KR_Counter += delta
-			
-		if Globals.KR >= 40 and KR_Counter >= 1.0/30.0:
-			KarmaDamage()
-		elif Globals.KR >= 30 and KR_Counter >= 2.0/30.0:
-			KarmaDamage()
-		elif Globals.KR >= 20 and KR_Counter >= 5.0/30.0:
-			KarmaDamage()
-		elif Globals.KR >= 10 and KR_Counter >= 15.0/30.0:
-			KarmaDamage()
-		elif KR_Counter >= 1.0:
-			KarmaDamage()
+	if Globals.KR == 0:
+		KR_Counter = 0
+	else:
+		KR_Counter += delta
+		
+	if Globals.KR >= 40 and KR_Counter >= 1.0/30.0:
+		KarmaDamage()
+	elif Globals.KR >= 30 and KR_Counter >= 2.0/30.0:
+		KarmaDamage()
+	elif Globals.KR >= 20 and KR_Counter >= 5.0/30.0:
+		KarmaDamage()
+	elif Globals.KR >= 10 and KR_Counter >= 15.0/30.0:
+		KarmaDamage()
+	elif KR_Counter >= 1.0:
+		KarmaDamage()
 		
 
 func KarmaDamage() -> void:

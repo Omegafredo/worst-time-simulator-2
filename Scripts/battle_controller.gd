@@ -133,7 +133,7 @@ func _ready():
 	#var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
 	#test1.BlasterMoveManual(Vector2(400,600), 120)
 	#test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
-	#await Globals.Wait(4)
+	await Globals.Wait(7)
 	#test1.ForceFire(2)
 	ReturnToMenu()
 	
@@ -143,8 +143,25 @@ func InitialiseBattle():
 	CombatBoxInstant(Rect2(111, 720, 1839, 1152))
 	
 func InitializeAttack():
-	pass
+	MenuMode = false
+	MenuControl = NONE
+	Soul.show()
+	CombatBox(Rect2(800, 720, 1200, 1152))
+	Soul.position = Vector2(1000, 1000)
+	await Globals.Wait(2)
+	ReturnToMenu()
+
+func ReturnToMenu():
+	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
+	CombatBox(Rect2(111, 720, 1839, 1152))
+	SelectedMenu = "Main"
+	MoveMenu(0)
+	MenuMode = true
+	await CombatZone.DoneMoving
+	MenuControl = ACTIONABLE
+	MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
 	
+
 func _process(_delta) -> void:
 	if MenuMode and MenuControl == ACTIONABLE:
 		if Input.is_action_just_pressed("left"):
@@ -174,14 +191,7 @@ func _process(_delta) -> void:
 	$"Attack Origin Point".update_scale = false
 	$"Attack Origin Point".update_scale = true
 	
-func ReturnToMenu():
-	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-	CombatBox(Rect2(111, 720, 1839, 1152))
-	MoveMenu(0)
-	MenuMode = true
-	await CombatZone.DoneMoving
-	MenuControl = ACTIONABLE
-	MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
+
 
 @export var SelectableOptions: Node2D
 var SelectedMenu = "Main"
@@ -334,21 +344,44 @@ func SetMenuOptions() -> void:
 		option.queue_free()
 	match SelectedMenu:
 		"Fight", "Act":
-			CreateMenuInput(CurrentEnemy, 0)
+			var Selection = CreateMenuInput(CurrentEnemy, 0)
+			if SelectedMenu == "Fight":
+				Selection.activated.connect(FightAction)
+			elif SelectedMenu == "Act":
+				Selection.activated.connect(ChangeMenu.bind("ActMenu"))
+		"ActMenu":
+			ActMenu()
 		"Item":
-			var i : int = 0
-			for item : FoodItem in Globals.CurrentItems:
-				CreateItemInput(item, i)
-				i += 1
+			ItemMenu()
+		"Mercy":
+			CreateMenuInput("Spare", 0)
 		"Main":
 			MenuText.unhideText()
+		
 			
 func ClearMenuOptions() -> void:
 	for option in OptionsArray:
 		option.queue_free()
 	Soul.hide()
+	
+func ActMenu() -> void:
+	var Check = CreateMenuInput("Check", 0)
+	Check.activated.connect(CheckAction)
+	
+func ItemMenu() -> void:
+	var i : int = 0
+	for item : FoodItem in Globals.CurrentItems:
+		CreateItemInput(item, i)
+		i += 1
+		
+func FightAction() -> void:
+	pass
 
-func InitiateDescription(Dialogue : Array[String], EndAction : Callable) -> void:
+func CheckAction() -> void:
+	if CurrentEnemy == "Sans":
+		InitiateDescription(["* SANS 1 ATK 1 DEF\n* The easiest enemy...\n* But something feels different.", "[color=red]* But we've killed him before,\n[indent]we can do it again."])
+
+func InitiateDescription(Dialogue : Array[String], EndAction : Callable = InitializeAttack) -> void:
 	MenuControl = CONFIRMABLE
 	MenuText.IsConfirmable = true
 	MenuText.show()
@@ -372,7 +405,7 @@ func ItemActivated(Item : BattleMenuItem):
 	
 	var FullDescription : Array[String] = ["* You eat the " + Item.Food.FullName + ".\n" + HealthDesc]
 	FullDescription.append_array(Item.Food.AdditionalDescription)
-	InitiateDescription(FullDescription, InitializeAttack)
+	InitiateDescription(FullDescription)
 	
 	
 
@@ -380,10 +413,11 @@ func ItemActivated(Item : BattleMenuItem):
 
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
-func CreateMenuInput(SetText: String, ID: int) -> void:
+func CreateMenuInput(SetText: String, ID: int) -> BattleMenuSelection:
 	var MenuSelection : BattleMenuSelection = BattleMenuSelection.new()
 	MenuSelection.text = SetText
-	CreateTextInput(MenuSelection, ID)
+	var Selection : BattleMenuSelection = CreateTextInput(MenuSelection, ID)
+	return Selection
 
 func CreateItemInput(Item : FoodItem, ID: int) -> void:
 	var ItemSelect : BattleMenuItem = BattleMenuItem.new()
