@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4boxokq6un50"]
+
+[ext_resource type="Texture2D" uid="uid://b76t862rfj6oj" path="res://Resources/Sprites/UI/Target/000.png" id="1_xow5h"]
+[ext_resource type="Texture2D" uid="uid://b3vmpyn1xya5s" path="res://Resources/Sprites/UI/TargetChoice/000.png" id="2_mdgr0"]
+[ext_resource type="Texture2D" uid="uid://gwffkikrvq5j" path="res://Resources/Sprites/UI/TargetChoice/001.png" id="3_3xar2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_50fjl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_mdgr0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_3xar2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="Target" type="Node2D"]
+
+[node name="Main" type="Sprite2D" parent="."]
+position = Vector2(275, 60)
+texture = ExtResource("1_xow5h")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Main"]
+position = Vector2(-275, -60)
+sprite_frames = SubResource("SpriteFrames_50fjl")
+frame = 1
+frame_progress = 0.521314
