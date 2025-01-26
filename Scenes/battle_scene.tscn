@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=33 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -17,6 +17,7 @@
 [ext_resource type="LabelSettings" uid="uid://bi2amwoie3dph" path="res://Resources/Fonts/styles/battle_label.tres" id="16_2glsd"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
+[ext_resource type="PackedScene" uid="uid://d4boxokq6un50" path="res://Scenes/target.tscn" id="18_t7tij"]
 [ext_resource type="Script" path="res://Scripts/health_bar.gd" id="19_khccm"]
 [ext_resource type="Texture2D" uid="uid://2ktqwwedgms0" path="res://Resources/Sprites/UI/HPText.png" id="19_rwh8x"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
@@ -171,7 +172,7 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
 Soul = NodePath("Player")
@@ -181,6 +182,7 @@ MenuButtons = NodePath("UI/MenuButtons")
 MenuCursor = NodePath("Audio/MenuCursor")
 HealthText = NodePath("UI/Health")
 HealthBar = NodePath("UI/HealthBar")
+Target = NodePath("UI/BoxCorner/Target")
 KrIcon = NodePath("UI/KrIcon")
 PlayerName = NodePath("UI/Name")
 AttackList = NodePath("AttackList")
@@ -311,6 +313,10 @@ tab_size = 6
 
 [node name="SelectableOptions" type="Node2D" parent="Battle Controller/UI/BoxCorner"]
 
+[node name="Target" parent="Battle Controller/UI/BoxCorner" instance=ExtResource("18_t7tij")]
+visible = false
+scale = Vector2(3, 3)
+
 [node name="HealthBar" type="Sprite2D" parent="Battle Controller/UI"]
 self_modulate = Color(0.454902, 0, 0, 1)
 clip_children = 2
@@ -370,3 +376,5 @@ libraries = {
 "": SubResource("AnimationLibrary_tcdjl")
 }
 autoplay = "fade"
+
+[connection signal="end" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_targetfight_end"]

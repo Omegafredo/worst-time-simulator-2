@@ -14,6 +14,7 @@ var PlatformPath := preload("res://Scenes/platform.tscn")
 @export var HealthText : Label
 @export var HealthBar: Sprite2D
 #@export var HpIcon: Sprite2D = $UI/HpIcon
+@export var Target : FightTarget
 @export var KrIcon: Sprite2D
 @export var PlayerName: Label
 @export var AttackList : Node
@@ -375,7 +376,21 @@ func ItemMenu() -> void:
 		i += 1
 		
 func FightAction() -> void:
-	pass
+	ClearMenuOptions()
+	MenuControl = NONE
+	Target.get_child(0).scale.x = 0.75
+	Target.modulate.a = 0
+	var tween = Target.create_tween()
+	tween.tween_property(Target.get_child(0), "scale:x", 1, 0.5)
+	tween.parallel().tween_property(Target, "modulate:a", 1, 0.5)
+	Target.Start()
+	
+func _on_targetfight_end():
+	var tween = Target.create_tween()
+	tween.tween_property(Target.get_child(0), "scale:x", 0.75, 0.5)
+	tween.parallel().tween_property(Target, "modulate:a", 0, 0.5)
+	await Globals.Wait(0.6)
+	InitializeAttack()
 
 func CheckAction() -> void:
 	if CurrentEnemy == "Sans":

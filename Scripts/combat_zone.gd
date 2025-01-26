@@ -1,6 +1,6 @@
 extends Node2D
 
-var Speed: float = 200.0
+var Speed: float = 300.0
 
 signal DoneMoving
 var Moving := false
