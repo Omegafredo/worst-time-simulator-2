@@ -172,10 +172,11 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
 Soul = NodePath("Player")
+SansHimself = NodePath("Sans")
 SpeechBubble = NodePath("SpeechBubble")
 MenuText = NodePath("UI/BoxCorner/BoxText")
 MenuButtons = NodePath("UI/MenuButtons")
@@ -377,4 +378,5 @@ libraries = {
 }
 autoplay = "fade"
 
-[connection signal="end" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_targetfight_end"]
+[connection signal="confirmed" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_confirmed"]
+[connection signal="end" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_fight_end"]

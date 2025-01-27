@@ -13,6 +13,7 @@ var Active := false
 var RightDir : bool
 
 signal end
+signal confirmed
 
 func Start() -> void:
 	Confirmable = false
@@ -28,6 +29,7 @@ func Start() -> void:
 func Activate() -> void:
 	Confirmed = true
 	Sprite.play("default")
+	confirmed.emit()
 	await Globals.Wait(0.5)
 	End()
 

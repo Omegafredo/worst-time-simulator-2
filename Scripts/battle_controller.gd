@@ -4,9 +4,11 @@ class_name BattleController
 var BonePath := preload("res://Scenes/bone_v.tscn")
 var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
 var PlatformPath := preload("res://Scenes/platform.tscn")
+var StrikeAnimation := preload("res://Scenes/strike.tscn")
 
 @onready var CombatZone := $CombatZoneCorner/CombatZone
 @export var Soul : CharacterBody2D
+@export var SansHimself : Node2D
 @export var SpeechBubble : TextSystem
 @export var MenuText : TextSystem
 @export var MenuButtons : Node
@@ -385,13 +387,37 @@ func FightAction() -> void:
 	tween.parallel().tween_property(Target, "modulate:a", 1, 0.5)
 	Target.Start()
 	
-func _on_targetfight_end():
+func _on_target_fight_end():
 	var tween = Target.create_tween()
 	tween.tween_property(Target.get_child(0), "scale:x", 0.75, 0.5)
 	tween.parallel().tween_property(Target, "modulate:a", 0, 0.5)
 	await Globals.Wait(0.6)
 	InitializeAttack()
-
+	
+func _on_target_confirmed() -> void:
+	StrikeEnemy()
+	EnemyDodge(560, 0.4)
+	await Globals.Wait(1)
+	EnemyReturn()
+	
+func EnemyDodge(Position : float, Speed : float) -> void:
+	var tween = SansHimself.create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(SansHimself, "position:x", Position, Speed)
+	
+func EnemyReturn() -> void:
+	var tween = SansHimself.create_tween()
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(SansHimself, "position:x", 960, 0.6)
+	
+func StrikeEnemy() -> void:
+	var Strike = StrikeAnimation.instantiate()
+	Strike.position = SansHimself.position - Vector2(0, 220)
+	Strike.play("default")
+	add_child(Strike)
+	
 func CheckAction() -> void:
 	if CurrentEnemy == "Sans":
 		InitiateDescription(["* SANS 1 ATK 1 DEF\n* The easiest enemy...\n* But something feels different.", "[color=red]* But we've killed him before,\n[indent]we can do it again."])
