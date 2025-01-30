@@ -394,11 +394,49 @@ func _on_target_fight_end():
 	await Globals.Wait(0.6)
 	InitializeAttack()
 	
+#var Relative: float:
+	#get():
+		#return SansHimself.position.x
+	
 func _on_target_confirmed() -> void:
 	StrikeEnemy()
 	EnemyDodge(560, 0.4)
 	await Globals.Wait(1)
 	EnemyReturn()
+	
+	#var time : float = 0.4
+	#StrikeEnemy()
+	#EnemyDodge(Relative - 150, time)
+	#await Globals.Wait(time)
+	#time -= 0.05
+	#StrikeEnemy()
+	#EnemyDodge(Relative + 180, time)
+	#await Globals.Wait(time)
+	#time -= 0.05
+	#StrikeEnemy()
+	#EnemyDodge(Relative - 190, time)
+	#await Globals.Wait(time)
+	#time -= 0.05
+	#StrikeEnemy()
+	#EnemyDodge(Relative - 210, time)
+	#await Globals.Wait(time)
+	#time -= 0.05
+	#StrikeEnemy()
+	#EnemyDodge(Relative - 250, time)
+	#await Globals.Wait(time)
+	#StrikeEnemy()
+	#EnemyDodge(Relative + 250, time)
+	#await Globals.Wait(time)
+	#StrikeEnemy()
+	#EnemyDodge(Relative - 270, time)
+	#await Globals.Wait(time)
+	#StrikeEnemy()
+	#EnemyDodge(Relative + 260, time)
+	#await Globals.Wait(time)
+	#StrikeEnemy()
+	#EnemyDodge(Relative + 220, time)
+	#await Globals.Wait(1)
+	#EnemyReturn()
 	
 func EnemyDodge(Position : float, Speed : float) -> void:
 	var tween = SansHimself.create_tween()
