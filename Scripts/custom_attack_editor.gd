@@ -1,9 +1,10 @@
 extends Control
 
-@onready var CodeEditor = $Panel/VBoxContainer/CodeEdit
+@export var CodeEditor : CodeEdit
+@export var ControlPanel : PanelContainer
 @onready var TemplateCode = preload("res://Scripts/attack_template.gd")
-@onready var ImportDialog = $ImportDialog
-@onready var ExportDialog = $ExportDialog
+@export var ImportDialog : FileDialog
+@export var ExportDialog : FileDialog
 
 #var CustomCodePath = load("res://CustomCode.gd")
 
@@ -66,3 +67,22 @@ func _on_import_dialog_file_selected(path):
 func _on_code_edit_text_changed():
 	CodeEditor.add_code_completion_option(CodeEdit.KIND_FUNCTION, "GasterBlaster", "BD.GasterBlaster")
 	CodeEditor.update_code_completion_options(true)
+
+
+func _input(event):
+	if (event is InputEventMouseButton) and event.pressed:
+		var evLocal = make_input_local(event)
+		if !Rect2(Vector2(0,0), ControlPanel.size).has_point(evLocal.position):
+			CodeEditor.release_focus()
+
+
+
+signal FocusEnter
+signal FocusExit
+
+func _on_code_edit_focus_entered():
+	FocusEnter.emit()
+
+
+func _on_code_edit_focus_exited():
+	FocusExit.emit()

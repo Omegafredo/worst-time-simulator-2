@@ -1,11 +1,13 @@
 extends Node
 
 @onready var BC = %"Battle Controller"
-@onready var AttackTurns = BC.AttackTurns
-@onready var AmountTurns = BC.AmountTurns
+# Usable variables:
+# BC.AttackTurns : Amount of times the player has attacked Sans.
+# BC.AmountTurns : Amount of turns have passed, including healing, acting etc.
+		
 
 func AttackStart() -> void:
-	match AttackTurns:
+	match BC.AttackTurns:
 		0:
 			Attack1()
 		1:

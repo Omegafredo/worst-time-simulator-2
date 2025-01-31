@@ -1,13 +1,15 @@
 extends Node2D
 
 var MoveIndex : int = 0
-var ControlsAllowed : bool = false
+
+enum {StartingBattle, CodeFocused}
+var ControlsBlocked : Array[int]
 @onready var Soul : Node2D = %SoulSelector
 var CurrentMenu : Menu
 var CurrentLabel : SettingSelection:
 	get():
 		return CurrentMenu.get_child(MoveIndex)
-@onready var MainContainer : Object = $MenuContainer
+@onready var MainContainer : Node2D = $MenuContainer
 var Menus : Array[Menu]
 var SideOptions : Array[SettingSelection]
 var MenuHistory : Array[Menu]
@@ -64,7 +66,7 @@ var held_free : bool = true
 func _process(delta: float) -> void:
 
 	
-	if ControlsAllowed:
+	if ControlsBlocked.is_empty():
 		
 		if Input.is_action_just_released("left") or Input.is_action_just_released("right") or (Input.is_action_pressed("left") and Input.is_action_pressed("right")):
 			held_time = 0
@@ -98,20 +100,21 @@ func _process(delta: float) -> void:
 # Called when pressing a move action
 func MoveAction(Direction : int) -> void:
 	MoveSoul(MoveIndex + int(Direction))
-	MenuCursorSound.play()
+	if get_menu_selections().size() > 1:
+		MenuCursorSound.play()
 
 # Called when moving the soul
 func MoveSoul(MovingTo : int) -> void:
 	
 	MoveIndex = MovingTo
 	
-	if MoveIndex > CurrentMenu.get_child_count() - 1:
+	if MoveIndex > get_menu_selections().size() - 1:
 		MoveIndex = 0
 	elif MoveIndex < 0:
-		MoveIndex = CurrentMenu.get_child_count() - 1
+		MoveIndex = get_menu_selections().size() - 1
 	var Total_Gap : float = 0
 	var i : int = 0
-	for Option in CurrentMenu.get_children():
+	for Option in get_menu_selections():
 		i += 1
 		if MoveIndex >= i:
 			Total_Gap += Option.size.y + 4
@@ -176,7 +179,7 @@ func SideOption(Direction : int) -> void:
 		UpdateLabels()
 	
 func InitiateBattle() -> void:
-	ControlsAllowed = false
+	AssignEnumArray(ControlsBlocked, StartingBattle)
 	for i in range(4):
 		await Flash(true)
 		await Flash(false)
@@ -216,7 +219,7 @@ func InitiateIntro() -> void:
 	await tween.finished
 	
 	
-	ControlsAllowed = true
+	ControlsBlocked.clear()
 	
 func InitiateMenu() -> void:
 	Soul.show()
@@ -228,7 +231,7 @@ func InitiateMenu() -> void:
 	WTSLogo.position = WTSLogoPosition
 	BottomGradient.modulate.a = 1
 	Soul.position = CurrentMenu.global_position + SoulOffset
-	ControlsAllowed = true
+	ControlsBlocked.clear()
 	
 	MenuSway()
 	
@@ -333,11 +336,31 @@ func NewMenuOut() -> void:
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	for Option in MenuHistory[-2].get_children():
 		if i == IndexHistory[-1]:
-			var oldTween = MenuLabelHistory[-1].get_meta("ActiveTween")
+			var TopMenu = MenuLabelHistory[-1]
+			
+			var oldTween = TopMenu.get_meta("ActiveTween")
 			if oldTween:
 				if oldTween.is_valid():
 					oldTween.kill()
-			var tween = InterpolateObject(MenuLabelHistory[-1], "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
-			MenuLabelHistory[-1].set_meta("ActiveTween", tween)
+			var tween = InterpolateObject(TopMenu, "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+			TopMenu.set_meta("ActiveTween", tween)
 		Total_Gap += Option.size.y + 4
 		i += 1
+
+
+func get_menu_selections(TheMenu : Menu = CurrentMenu) -> Array[SettingSelection]:
+	var setting_array : Array[SettingSelection]
+	for Selection in TheMenu.get_children():
+		if Selection is SettingSelection:
+			setting_array.append(Selection)
+	return setting_array
+
+func AssignEnumArray(AssignedArray : Array[int], AssignedInt : int) -> void:
+	if not AssignedArray.has(AssignedInt):
+		AssignedArray.append(AssignedInt)
+
+func _on_CustomAttackFocused():
+	AssignEnumArray(ControlsBlocked, CodeFocused)
+
+func _on_CustomAttackUnfocused():
+	ControlsBlocked.erase(CodeFocused)

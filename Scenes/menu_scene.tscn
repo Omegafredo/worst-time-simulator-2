@@ -200,7 +200,6 @@ ClampedMax = 100.0
 LinkedProperty = "MusicBus"
 
 [node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer"]
-visible = false
 script = ExtResource("2_hl0mm")
 
 [node name="CustomStart" type="Label" parent="Menu/MenuContainer/CustomAttacks"]
@@ -211,10 +210,10 @@ label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
 [node name="Custom Attack Editor" parent="Menu/MenuContainer/CustomAttacks/CustomStart" instance=ExtResource("5_nty0a")]
-offset_left = 267.0
-offset_top = 240.0
-offset_right = 267.0
-offset_bottom = 240.0
+offset_left = 268.0
+offset_top = 239.0
+offset_right = 268.0
+offset_bottom = 239.0
 scale = Vector2(1.5, 1.5)
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
@@ -288,3 +287,5 @@ texture = SubResource("GradientTexture1D_wdhac")
 
 [connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
 [connection signal="activated" from="Menu/MenuContainer/CustomAttacks/CustomStart" to="Menu" method="_on_custom_start"]
+[connection signal="FocusEnter" from="Menu/MenuContainer/CustomAttacks/CustomStart/Custom Attack Editor" to="Menu" method="_on_CustomAttackFocused"]
+[connection signal="FocusExit" from="Menu/MenuContainer/CustomAttacks/CustomStart/Custom Attack Editor" to="Menu" method="_on_CustomAttackUnfocused"]
