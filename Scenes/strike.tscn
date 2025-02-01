@@ -46,7 +46,7 @@ frame = 6
 frame_progress = 1.0
 script = ExtResource("7_c3yjv")
 
-[node name="PlayerFight" type="AudioStreamPlayer" parent="."]
+[node name="PlayerFight" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
 stream = ExtResource("8_f02c4")
 autoplay = true
 bus = &"SoundEffects"

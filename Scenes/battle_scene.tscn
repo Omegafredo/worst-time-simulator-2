@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=34 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -133,7 +133,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_ckbld"]
@@ -164,15 +164,44 @@ tracks/1/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_jbk23"]
+resource_name = "death"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tcdjl"]
 _data = {
 "RESET": SubResource("Animation_mnjtw"),
+"death": SubResource("Animation_jbk23"),
 "fade": SubResource("Animation_ckbld")
 }
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "SelectableOptions")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
 Soul = NodePath("Player")
@@ -187,6 +216,9 @@ Target = NodePath("UI/BoxCorner/Target")
 KrIcon = NodePath("UI/KrIcon")
 PlayerName = NodePath("UI/Name")
 AttackList = NodePath("AttackList")
+AnimationController = NodePath("../AnimationPlayer")
+MaskedAttacks = NodePath("CombatZoneCorner/Mask/MaskedAttacks")
+VisibleAttacks = NodePath("VisibleAttacks")
 SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]
@@ -358,12 +390,11 @@ texture = ExtResource("20_aac14")
 
 [node name="Audio" type="Node" parent="Battle Controller"]
 
-[node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller/Audio"]
+[node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller/Audio" groups=["SoundEffects"]]
 stream = ExtResource("17_xl1g0")
 bus = &"SoundEffects"
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 z_index = 5
 anchors_preset = 15
 anchor_right = 1.0
@@ -378,5 +409,6 @@ libraries = {
 }
 autoplay = "fade"
 
+[connection signal="died" from="Battle Controller/Player" to="Battle Controller" method="_on_player_death"]
 [connection signal="confirmed" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_confirmed"]
 [connection signal="end" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_fight_end"]

@@ -1,10 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://qjh4h6r7nww5"]
+[gd_scene load_steps=17 format=3 uid="uid://qjh4h6r7nww5"]
 
 [ext_resource type="Script" path="res://Scripts/battle_soul.gd" id="1_6hssw"]
-[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul.png" id="2_ab1kl"]
+[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul/Soul.png" id="2_ab1kl"]
+[ext_resource type="Texture2D" uid="uid://dsiobw2jivci5" path="res://Resources/Sprites/Soul/Split.png" id="2_vxr54"]
 [ext_resource type="AudioStream" uid="uid://clnhipeueds0f" path="res://Resources/Sounds/Slam.ogg" id="3_tijpy"]
 [ext_resource type="AudioStream" uid="uid://bf3kxpnhxdot2" path="res://Resources/Sounds/Ding.ogg" id="4_730i4"]
+[ext_resource type="Texture2D" uid="uid://ccyf8bida6wtw" path="res://Resources/Sprites/Soul/Shards/000.png" id="4_w5338"]
+[ext_resource type="Texture2D" uid="uid://ckq7wsfbip77l" path="res://Resources/Sprites/Soul/Shards/001.png" id="5_dbbhc"]
 [ext_resource type="AudioStream" uid="uid://b44o1hnvo2xuo" path="res://Resources/Sounds/PlayerDamaged.ogg" id="5_w64fa"]
+[ext_resource type="Texture2D" uid="uid://qxracr31g556" path="res://Resources/Sprites/Soul/Shards/002.png" id="6_nd2td"]
+[ext_resource type="AudioStream" uid="uid://cimtvckrh6s3x" path="res://Resources/Sounds/HeartSplit.ogg" id="7_naqc2"]
+[ext_resource type="Texture2D" uid="uid://bubscrbe2g3pp" path="res://Resources/Sprites/Soul/Shards/003.png" id="7_xoobp"]
+[ext_resource type="AudioStream" uid="uid://bx05grky183sd" path="res://Resources/Sounds/HeartShatter.ogg" id="8_j853n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u50k1"]
 size = Vector2(15, 15)
@@ -12,7 +19,25 @@ size = Vector2(15, 15)
 [sub_resource type="CircleShape2D" id="CircleShape2D_t81ya"]
 radius = 24.0
 
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("SoulSprite", "FadeSprite", "CoyoteTime", "JumpRemember", "SlamSfx", "DingSfx", "PlayerDamagedSfx")]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_miyet"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 350.0
+initial_velocity_max = 350.0
+gravity = Vector3(0, 300, 0)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_6yfq8"]
+frames = 4
+speed_scale = 6.0
+frame_0/texture = ExtResource("4_w5338")
+frame_1/texture = ExtResource("5_dbbhc")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("6_nd2td")
+frame_2/duration = 1.0
+frame_3/texture = ExtResource("7_xoobp")
+frame_3/duration = 1.0
+
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("SoulSprite", "FadeSprite", "CoyoteTime", "JumpRemember", "SlamSfx", "DingSfx", "PlayerDamagedSfx", "HeartShatter", "HeartSplit", "ShatterParticles")]
 texture_filter = 1
 collision_mask = 6
 floor_stop_on_slope = false
@@ -20,6 +45,7 @@ floor_constant_speed = true
 platform_on_leave = 2
 platform_floor_layers = 0
 script = ExtResource("1_6hssw")
+SplitSprite = ExtResource("2_vxr54")
 SoulSprite = NodePath("SoulSprite")
 FadeSprite = NodePath("SoulSprite/FadeSprite")
 CoyoteTime = NodePath("CoyoteTime")
@@ -27,6 +53,9 @@ JumpRemember = NodePath("JumpRemember")
 SlamSfx = NodePath("Slam")
 DingSfx = NodePath("Ding")
 PlayerDamagedSfx = NodePath("PlayerDamaged")
+HeartShatter = NodePath("HeartShatter")
+HeartSplit = NodePath("HeartSplit")
+ShatterParticles = NodePath("HeartShatterParticle")
 
 [node name="SoulSprite" type="Sprite2D" parent="."]
 modulate = Color(1, 0, 0, 1)
@@ -45,6 +74,15 @@ shape = SubResource("RectangleShape2D_u50k1")
 [node name="CombatBoxHitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_t81ya")
 
+[node name="HeartShatterParticle" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_miyet")
+texture = SubResource("AnimatedTexture_6yfq8")
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+
 [node name="CoyoteTime" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
@@ -53,16 +91,22 @@ one_shot = true
 wait_time = 0.2
 one_shot = true
 
-[node name="Slam" type="AudioStreamPlayer" parent="."]
+[node name="Slam" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
 stream = ExtResource("3_tijpy")
 bus = &"SoundEffects"
 
-[node name="Ding" type="AudioStreamPlayer" parent="."]
+[node name="Ding" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
 stream = ExtResource("4_730i4")
 bus = &"SoundEffects"
 
-[node name="PlayerDamaged" type="AudioStreamPlayer" parent="."]
+[node name="PlayerDamaged" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
 stream = ExtResource("5_w64fa")
 bus = &"SoundEffects"
 
-[node name="Node" type="Node" parent="."]
+[node name="HeartSplit" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
+stream = ExtResource("7_naqc2")
+bus = &"SoundEffects"
+
+[node name="HeartShatter" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
+stream = ExtResource("8_j853n")
+bus = &"SoundEffects"

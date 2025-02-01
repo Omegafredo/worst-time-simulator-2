@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu31l5tubftv7"
-path="res://.godot/imported/Soul.png-6be6aaa73f0ba0af1d94a2d80b01edfe.ctex"
+uid="uid://ccyf8bida6wtw"
+path="res://.godot/imported/000.png-05007b2d170a26b808e06120a4c6ff13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/Soul.png"
-dest_files=["res://.godot/imported/Soul.png-6be6aaa73f0ba0af1d94a2d80b01edfe.ctex"]
+source_file="res://Resources/Sprites/Soul/Shards/000.png"
+dest_files=["res://.godot/imported/000.png-05007b2d170a26b808e06120a4c6ff13.ctex"]
 
 [params]
 

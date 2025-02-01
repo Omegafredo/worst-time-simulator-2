@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-enum {SOUL_RED, SOUL_BLUE}
+enum {SOUL_RED, SOUL_BLUE, DEAD}
 
 var Soul_Type := SOUL_RED
 
@@ -11,6 +11,8 @@ var gravityDir := 0:
 
 var gravity : float = 980
 
+@export var SplitSprite : Texture2D
+
 @export var SoulSprite : Sprite2D
 @export var FadeSprite : Sprite2D
 @onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZoneCorner/CombatZone"
@@ -19,7 +21,9 @@ var gravity : float = 980
 @export var SlamSfx : AudioStreamPlayer
 @export var DingSfx : AudioStreamPlayer
 @export var PlayerDamagedSfx : AudioStreamPlayer
-
+@export var HeartShatter : AudioStreamPlayer
+@export var HeartSplit : AudioStreamPlayer
+@export var ShatterParticles : GPUParticles2D
 
 const SPEED := 450.0
 const JUMP_STRENGTH := 700.0
@@ -31,13 +35,19 @@ var SlamDamage := 1
 
 var KR_Counter : float = 0
 
+var Controllable := true
+
+signal died
+
 
 func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("menu"):
 		get_tree().change_scene_to_file("res://Scenes/menu_scene.tscn")
+		
 	
-	if !get_parent().MenuMode:
+	
+	if Controllable:
 		# Get the input direction and handle the movement/deceleration.
 		var h_direction := Input.get_axis("left", "right")
 		var v_direction := Input.get_axis("up", "down")
@@ -134,7 +144,7 @@ func KarmaDamage() -> void:
 
 func Change_Soul(Type) -> void:
 	# TODO Implement additional reasons to not do the animation (such as when flashes are added)
-	if Soul_Type != Type:
+	if Soul_Type != Type and visible:
 		DingSfx.play()
 		FadeSoulAnim()
 	Soul_Type = Type
@@ -162,13 +172,35 @@ func SlamHitGround() -> void:
 	else:
 		PlayerDamagedSfx.play()
 		Globals.HP -= SlamDamage
-	
+
+var OldFadeTween : Tween
+
 func FadeSoulAnim():
+	if OldFadeTween:
+		OldFadeTween.kill()
+			
 	FadeSprite.scale = Vector2(1, 1)
 	FadeSprite.self_modulate.a = 1
 	var tween = get_tree().create_tween()
 	tween.tween_property(FadeSprite, "scale", Vector2(4, 4), 1.5)
 	tween.parallel().tween_property(FadeSprite, "self_modulate:a", 0, 1.5)
+	
+	OldFadeTween = tween
+	
+func Death():
+	Soul_Type = DEAD
+	if OldFadeTween:
+		OldFadeTween.kill()
+	died.emit()
+	SoulSprite.modulate = Color(1, 0, 0)
+	await Globals.Wait(1)
+	HeartSplit.play()
+	SoulSprite.texture = SplitSprite
+	SoulSprite.modulate = Color.WHITE
+	await Globals.Wait(1)
+	HeartShatter.play()
+	SoulSprite.visible = false
+	ShatterParticles.emitting = true
 	
 func TakeDamage(Damage : int, Karma : int):
 	Globals.KR += Karma
@@ -180,3 +212,6 @@ func TakeDamage(Damage : int, Karma : int):
 		Globals.KR = Globals.HP - 1
 	if Globals.KR > 40:
 		Globals.KR = 40
+		
+	if Globals.HP <= 0 and Soul_Type != DEAD:
+		Death()

@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
 [ext_resource type="Script" path="res://Scripts/menu_node.gd" id="2_hl0mm"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="3_8yvr6"]
-[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul.png" id="3_pbhkn"]
+[ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul/Soul.png" id="3_pbhkn"]
 [ext_resource type="Script" path="res://Scripts/setting_selection.gd" id="3_rhj55"]
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
 [ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
@@ -199,22 +199,30 @@ MultiplyShown = 100.0
 ClampedMax = 100.0
 LinkedProperty = "MusicBus"
 
-[node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer"]
+[node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer" node_paths=PackedStringArray("HeaderPos", "Animatables")]
+visible = false
+position = Vector2(-743, 4)
 script = ExtResource("2_hl0mm")
+CustomMenu = true
+HeaderPos = NodePath("Marker2D")
+Animatables = [NodePath("Custom Attack Editor")]
+
+[node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CustomAttacks"]
+position = Vector2(0, -100)
 
 [node name="CustomStart" type="Label" parent="Menu/MenuContainer/CustomAttacks"]
-offset_right = 352.0
+offset_left = 61.0
+offset_right = 413.0
 offset_bottom = 66.0
 text = "Start Fight"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
 
-[node name="Custom Attack Editor" parent="Menu/MenuContainer/CustomAttacks/CustomStart" instance=ExtResource("5_nty0a")]
-offset_left = 268.0
-offset_top = 239.0
-offset_right = 268.0
-offset_bottom = 239.0
-scale = Vector2(1.5, 1.5)
+[node name="Custom Attack Editor" parent="Menu/MenuContainer/CustomAttacks" instance=ExtResource("5_nty0a")]
+offset_left = 461.0
+offset_top = -110.0
+offset_right = 461.0
+offset_bottom = -110.0
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")
@@ -286,6 +294,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture1D_wdhac")
 
 [connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
+[connection signal="entered" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_menu"]
+[connection signal="exited" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_exit"]
 [connection signal="activated" from="Menu/MenuContainer/CustomAttacks/CustomStart" to="Menu" method="_on_custom_start"]
-[connection signal="FocusEnter" from="Menu/MenuContainer/CustomAttacks/CustomStart/Custom Attack Editor" to="Menu" method="_on_CustomAttackFocused"]
-[connection signal="FocusExit" from="Menu/MenuContainer/CustomAttacks/CustomStart/Custom Attack Editor" to="Menu" method="_on_CustomAttackUnfocused"]
+[connection signal="FocusEnter" from="Menu/MenuContainer/CustomAttacks/Custom Attack Editor" to="Menu" method="_on_CustomAttackFocused"]
+[connection signal="FocusExit" from="Menu/MenuContainer/CustomAttacks/Custom Attack Editor" to="Menu" method="_on_CustomAttackUnfocused"]

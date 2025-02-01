@@ -20,6 +20,11 @@ var StrikeAnimation := preload("res://Scenes/strike.tscn")
 @export var KrIcon: Sprite2D
 @export var PlayerName: Label
 @export var AttackList : Node
+@export var AnimationController : AnimationPlayer
+@export var MaskedAttacks : Node2D
+@export var VisibleAttacks : Node
+
+var StopProcess := false
 
 var CurrentEnemy = "Sans"
 
@@ -147,6 +152,7 @@ func InitialiseBattle():
 	
 func InitializeAttack():
 	MenuMode = false
+	Soul.Controllable = true
 	MenuControl = NONE
 	Soul.show()
 	CombatBox(Rect2(800, 720, 1200, 1152))
@@ -155,14 +161,24 @@ func InitializeAttack():
 	ReturnToMenu()
 
 func ReturnToMenu():
-	CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-	CombatBox(Rect2(111, 720, 1839, 1152))
-	SelectedMenu = "Main"
-	MoveMenu(0)
-	MenuMode = true
-	await CombatZone.DoneMoving
-	MenuControl = ACTIONABLE
-	MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
+	if !StopProcess:
+		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
+		CombatBox(Rect2(111, 720, 1839, 1152))
+		SelectedMenu = "Main"
+		ClearAttacks()
+		MoveMenu(0)
+		MenuMode = true
+		Soul.Controllable = false
+		await CombatZone.DoneMoving
+		MenuControl = ACTIONABLE
+		MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
+	
+func ClearAttacks():
+	var allattacks : Array = MaskedAttacks.get_children()
+	allattacks.append_array(VisibleAttacks.get_children())
+	for child in allattacks:
+		if child is Attack:
+			child.queue_free()
 	
 
 func _process(_delta) -> void:
@@ -194,7 +210,12 @@ func _process(_delta) -> void:
 	$"Attack Origin Point".update_scale = false
 	$"Attack Origin Point".update_scale = true
 	
-
+func _on_player_death():
+	ClearAttacks()
+	get_tree().call_group("SoundEffects", "stop")
+	AnimationController.play("death")
+	Soul.Controllable = false
+	
 
 @export var SelectableOptions: Node2D
 var SelectedMenu = "Main"

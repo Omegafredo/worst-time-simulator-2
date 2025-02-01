@@ -2,13 +2,13 @@ extends Node2D
 
 var MoveIndex : int = 0
 
-enum {StartingBattle, CodeFocused}
+enum {StartingBattle, IntroAnim, CodeFocused}
 var ControlsBlocked : Array[int]
 @onready var Soul : Node2D = %SoulSelector
 var CurrentMenu : Menu
 var CurrentLabel : SettingSelection:
 	get():
-		return CurrentMenu.get_child(MoveIndex)
+		return get_menu_selections()[MoveIndex]
 @onready var MainContainer : Node2D = $MenuContainer
 var Menus : Array[Menu]
 var SideOptions : Array[SettingSelection]
@@ -22,6 +22,8 @@ var IndexHistory : Array[int]
 @onready var WTSLogo : TextureRect = $"/root/Menu Scene/WTS"
 @onready var BottomParticles : GPUParticles2D = $"/root/Menu Scene/BottomParticles"
 @onready var BottomGradient : TextureRect = $"/root/Menu Scene/BottomGradient"
+
+var OriginalSelectPos : Dictionary
 const SoulOffset : Vector2 = Vector2(-60, 35)
 
 const WTSLogoPosition := Vector2(-625, 25)
@@ -41,6 +43,8 @@ func _ready() -> void:
 		for option in menu.get_children():
 			if option is SettingScroll:
 				SideOptions.append(option)
+		for selection in get_menu_selections(menu):
+			OriginalSelectPos[selection] = selection.global_position
 	
 	# Sets the first menu as the Current Menu
 	CurrentMenu = Menus[0]
@@ -118,7 +122,7 @@ func MoveSoul(MovingTo : int) -> void:
 		i += 1
 		if MoveIndex >= i:
 			Total_Gap += Option.size.y + 4
-	Soul.InterpolateMovement(CurrentMenu.global_position + SoulOffset + Vector2(0, Total_Gap) )
+	Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
 		
 
 func CancelAction() -> void:
@@ -147,6 +151,54 @@ func _on_custom_start():
 	Globals.CustomMode = true
 	InitiateBattle()
 
+func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]):
+	var CustomAttackEditor : Control = Movables[0]
+	
+	CurrentMenu.visible = true
+	CurrentMenu.HideAfter = false
+	for child in CurrentMenu.get_children():
+		child.modulate.a = 0
+		if OriginalSelectPos.has(child):
+			child.global_position.x = -300
+			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		
+	InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	var MovedMenu = Header
+	var oldTween = MovedMenu.get_meta("ActiveTween")
+	if oldTween:
+		if oldTween.is_valid():
+			oldTween.kill()
+	var tween = InterpolateObject(MovedMenu, "global_position", HeaderPos.global_position, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+	MovedMenu.set_meta("ActiveTween", tween)
+	MenuLabelHistory.append(MovedMenu)
+
+func _on_customattack_exit(Movables : Array[Node]):
+	var CustomAttackEditor : Control = Movables[0]
+	
+	CurrentMenu.HideAfter = true
+	for child in get_menu_selections():
+		if child != MenuLabelHistory[-1]:
+			if child is SettingSelection:
+				InterpolateObject(child, "global_position:x", -300, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	var TopMenu = MenuLabelHistory[-1]
+	
+	var oldTween = TopMenu.get_meta("ActiveTween")
+	if oldTween:
+		if oldTween.is_valid():
+			oldTween.kill()
+	var tween = InterpolateObject(TopMenu, "global_position", OriginalSelectPos[TopMenu], 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+	TopMenu.set_meta("ActiveTween", tween)
+	
+	
+	
 func UpdateLabels() -> void:
 	for child in find_children("*", "SettingSelection", true):
 		child.Update()
@@ -155,13 +207,21 @@ func UpdateLabels() -> void:
 
 func ChangeMenu(MenuTo : Menu, MenuHeader : SettingMenuChanger = CurrentLabel) -> void:
 	OldMenuOut(MenuHeader)
+	if !MenuTo.CustomMenu:
+		HeaderIn(MenuHeader)
 	CurrentMenu = MenuTo
-	NewMenuIn()
+	MenuTo.Enter(MenuHeader)
+	if !MenuTo.CustomMenu:
+		NewMenuIn()
 	AppendHistory()
 	MoveSoul(0)
 	
+	
 func ReturnMenu() -> void:
-	NewMenuOut()
+	CurrentMenu.Exit()
+	if !CurrentMenu.CustomMenu:
+		NewMenuOut()
+		HeaderOut()
 	CurrentMenu = MenuHistory[-2]
 	OldMenuIn()
 	#for menu in Menus:
@@ -192,6 +252,7 @@ func InitiateBattle() -> void:
 	get_tree().change_scene_to_file("res://Scenes/battle_scene.tscn")
 	
 func InitiateIntro() -> void:
+	ControlsBlocked.append(IntroAnim)
 	MainContainer.hide()
 	Soul.hide()
 	WTSLogo.hide()
@@ -219,7 +280,7 @@ func InitiateIntro() -> void:
 	await tween.finished
 	
 	
-	ControlsBlocked.clear()
+	ControlsBlocked.erase(IntroAnim)
 	
 func InitiateMenu() -> void:
 	Soul.show()
@@ -293,6 +354,9 @@ func OldMenuOut(MovedMenu : SettingMenuChanger) -> void:
 			InterpolateObject(child, "position:x", -500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			
+
+	
+func HeaderIn(MovedMenu : SettingMenuChanger) -> void:
 	# Kills the old tween attached to the meta data when creating a new one
 	var oldTween = MovedMenu.get_meta("ActiveTween")
 	if oldTween:
@@ -304,6 +368,7 @@ func OldMenuOut(MovedMenu : SettingMenuChanger) -> void:
 	if MenuLabelHistory.size() >= 1:
 		InterpolateObject(MenuLabelHistory[-1], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	MenuLabelHistory.append(MovedMenu)
+	
 
 func OldMenuIn() -> void:
 	CurrentMenu.visible = true
@@ -327,13 +392,17 @@ func NewMenuIn() -> void:
 
 
 func NewMenuOut() -> void:
-	var Total_Gap : float = 0
-	var i : int = 0
+
 	CurrentMenu.HideAfter = true
 	for child in CurrentMenu.get_children():
 		if child != MenuLabelHistory[-1]:
 			InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+
+		
+func HeaderOut() -> void:
+	var Total_Gap : float = 0
+	var i : int = 0
 	for Option in MenuHistory[-2].get_children():
 		if i == IndexHistory[-1]:
 			var TopMenu = MenuLabelHistory[-1]
@@ -345,7 +414,7 @@ func NewMenuOut() -> void:
 			var tween = InterpolateObject(TopMenu, "position:y", Total_Gap, 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 			TopMenu.set_meta("ActiveTween", tween)
 		Total_Gap += Option.size.y + 4
-		i += 1
+		i += 1	
 
 
 func get_menu_selections(TheMenu : Menu = CurrentMenu) -> Array[SettingSelection]:

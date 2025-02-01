@@ -33,6 +33,10 @@ window/size/window_height_override=960
 window/stretch/mode="viewport"
 window/vsync/vsync_mode=0
 
+[global_group]
+
+SoundEffects="Get all non-music AudioPlayers"
+
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true
