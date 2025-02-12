@@ -96,9 +96,6 @@ var AmountTurns : int = 0
 
 func _ready():
 	InitialiseBattle()
-	if Globals.CustomMode:
-		Globals.CustomAttackScript.reload()
-		AttackList.set_script(Globals.CustomAttackScript)
 	
 	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
 	
@@ -120,11 +117,11 @@ func _ready():
 	#await Globals.Wait(0.5)
 	#SoulSlam(2)
 	#await Globals.Wait(1)
-	SoulMode(1)
+	#SoulMode(1)
 	#await Globals.Wait(2)
-	Bone(Vector2(1200, 1000),50,180,70,true)
-	Platform(Vector2(1200, 1000),50,180,70,true)
-	CombatBox(Rect2(400, 720, 1400, 1152))
+	#Bone(Vector2(1200, 1000),50,180,70,true)
+	#Platform(Vector2(1200, 1000),50,180,70,true)
+	#CombatBox(Rect2(400, 720, 1400, 1152))
 	#
 	#await Globals.Wait(2)
 	#Bone(Vector2(1100, 750), 30, 180, 150)
@@ -141,9 +138,10 @@ func _ready():
 	#var test1 = GasterBlaster(1, Vector2(0,0), Vector2(435, 884), 0, 1, 2)
 	#test1.BlasterMoveManual(Vector2(400,600), 120)
 	#test1.BlasterMoveManual(Vector2(600, 600), 75, 2)
-	await Globals.Wait(7)
+	#await Globals.Wait(7)
 	#test1.ForceFire(2)
-	ReturnToMenu()
+	#ReturnToMenu()
+	InitializeAttack()
 	
 	
 func InitialiseBattle():
@@ -157,8 +155,7 @@ func InitializeAttack():
 	Soul.show()
 	CombatBox(Rect2(800, 720, 1200, 1152))
 	Soul.position = Vector2(1000, 1000)
-	await Globals.Wait(2)
-	ReturnToMenu()
+	AttackList.AttackStart()
 
 func ReturnToMenu():
 	if !StopProcess:

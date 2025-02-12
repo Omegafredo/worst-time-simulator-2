@@ -13,7 +13,8 @@ func _ready():
 	if !Globals.CustomAttackScript:
 		CodeEditor.text = TemplateCode.new().get_script().get_source_code()
 	else:
-		CodeEditor.text = Globals.CustomAttackScript.get_source_code()
+		#CodeEditor.text = Globals.CustomAttackScript.get_source_code()
+		pass
 	
 
 func _on_save_pressed():
@@ -42,7 +43,8 @@ func StringToGlobal(AttackString : String) -> void:
 	SaveToGlobal(ToGDScript(AttackString))
 	
 func SaveToGlobal(AttackScript : GDScript) -> void:
-	Globals.CustomAttackScript = AttackScript
+	#Globals.CustomAttackScript = AttackScript
+	pass
 
 func ToGDScript(AttackString : String) -> GDScript:
 	var CustomCode : GDScript = GDScript.new()

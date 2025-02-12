@@ -4,6 +4,7 @@ extends Node
 
 var MusicEnabled : bool = true
 var ShowIntro : bool = true
+var FirstTime := true
 var PlayerName := "CHARA"
 
 var CustomMode : bool
@@ -63,8 +64,8 @@ func _ready():
 
 # Other
 
-var CustomAttackScript : GDScript
-
+#var CustomAttackScript : GDScript
+const CustomAttackScript = preload("res://Scripts/attack_template.gd")
 
 # Functions
 

@@ -32,7 +32,9 @@ const WTSLogoPosition := Vector2(-625, 25)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
+	if Globals.FirstTime:
+		LoadMods()
+		Globals.FirstTime = false
 	
 	
 	# Gathers all the Menus into an array
@@ -116,12 +118,6 @@ func MoveSoul(MovingTo : int) -> void:
 		MoveIndex = 0
 	elif MoveIndex < 0:
 		MoveIndex = get_menu_selections().size() - 1
-	var Total_Gap : float = 0
-	var i : int = 0
-	for Option in get_menu_selections():
-		i += 1
-		if MoveIndex >= i:
-			Total_Gap += Option.size.y + 4
 	Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
 		
 
@@ -299,7 +295,32 @@ func InitiateMenu() -> void:
 	
 	# Applies all label changes when coming back from a battle
 	UpdateLabels()
+
+
+func LoadMods() -> void:
+	var mods : Array[String]
 	
+	const ModFolderPath : String = "mods"
+	
+	var dir = DirAccess.open(OS.get_executable_path().get_base_dir())
+	if dir.dir_exists(ModFolderPath) != null:
+		dir.change_dir(ModFolderPath)
+		print("found mods folder")
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if !dir.current_is_dir():
+				mods.append(dir.get_current_dir() + "/" + file_name)
+				print(dir.get_current_dir() + "/" + file_name)
+			file_name = dir.get_next()
+	else:
+		print("couldn't")
+	if mods:
+		for mod in mods:
+			print(ProjectSettings.load_resource_pack(mod))
+
+
+
 var MenuSwayTween : Tween
 var MenuSwayTime : float = 3
 var MenuSwayAmount : float = 2.5
