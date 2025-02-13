@@ -41,6 +41,30 @@ func _ready() -> void:
 	for child in MainContainer.get_children():
 		Menus.append(child)
 	
+	# Adds custom fights to the custom fight menu
+	var dir = DirAccess.open("res://")
+	var i : int = 0
+	if dir.dir_exists("Custom Fights"):
+		dir.change_dir("Custom Fights")
+		for a in dir.get_files():
+			var res = load(dir.get_current_dir() + "/" + a)
+			print(dir.get_current_dir() + "/" + a)
+			print(res)
+			if a.get_extension() in ["gd", "gdc"]:
+				var CFButton = SettingSelection.new()
+				CFButton.activated.connect(_on_custom_start.bind(res))
+				CFButton.position = Vector2(61, i * 70)
+				CFButton.text = a
+				CFButton.label_settings = load("res://Resources/Fonts/styles/menu_label.tres")
+				$MenuContainer/CustomAttacks.add_child(CFButton)
+				
+				i += 1
+	else:
+		print("fuck you")
+	if i == 0:
+		$MenuContainer/FirstMenu/CustomAttack.DeactiveState = true
+		UpdateLabels()
+	
 	for menu in Menus:
 		for option in menu.get_children():
 			if option is SettingScroll:
@@ -53,6 +77,8 @@ func _ready() -> void:
 	
 	MenuHistory.append(CurrentMenu)
 	
+
+	
 	
 	if Globals.ShowIntro:
 		Globals.ShowIntro = false
@@ -61,6 +87,8 @@ func _ready() -> void:
 		InitiateMenu()
 		if Globals.CustomMode:
 			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
+			
+	MoveIndex = get_top_active_index()
 	
 
 
@@ -105,6 +133,19 @@ func _process(delta: float) -> void:
 	
 # Called when pressing a move action
 func MoveAction(Direction : int) -> void:
+	var TempIndex = MoveIndex
+	while !CurrentLabel.DeactiveState:
+		if Direction == 0:
+			Direction = 1
+		TempIndex += Direction
+		
+		if TempIndex > get_menu_selections().size() - 1:
+			return
+		elif TempIndex < 0:
+			return
+		
+		if !get_menu_selections()[TempIndex].DeactiveState:
+			break
 	MoveSoul(MoveIndex + int(Direction))
 	if get_menu_selections().size() > 1:
 		MenuCursorSound.play()
@@ -118,7 +159,12 @@ func MoveSoul(MovingTo : int) -> void:
 		MoveIndex = 0
 	elif MoveIndex < 0:
 		MoveIndex = get_menu_selections().size() - 1
-	Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
+	
+	# Checks if the label has a original pos saved in the dictionary, if not move directly to its position
+	if OriginalSelectPos.has(CurrentLabel):
+		Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
+	else:
+		Soul.InterpolateMovement(CurrentLabel.global_position + SoulOffset)
 		
 
 func CancelAction() -> void:
@@ -143,24 +189,27 @@ func _on_start():
 	InitiateBattle()
 
 
-func _on_custom_start():
+func _on_custom_start(FightScript : GDScript):
 	Globals.CustomMode = true
+	Globals.CustomAttackScript = FightScript
 	InitiateBattle()
 
 func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]):
-	var CustomAttackEditor : Control = Movables[0]
+	#var CustomAttackEditor : Control = Movables[0]
 	
 	CurrentMenu.visible = true
 	CurrentMenu.HideAfter = false
-	for child in CurrentMenu.get_children():
+	for child in get_menu_selections():
 		child.modulate.a = 0
-		if OriginalSelectPos.has(child):
-			child.global_position.x = -300
-			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		child.global_position.x = -300
+		InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	
+	
 		
-	InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
 	var MovedMenu = Header
 	var oldTween = MovedMenu.get_meta("ActiveTween")
@@ -172,7 +221,11 @@ func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Mo
 	MenuLabelHistory.append(MovedMenu)
 
 func _on_customattack_exit(Movables : Array[Node]):
-	var CustomAttackEditor : Control = Movables[0]
+	#var Selections : Array[SettingSelection]
+	#for Movable in Movables:
+		#if Movable is SettingSelection:
+			#Selections.append(Movable)
+			
 	
 	CurrentMenu.HideAfter = true
 	for child in get_menu_selections():
@@ -181,8 +234,8 @@ func _on_customattack_exit(Movables : Array[Node]):
 				InterpolateObject(child, "global_position:x", -300, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
-	InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-	InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
 	var TopMenu = MenuLabelHistory[-1]
 	
@@ -210,7 +263,7 @@ func ChangeMenu(MenuTo : Menu, MenuHeader : SettingMenuChanger = CurrentLabel) -
 	if !MenuTo.CustomMenu:
 		NewMenuIn()
 	AppendHistory()
-	MoveSoul(0)
+	MoveSoul(get_top_active_index())
 	
 	
 func ReturnMenu() -> void:
@@ -272,7 +325,7 @@ func InitiateIntro() -> void:
 	Soul.show()
 	Soul.position = Vector2(CurrentMenu.global_position.x + SoulOffset.x, 1700)
 	MenuSway()
-	var tween = Soul.InterpolateMovement(CurrentMenu.global_position + SoulOffset)
+	var tween = Soul.InterpolateMovement(CurrentMenu.global_position + Vector2(0, get_top_active_index() * 70) + SoulOffset)
 	await tween.finished
 	
 	
@@ -309,7 +362,8 @@ func LoadMods() -> void:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if !dir.current_is_dir():
+			# Checks if it is not a folder and it ends in .PCK
+			if !dir.current_is_dir() and file_name.get_extension() in ["pck", "zip"]:
 				mods.append(dir.get_current_dir() + "/" + file_name)
 				print(dir.get_current_dir() + "/" + file_name)
 			file_name = dir.get_next()
@@ -444,6 +498,18 @@ func get_menu_selections(TheMenu : Menu = CurrentMenu) -> Array[SettingSelection
 		if Selection is SettingSelection:
 			setting_array.append(Selection)
 	return setting_array
+	
+func get_top_active_index() -> int:
+	var i : int = 0
+	while true:
+		if get_menu_selections().size() - 1 < i:
+			return 0
+		
+		if !get_menu_selections()[i].DeactiveState:
+			break
+		i += 1
+		
+	return i
 
 func AssignEnumArray(AssignedArray : Array[int], AssignedInt : int) -> void:
 	if not AssignedArray.has(AssignedInt):

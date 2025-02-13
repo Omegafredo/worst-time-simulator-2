@@ -64,8 +64,7 @@ func _ready():
 
 # Other
 
-#var CustomAttackScript : GDScript
-const CustomAttackScript = preload("res://Scripts/attack_template.gd")
+var CustomAttackScript : GDScript
 
 # Functions
 

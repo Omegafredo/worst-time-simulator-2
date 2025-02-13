@@ -96,6 +96,9 @@ var AmountTurns : int = 0
 
 func _ready():
 	InitialiseBattle()
+	if Globals.CustomMode:
+		AttackList.set_script(Globals.CustomAttackScript)
+		AttackList.LoadVariables()
 	
 	#SpeechBubble.setText("Waiting system [Wait=0.5]Test")
 	

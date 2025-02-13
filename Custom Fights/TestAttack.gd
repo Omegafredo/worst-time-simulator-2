@@ -19,6 +19,10 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
+	BC.SoulMode(1)
+	BC.Bone(Vector2(1200, 1000),50,180,70,true)
+	BC.Platform(Vector2(1200, 1000),50,180,70,true)
+	BC.CombatBox(Rect2(400, 720, 1400, 1152))
 	pass
 	
 func Attack2() -> void:

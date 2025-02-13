@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://blty1ony4m351"]
+[gd_scene load_steps=21 format=3 uid="uid://blty1ony4m351"]
 
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
 [ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" path="res://Scripts/setting_scroll.gd" id="5_4cdd5"]
 [ext_resource type="Script" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
-[ext_resource type="PackedScene" uid="uid://b3shckdxsreeu" path="res://Scenes/custom_attack_editor.tscn" id="5_nty0a"]
 [ext_resource type="Script" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
@@ -70,6 +69,7 @@ offset_bottom = 66.0
 text = "Start"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("3_rhj55")
+DeactiveState = true
 
 [node name="Settings" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 70.0
@@ -108,6 +108,7 @@ text = "Video"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../VideoMenu")
+DeactiveState = true
 
 [node name="Audio" type="Label" parent="Menu/MenuContainer/SettingsMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 70.0
@@ -205,24 +206,10 @@ position = Vector2(-743, 4)
 script = ExtResource("2_hl0mm")
 CustomMenu = true
 HeaderPos = NodePath("Marker2D")
-Animatables = [NodePath("Custom Attack Editor")]
+Animatables = [null]
 
 [node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CustomAttacks"]
 position = Vector2(0, -100)
-
-[node name="CustomStart" type="Label" parent="Menu/MenuContainer/CustomAttacks"]
-offset_left = 61.0
-offset_right = 413.0
-offset_bottom = 66.0
-text = "Start Fight"
-label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-
-[node name="Custom Attack Editor" parent="Menu/MenuContainer/CustomAttacks" instance=ExtResource("5_nty0a")]
-offset_left = 461.0
-offset_top = -110.0
-offset_right = 461.0
-offset_bottom = -110.0
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")
@@ -296,6 +283,3 @@ texture = SubResource("GradientTexture1D_wdhac")
 [connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
 [connection signal="entered" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_menu"]
 [connection signal="exited" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_exit"]
-[connection signal="activated" from="Menu/MenuContainer/CustomAttacks/CustomStart" to="Menu" method="_on_custom_start"]
-[connection signal="FocusEnter" from="Menu/MenuContainer/CustomAttacks/Custom Attack Editor" to="Menu" method="_on_CustomAttackFocused"]
-[connection signal="FocusExit" from="Menu/MenuContainer/CustomAttacks/Custom Attack Editor" to="Menu" method="_on_CustomAttackUnfocused"]
