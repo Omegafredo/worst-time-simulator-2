@@ -86,14 +86,10 @@ func displayChar() -> void:
 				await Globals.Wait(CharacterInterval)
 			displayChar()
 		else:
-			textDone.emit()
-			if AskForConfirmation:
-				IsConfirmable = true
-			CurrentlyTyping = false
+			TextEnded()
 	else:
 		await get_tree().process_frame
-		textDone.emit()
-		CurrentlyTyping = false
+		TextEnded()
 	
 
 func clearText() -> void:
@@ -137,6 +133,12 @@ func TextConfirmed() -> void:
 		else:
 			endofdialogue.emit()
 			clearText()
+		
+func TextEnded() -> void:
+	textDone.emit()
+	if AskForConfirmation:
+		IsConfirmable = true
+	CurrentlyTyping = false
 		
 func ClearTextTags() -> void:
 	TimeDelay.clear()

@@ -46,7 +46,6 @@ func _ready():
 	CPie.FullName = "Butterscotch Pie"
 	CPie.Name = "Pie"
 	CPie.Health = 90
-	CPie.AdditionalDescription.append("hi hi hi hi")
 	var CNoodles = FoodItem.new()
 	CNoodles.FullName = "Instant Noodles"
 	CNoodles.Name = "I.Noodles"

@@ -483,12 +483,13 @@ func CheckAction() -> void:
 
 func InitiateDescription(Dialogue : Array[String], EndAction : Callable = InitializeAttack) -> void:
 	MenuControl = CONFIRMABLE
-	MenuText.IsConfirmable = true
-	MenuText.show()
+	MenuText.IsConfirmable = false
+	MenuText.AskForConfirmation = true
 	ClearMenuOptions()
 	
 	MenuText.appendText(Dialogue)
 	await MenuText.endofdialogue
+	MenuText.AskForConfirmation = false
 	EndAction.call()
 
 func ItemHeal(HealAmount : int):
@@ -507,7 +508,8 @@ func ItemActivated(Item : BattleMenuItem):
 	FullDescription.append_array(Item.Food.AdditionalDescription)
 	InitiateDescription(FullDescription)
 	
-	
+	# Removes item from inventory after use
+	Globals.CurrentItems.remove_at(Item.get_index())
 
 
 
