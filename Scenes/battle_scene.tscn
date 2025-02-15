@@ -1,7 +1,6 @@
-[gd_scene load_steps=35 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=34 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
-[ext_resource type="Script" path="res://Scripts/attack_template.gd" id="2_3vnf4"]
 [ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
@@ -223,7 +222,6 @@ VisibleAttacks = NodePath("VisibleAttacks")
 SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]
-script = ExtResource("2_3vnf4")
 
 [node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
 position = Vector2(856, 1103)

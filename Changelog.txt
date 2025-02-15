@@ -1,0 +1,7 @@
+V0.02
+
+Made AttackTurns and AmountTurns count up (whoops)
+Made custom Act and Mercy actions possible
+Made custom turn text possible
+Fixed items not resetting when exiting out of battle
+Added a lot more examples to the attack tempalte

@@ -134,7 +134,7 @@ func _process(delta: float) -> void:
 # Called when pressing a move action
 func MoveAction(Direction : int) -> void:
 	var TempIndex = MoveIndex
-	while !CurrentLabel.DeactiveState:
+	while true:
 		if Direction == 0:
 			Direction = 1
 		TempIndex += Direction
@@ -146,7 +146,7 @@ func MoveAction(Direction : int) -> void:
 		
 		if !get_menu_selections()[TempIndex].DeactiveState:
 			break
-	MoveSoul(MoveIndex + int(Direction))
+	MoveSoul(TempIndex)
 	if get_menu_selections().size() > 1:
 		MenuCursorSound.play()
 
@@ -262,6 +262,7 @@ func ChangeMenu(MenuTo : Menu, MenuHeader : SettingMenuChanger = CurrentLabel) -
 	MenuTo.Enter(MenuHeader)
 	if !MenuTo.CustomMenu:
 		NewMenuIn()
+	MoveIndex = MenuHeader.get_index()
 	AppendHistory()
 	MoveSoul(get_top_active_index())
 	
@@ -295,8 +296,7 @@ func InitiateBattle() -> void:
 	Flash(true)
 	var tween = Soul.InterpolateMovement(Vector2(1000, 1000))
 	await tween.finished
-	Globals.HP = Globals.MaxHP
-	Globals.KR = 0
+	ResetVariables()
 	request_ready()
 	get_tree().change_scene_to_file("res://Scenes/battle_scene.tscn")
 	
@@ -373,7 +373,10 @@ func LoadMods() -> void:
 		for mod in mods:
 			print(ProjectSettings.load_resource_pack(mod))
 
-
+func ResetVariables() -> void:
+	Globals.ResetInventory()
+	Globals.HP = Globals.MaxHP
+	Globals.KR = 0
 
 var MenuSwayTween : Tween
 var MenuSwayTime : float = 3
