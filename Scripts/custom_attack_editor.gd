@@ -2,7 +2,7 @@ extends Control
 
 @export var CodeEditor : CodeEdit
 @export var ControlPanel : PanelContainer
-@onready var TemplateCode = preload("res://Scripts/attack_template.gd")
+#@onready var TemplateCode = preload("res://Scripts/attack_template.gd")
 @export var ImportDialog : FileDialog
 @export var ExportDialog : FileDialog
 
@@ -11,7 +11,8 @@ extends Control
 
 func _ready():
 	if !Globals.CustomAttackScript:
-		CodeEditor.text = TemplateCode.new().get_script().get_source_code()
+		pass
+		#CodeEditor.text = TemplateCode.new().get_script().get_source_code()
 	else:
 		#CodeEditor.text = Globals.CustomAttackScript.get_source_code()
 		pass

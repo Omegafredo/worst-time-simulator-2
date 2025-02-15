@@ -158,6 +158,7 @@ func InitializeAttack():
 	Soul.show()
 	CombatBox(Rect2(800, 720, 1200, 1152))
 	Soul.position = Vector2(1000, 1000)
+	AmountTurns += 1
 	AttackList.AttackStart()
 
 func ReturnToMenu():
@@ -171,7 +172,10 @@ func ReturnToMenu():
 		Soul.Controllable = false
 		await CombatZone.DoneMoving
 		MenuControl = ACTIONABLE
-		MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
+		if AttackList.has_method("TurnDescription"):
+			AttackList.TurnDescription()
+		else:
+			MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
 	
 func ClearAttacks():
 	var allattacks : Array = MaskedAttacks.get_children()
@@ -221,7 +225,11 @@ func _on_player_death():
 var SelectedMenu = "Main"
 var OptionsArray : Array:
 	get():
-		return SelectableOptions.get_children()
+		var TempArray : Array[BattleMenuSelection]
+		for option in SelectableOptions.get_children():
+			if option is BattleMenuSelection and not option.is_queued_for_deletion():
+				TempArray.append(option)
+		return TempArray
 var CurrentOption : BattleMenuSelection:
 	get():
 		for option in OptionsArray:
@@ -368,17 +376,23 @@ func SetMenuOptions() -> void:
 		option.queue_free()
 	match SelectedMenu:
 		"Fight", "Act":
-			var Selection = CreateMenuInput(CurrentEnemy, 0)
+			var Selection = CreateMenuInput(CurrentEnemy)
 			if SelectedMenu == "Fight":
 				Selection.activated.connect(FightAction)
 			elif SelectedMenu == "Act":
 				Selection.activated.connect(ChangeMenu.bind("ActMenu"))
 		"ActMenu":
-			ActMenu()
+			if AttackList.has_method("ActMenu"):
+				AttackList.ActMenu()
+			else:
+				ActMenu()
 		"Item":
 			ItemMenu()
 		"Mercy":
-			CreateMenuInput("Spare", 0)
+			if AttackList.has_method("MercyMenu"):
+				AttackList.MercyMenu()
+			else:
+				CreateMenuInput("Spare")
 		"Main":
 			MenuText.unhideText()
 		
@@ -389,14 +403,12 @@ func ClearMenuOptions() -> void:
 	Soul.hide()
 	
 func ActMenu() -> void:
-	var Check = CreateMenuInput("Check", 0)
+	var Check = CreateMenuInput("Check")
 	Check.activated.connect(CheckAction)
 	
 func ItemMenu() -> void:
-	var i : int = 0
 	for item : FoodItem in Globals.CurrentItems:
-		CreateItemInput(item, i)
-		i += 1
+		CreateItemInput(item)
 		
 func FightAction() -> void:
 	ClearMenuOptions()
@@ -421,6 +433,7 @@ func _on_target_fight_end():
 	
 func _on_target_confirmed() -> void:
 	StrikeEnemy()
+	AttackTurns += 1
 	EnemyDodge(560, 0.4)
 	await Globals.Wait(1)
 	EnemyReturn()
@@ -483,12 +496,14 @@ func CheckAction() -> void:
 
 func InitiateDescription(Dialogue : Array[String], EndAction : Callable = InitializeAttack) -> void:
 	MenuControl = CONFIRMABLE
-	MenuText.IsConfirmable = true
-	MenuText.show()
+	MenuText.IsConfirmable = false
+	MenuText.AskForConfirmation = true
 	ClearMenuOptions()
 	
 	MenuText.appendText(Dialogue)
 	await MenuText.endofdialogue
+	MenuText.AskForConfirmation = false
+	MenuText.IsConfirmable = false
 	EndAction.call()
 
 func ItemHeal(HealAmount : int):
@@ -507,26 +522,31 @@ func ItemActivated(Item : BattleMenuItem):
 	FullDescription.append_array(Item.Food.AdditionalDescription)
 	InitiateDescription(FullDescription)
 	
-	
+	# Removes item from inventory after use
+	Globals.CurrentItems.remove_at(Item.get_index())
 
 
 
 const TextFont = preload("res://Resources/Fonts/styles/boxText.tres")
 
-func CreateMenuInput(SetText: String, ID: int) -> BattleMenuSelection:
+func CreateMenuInput(SetText: String) -> BattleMenuSelection:
 	var MenuSelection : BattleMenuSelection = BattleMenuSelection.new()
 	MenuSelection.text = SetText
-	var Selection : BattleMenuSelection = CreateTextInput(MenuSelection, ID)
+	var Selection : BattleMenuSelection = CreateTextInput(MenuSelection)
 	return Selection
 
-func CreateItemInput(Item : FoodItem, ID: int) -> void:
+func CreateItemInput(Item : FoodItem) -> void:
 	var ItemSelect : BattleMenuItem = BattleMenuItem.new()
 	ItemSelect.text = Item.Name
 	ItemSelect.Food = Item
-	var NewItem = CreateTextInput(ItemSelect, ID)
+	var NewItem = CreateTextInput(ItemSelect)
 	NewItem.activated.connect(ItemActivated.bind(ItemSelect))
 	
-func CreateTextInput(TextLabel : BattleMenuSelection, ID : int) -> BattleMenuSelection:
+func CreateTextInput(TextLabel : BattleMenuSelection) -> BattleMenuSelection:
+	var ID : int = 0
+	for option in OptionsArray:
+		if option is BattleMenuSelection:
+			ID += 1
 	TextLabel.position = Vector2(192 + (ID%2)*768, 0)
 	if ID%4 in [2, 3] :
 		TextLabel.position.y = 96
