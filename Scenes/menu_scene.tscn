@@ -53,10 +53,19 @@ use_hdr = true
 
 [node name="Menu Scene" type="Node"]
 
-[node name="Menu" type="Node2D" parent="."]
+[node name="Menu" type="Node2D" parent="." node_paths=PackedStringArray("Soul", "MainContainer", "MenuCursorSound", "MenuSelectSound", "MenuLogoSound", "FlashSound", "WTSLogo", "BottomParticles", "BottomGradient")]
 texture_filter = 1
 position = Vector2(900, 300)
 script = ExtResource("1_yo4v4")
+Soul = NodePath("../SoulSelector")
+MainContainer = NodePath("MenuContainer")
+MenuCursorSound = NodePath("MenuCursor")
+MenuSelectSound = NodePath("MenuSelect")
+MenuLogoSound = NodePath("LogoAppear")
+FlashSound = NodePath("Flash")
+WTSLogo = NodePath("../WTS")
+BottomParticles = NodePath("../BottomParticles")
+BottomGradient = NodePath("../BottomGradient")
 
 [node name="MenuContainer" type="Node2D" parent="Menu"]
 

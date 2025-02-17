@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 enum {SOUL_RED, SOUL_BLUE, DEAD}
 
@@ -15,6 +16,7 @@ var gravity : float = 980
 
 @export var SoulSprite : Sprite2D
 @export var FadeSprite : Sprite2D
+@export var Hitbox : Area2D
 @onready var CombatBox := $"/root/Main Node/Battle Controller/CombatZoneCorner/CombatZone"
 @export var CoyoteTime : Timer
 @export var JumpRemember : Timer

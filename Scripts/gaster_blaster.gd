@@ -26,8 +26,14 @@ var Size : int:
 			2:
 				scale = Vector2(8, 8)
 
-@onready var BlasterSprite : AnimatedSprite2D = $AnimatedSprite2D
-@onready var Blast = $Blast
+@export var BlasterSprite : AnimatedSprite2D
+@export var Blast : Node2D
+
+@export var SGasterBlaster : AudioStreamPlayer
+@export var SGasterBlast : AudioStreamPlayer
+@export var SGasterBlast2 : AudioStreamPlayer
+
+@onready var BlasterSounds : Array[AudioStreamPlayer] = [SGasterBlaster, SGasterBlast, SGasterBlast2]
 
 var on_screen : bool = true
 
@@ -35,13 +41,16 @@ var Shooting : bool = false
 var forcedShoot : bool = false
 var forcedShootTime : float
 
+var WaitCheck := true
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Blast.scale.y = 0
-	await Globals.Wait(1)
-	Fire()
-	CurrentState = STATE_WAIT
+	#Blast.scale.y = 0
+	#await Globals.Wait(1)
+	#Fire()
+	#CurrentState = STATE_WAIT
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,10 +58,13 @@ func _process(delta):
 	super(delta)
 	
 	if CurrentState == STATE_WAIT:
-		if DelayTime <= 0:
+		if DelayTime <= 0 and WaitCheck:
 			if WillShoot:
+				WaitCheck = false
 				Fire()
+				print("fire")
 			elif Path.size() > 1 or Path.size() <= 1 and !Shooting:
+				WaitCheck = false
 				NextPathPoint()
 				
 		
@@ -61,11 +73,13 @@ func _process(delta):
 	if CurrentState == STATE_FIRE:
 		if Path.size() <= 1:
 			Exit()
+			print("exit")
 			
 		
 	if CurrentState in [STATE_FIRE, STATE_LEAVE]:
 		if ShootTime <= 0:
 			Stop()
+			print("stop")
 			NextPathPoint()
 		ShootTime -= delta
 		
@@ -75,8 +89,8 @@ func _process(delta):
 			
 			if EXIT_SPEED <= 1800:
 				EXIT_SPEED += 2000 * delta
-		elif !Blast.visible:
-			get_parent().queue_free()
+		elif not Blast.visible and not are_sounds_playing():
+			queue_free()
 	
 	if forcedShoot and forcedShootTime > 0:
 		forcedShootTime -= delta
@@ -107,8 +121,10 @@ func Enter() -> void:
 	SetMoves()
 	CurrentState = STATE_ENTER
 	BlasterSprite.play("default")
+	SGasterBlaster.play()
 	await Move(MoveSpeed)
 	CurrentState = STATE_WAIT
+	WaitCheck = true
 
 func Exit() -> void:
 	CurrentState = STATE_LEAVE
@@ -127,6 +143,12 @@ func Shoot() -> void:
 	Shooting = true
 	Hitbox.monitoring = true
 	Blast.show()
+	if Size >= 2:
+		SGasterBlast2.play()
+	else:
+		print("played")
+		SGasterBlast.play()
+	
 	var tween = Blast.create_tween()
 	tween.tween_property(Blast, "scale:y", 1, 0.2)
 	await tween.finished
@@ -140,7 +162,8 @@ func Shoot() -> void:
 	
 func Stop() -> void:
 	Shooting = false
-	SineTween.kill()
+	if SineTween:
+		SineTween.kill()
 	var tween = Blast.create_tween()
 	tween.tween_property(Blast, "scale:y", 0, 0.2)
 	Hitbox.monitoring = false
@@ -205,7 +228,12 @@ func ShootingAnimation() -> void:
 		CurrentState = STATE_FIRE
 	Shoot()
 	LoopingAnimation = true
-	
+
+func are_sounds_playing() -> bool:
+	for sound : AudioStreamPlayer in BlasterSounds:
+		if sound.playing:
+			return true
+	return false
 
 func _on_animated_sprite_2d_animation_looped():
 	if LoopingAnimation:

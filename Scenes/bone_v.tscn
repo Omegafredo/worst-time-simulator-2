@@ -45,3 +45,6 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BoneHitreg"]
 position = Vector2(5, 12)
 shape = SubResource("RectangleShape2D_qqr6a")
+
+[connection signal="area_shape_entered" from="BoneHitreg" to="." method="_body_entered"]
+[connection signal="area_shape_exited" from="BoneHitreg" to="." method="_body_exited"]

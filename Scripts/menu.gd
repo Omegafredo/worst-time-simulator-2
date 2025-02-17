@@ -4,24 +4,24 @@ var MoveIndex : int = 0
 
 enum {StartingBattle, IntroAnim, CodeFocused}
 var ControlsBlocked : Array[int]
-@onready var Soul : Node2D = %SoulSelector
+@export var Soul : Node2D
 var CurrentMenu : Menu
 var CurrentLabel : SettingSelection:
 	get():
 		return get_menu_selections()[MoveIndex]
-@onready var MainContainer : Node2D = $MenuContainer
+@export var MainContainer : Node2D
 var Menus : Array[Menu]
 var SideOptions : Array[SettingSelection]
 var MenuHistory : Array[Menu]
 var MenuLabelHistory : Array[SettingSelection]
 var IndexHistory : Array[int]
-@onready var MenuCursorSound : AudioStreamPlayer = $MenuCursor
-@onready var MenuSelectSound : AudioStreamPlayer = $MenuSelect
-@onready var MenuLogoSound : AudioStreamPlayer = $LogoAppear
-@onready var FlashSound : AudioStreamPlayer = $Flash
-@onready var WTSLogo : TextureRect = $"/root/Menu Scene/WTS"
-@onready var BottomParticles : GPUParticles2D = $"/root/Menu Scene/BottomParticles"
-@onready var BottomGradient : TextureRect = $"/root/Menu Scene/BottomGradient"
+@export var MenuCursorSound : AudioStreamPlayer
+@export var MenuSelectSound : AudioStreamPlayer
+@export var MenuLogoSound : AudioStreamPlayer
+@export var FlashSound : AudioStreamPlayer
+@export var WTSLogo : TextureRect
+@export var BottomParticles : GPUParticles2D
+@export var BottomGradient : TextureRect
 
 var OriginalSelectPos : Dictionary
 const SoulOffset : Vector2 = Vector2(-60, 35)
