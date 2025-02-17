@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bbjbm8mfopl45"]
+[gd_scene load_steps=17 format=3 uid="uid://bbjbm8mfopl45"]
 
 [ext_resource type="Script" path="res://Scripts/gaster_blaster.gd" id="2_fmef2"]
 [ext_resource type="Texture2D" uid="uid://c7lckuhb8fett" path="res://Resources/Sprites/Attacks/Gaster Blaster/Default.png" id="2_mfxnm"]
@@ -6,7 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://b6v7si5c5b7bd" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire1.png" id="5_2rrxl"]
 [ext_resource type="Texture2D" uid="uid://c3dxodbbrq1ea" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire2.png" id="6_g0f7r"]
 [ext_resource type="Texture2D" uid="uid://uvutpkbqiypk" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire3.png" id="7_njko1"]
+[ext_resource type="AudioStream" uid="uid://dts173ggqxweu" path="res://Resources/Sounds/GasterBlaster.ogg" id="8_m6li3"]
 [ext_resource type="Texture2D" uid="uid://cewsncbg82y4l" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire4.png" id="8_qrbuu"]
+[ext_resource type="AudioStream" uid="uid://ddavk0kt1f47e" path="res://Resources/Sounds/GasterBlast.ogg" id="9_xb8ny"]
+[ext_resource type="AudioStream" uid="uid://digvkwlbuiidf" path="res://Resources/Sounds/GasterBlast2.ogg" id="10_edta7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2yo2r"]
 animations = [{
@@ -56,9 +59,14 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 gradient = SubResource("Gradient_frcsk")
 width = 1
 
-[node name="Gaster Blaster" type="Node2D" node_paths=PackedStringArray("Hitbox")]
+[node name="Gaster Blaster" type="Node2D" node_paths=PackedStringArray("BlasterSprite", "Blast", "SGasterBlaster", "SGasterBlast", "SGasterBlast2", "Hitbox")]
 scale = Vector2(3, 3)
 script = ExtResource("2_fmef2")
+BlasterSprite = NodePath("AnimatedSprite2D")
+Blast = NodePath("Blast")
+SGasterBlaster = NodePath("GasterBlaster")
+SGasterBlast = NodePath("GasterBlast")
+SGasterBlast2 = NodePath("GasterBlast2")
 Hitbox = NodePath("Area2D")
 Damage = 1
 Karma = 2
@@ -99,7 +107,21 @@ scale = Vector2(5000, 33)
 texture = SubResource("GradientTexture1D_f5gr8")
 centered = false
 
+[node name="GasterBlaster" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
+stream = ExtResource("8_m6li3")
+bus = &"SoundEffects"
+
+[node name="GasterBlast" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
+stream = ExtResource("9_xb8ny")
+bus = &"SoundEffects"
+
+[node name="GasterBlast2" type="AudioStreamPlayer" parent="." groups=["SoundEffects"]]
+stream = ExtResource("10_edta7")
+bus = &"SoundEffects"
+
 [connection signal="animation_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_changed"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
 [connection signal="screen_entered" from="AnimatedSprite2D/VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
 [connection signal="screen_exited" from="AnimatedSprite2D/VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="area_shape_entered" from="Area2D" to="." method="_body_entered"]
+[connection signal="area_shape_exited" from="Area2D" to="." method="_body_exited"]

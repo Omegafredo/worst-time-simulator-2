@@ -1,17 +1,10 @@
 extends Node2D
 class_name Attack
 
-var Masked : bool = false:
-	set(d):
-		if d:
-			reparent(MaskedNode)
-		else:
-			reparent(AttacksNode)
-		Masked = d
-
-@onready var Player : CharacterBody2D = get_tree().root.get_node("Main Node").find_child("Player")
-@onready var MaskedNode : Node2D = get_tree().root.get_node("Main Node").find_child("MaskedAttacks")
-@onready var AttacksNode : Node = get_tree().root.get_node("Main Node").find_child("VisibleAttacks")
+var BC : BattleController
+@onready var Soul : Player = BC.Soul
+@onready var MaskedNode : Node2D = BC.MaskedAttacks
+@onready var AttacksNode : Node = BC.VisibleAttacks
 @export var Hitbox : Area2D
 @export var Damage : int
 @export var Karma : int
@@ -34,13 +27,26 @@ func _process(delta: float) -> void:
 		
 		if Counter > 1.0/30.0:
 			Counter = 0
-			Player.TakeDamage(Damage, Karma)
+			Soul.TakeDamage(Damage, Karma)
+			
+func set_masked(state : bool):
+	if state:
+		reparent(MaskedNode)
+	else:
+		reparent(AttacksNode)
 
-func _body_entered(body: Node2D):
-	if body == Player:
+func get_masked() -> bool:
+	if get_parent() == MaskedNode:
+		return true
+	elif get_parent() != AttacksNode:
+		print(self.to_string() + " is not child of a masked/visible node")
+	return false
+
+func _body_entered(area_rid : RID, area : Area2D, area_shape_index : int, local_shape_index : int):
+	if area == Soul.Hitbox:
 		PlayerHitboxIn = true
 		Counter = 0
 
-func _body_exited(body: Node2D):
-	if body == Player:
+func _body_exited(area_rid : RID, area : Area2D, area_shape_index : int, local_shape_index : int):
+	if area == Soul.Hitbox:
 		PlayerHitboxIn = false

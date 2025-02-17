@@ -37,8 +37,9 @@ frame_2/duration = 1.0
 frame_3/texture = ExtResource("7_xoobp")
 frame_3/duration = 1.0
 
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("SoulSprite", "FadeSprite", "CoyoteTime", "JumpRemember", "SlamSfx", "DingSfx", "PlayerDamagedSfx", "HeartShatter", "HeartSplit", "ShatterParticles")]
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("SoulSprite", "FadeSprite", "Hitbox", "CoyoteTime", "JumpRemember", "SlamSfx", "DingSfx", "PlayerDamagedSfx", "HeartShatter", "HeartSplit", "ShatterParticles")]
 texture_filter = 1
+collision_layer = 6
 collision_mask = 6
 floor_stop_on_slope = false
 floor_constant_speed = true
@@ -48,6 +49,7 @@ script = ExtResource("1_6hssw")
 SplitSprite = ExtResource("2_vxr54")
 SoulSprite = NodePath("SoulSprite")
 FadeSprite = NodePath("SoulSprite/FadeSprite")
+Hitbox = NodePath("PlayerHitbox")
 CoyoteTime = NodePath("CoyoteTime")
 JumpRemember = NodePath("JumpRemember")
 SlamSfx = NodePath("Slam")

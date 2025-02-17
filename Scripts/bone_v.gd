@@ -1,4 +1,5 @@
 extends Attack
+class_name StandardBone
 
 const OGBoneBottomY = 16
 const OGBoneMiddleHeight = 8

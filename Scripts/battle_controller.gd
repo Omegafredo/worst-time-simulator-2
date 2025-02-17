@@ -2,12 +2,13 @@ extends Node
 class_name BattleController
 
 var BonePath := preload("res://Scenes/bone_v.tscn")
+var BoneStabPath := preload("res://Scenes/bone_stab.tscn")
 var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
 var PlatformPath := preload("res://Scenes/platform.tscn")
 var StrikeAnimation := preload("res://Scenes/strike.tscn")
 
 @onready var CombatZone := $CombatZoneCorner/CombatZone
-@export var Soul : CharacterBody2D
+@export var Soul : Player
 @export var SansHimself : Node2D
 @export var SpeechBubble : TextSystem
 @export var MenuText : TextSystem
@@ -47,24 +48,38 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
 	
 
-func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> Attack:
-	var newBone = BonePath.instantiate()
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> StandardBone:
+	var newBone : StandardBone = BonePath.instantiate()
+	newBone.BC = self
 	newBone.position = StartPos
 	newBone.Height = NewHeight
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
 	add_child(newBone)
-	newBone.Masked = MaskedState
+	newBone.set_masked(MaskedState)
 	return newBone
+
+func BoneStab(Side : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36) -> Bone_Stab:
+	var newStab : Bone_Stab = BoneStabPath.instantiate()
+	newStab.BC = self
+	newStab.rotationOffset = deg_to_rad(Side * 90)
+	newStab.boneHeight = Height
+	newStab.waitTime = WaitTime
+	newStab.stayTime = StayTime
+	newStab.boneGap = BoneGap
+	MaskedAttacks.add_child(newStab)
+	return newStab
+	
 	
 func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : float, DelayTime : float, ShootTime : float) -> Gaster_Blaster:
 	var newBlaster : Gaster_Blaster = BlasterPath.instantiate()
+	newBlaster.BC = self
 	newBlaster.Size = Size
 	newBlaster.position = StartPos
 	newBlaster.rotation_degrees = 90
 	add_child(newBlaster)
 	newBlaster.BlasterMove(EndPos, Angle, DelayTime, ShootTime)
-	newBlaster.Masked = false
+	newBlaster.set_masked(false)
 	newBlaster.Enter()
 	return newBlaster
 	
@@ -81,12 +96,13 @@ func SoulSlam(SlamDirection : int):
 
 func Platform(StartPos : Vector2, Width : float, Direction : float, Speed : float, MaskedState : bool = false) -> Attack:
 	var newPlatform : Attack = PlatformPath.instantiate()
+	newPlatform.BC = self
 	newPlatform.position = StartPos
 	newPlatform.Width = Width
 	newPlatform.Direction = Direction
 	newPlatform.Speed = Speed
 	add_child(newPlatform)
-	newPlatform.Masked = MaskedState
+	newPlatform.set_masked(MaskedState)
 	return newPlatform
 
 #endregion
@@ -166,6 +182,7 @@ func ReturnToMenu():
 		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
 		CombatBox(Rect2(111, 720, 1839, 1152))
 		SelectedMenu = "Main"
+		MenuHistory = ["Main"]
 		ClearAttacks()
 		MoveMenu(0)
 		MenuMode = true
