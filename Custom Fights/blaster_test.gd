@@ -82,7 +82,9 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.GasterBlaster(0, Vector2(0, 0), Vector2(300, 900), 0, 0, 0.1)
+	BC.GasterBlaster(0, Vector2(0, 0), Vector2(300, 900), 0, 0, 2)
+	BC.GasterBlaster(1, Vector2(0, 0), Vector2(300, 700), 0, 0, 2)
+	BC.GasterBlaster(2, Vector2(0, 0), Vector2(300, 500), 0, 0, 2)
 	pass
 	
 func Attack2() -> void:
