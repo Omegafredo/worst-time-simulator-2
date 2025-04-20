@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dbgw3j3lyw8k5" path="res://Resources/Sprites/Strike/003.png" id="4_yf77y"]
 [ext_resource type="Texture2D" uid="uid://cbvbxljuf7xtf" path="res://Resources/Sprites/Strike/004.png" id="5_odxbm"]
 [ext_resource type="Texture2D" uid="uid://v51ytii8eiuf" path="res://Resources/Sprites/Strike/005.png" id="6_to5uh"]
-[ext_resource type="Script" path="res://Scripts/strike.gd" id="7_c3yjv"]
+[ext_resource type="Script" uid="uid://dn4sqk1vy3tq2" path="res://Scripts/strike.gd" id="7_c3yjv"]
 [ext_resource type="AudioStream" uid="uid://c152oynt6j81j" path="res://Resources/Sounds/PlayerFight.ogg" id="8_f02c4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wa7f1"]

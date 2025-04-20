@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://bbjbm8mfopl45"]
 
-[ext_resource type="Script" path="res://Scripts/gaster_blaster.gd" id="2_fmef2"]
+[ext_resource type="Script" uid="uid://bf1av5bs1wqg8" path="res://Scripts/gaster_blaster.gd" id="2_fmef2"]
 [ext_resource type="Texture2D" uid="uid://c7lckuhb8fett" path="res://Resources/Sprites/Attacks/Gaster Blaster/Default.png" id="2_mfxnm"]
 [ext_resource type="Texture2D" uid="uid://cmhanq8pitj1c" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire0.png" id="4_3y8f7"]
 [ext_resource type="Texture2D" uid="uid://b6v7si5c5b7bd" path="res://Resources/Sprites/Attacks/Gaster Blaster/Fire1.png" id="5_2rrxl"]

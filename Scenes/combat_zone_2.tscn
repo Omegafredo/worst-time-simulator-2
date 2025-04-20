@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dk7m362s6ohi3"]
 
-[ext_resource type="Script" path="res://Scripts/combat_zone_2.gd" id="1_s63jv"]
+[ext_resource type="Script" uid="uid://b1jdx0cny78tr" path="res://Scripts/combat_zone_2.gd" id="1_s63jv"]
 [ext_resource type="Texture2D" uid="uid://bodo7kbx1c1ef" path="res://Resources/Sprites/UI/CombatBox/CombatZone.png" id="2_ee7n0"]
 
 [node name="CombatZone" type="Node2D"]

@@ -16,7 +16,7 @@ func _ready() -> void:
 		Globals.MaxHP = clampi(Globals.MaxHP, ClampedMin, ClampedMax)
 
 func Update() -> void:
-	text = str(Original_Text, ": ", snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown)
+	text = str(Original_Text, ": ", int(snappedf(Globals.get(LinkedProperty), 0.01) * MultiplyShown))
 	super()
 
 func CheckIfClamp(Direction : float) -> bool:

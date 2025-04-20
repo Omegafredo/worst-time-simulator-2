@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c0kakomponxni"]
 
-[ext_resource type="Script" path="res://Scripts/attack_platform.gd" id="1_7iwbn"]
-[ext_resource type="Script" path="res://addons/nine_patch_sprite_2d/nine_patch_sprite_2d.gd" id="2_mm6su"]
+[ext_resource type="Script" uid="uid://r5v61yuk7mn1" path="res://Scripts/attack_platform.gd" id="1_7iwbn"]
+[ext_resource type="Script" uid="uid://dh2dv5y7vp54k" path="res://addons/nine_patch_sprite_2d/nine_patch_sprite_2d.gd" id="2_mm6su"]
 [ext_resource type="Texture2D" uid="uid://cuwpoexrgq1ns" path="res://Resources/Sprites/Attacks/Platform/Platform2.png" id="3_g27ym"]
 [ext_resource type="Texture2D" uid="uid://b5ddcoishyjwe" path="res://Resources/Sprites/Attacks/Platform/Platform1.png" id="4_lb62a"]
 

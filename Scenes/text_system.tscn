@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://wf7oo7q1il3f"]
 
-[ext_resource type="Script" path="res://Scripts/speech_bubble.gd" id="2_0kl1p"]
+[ext_resource type="Script" uid="uid://ccemabiw2a1yk" path="res://Scripts/speech_bubble.gd" id="2_0kl1p"]
 [ext_resource type="AudioStream" uid="uid://djpmgoil75h2g" path="res://Resources/Sounds/BattleText.ogg" id="3_xqd1f"]
 [ext_resource type="AudioStream" uid="uid://13gpiwhn3i43" path="res://Resources/Sounds/SansSpeak.ogg" id="4_lxrgq"]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://djr8tudb1kart"]
 
-[ext_resource type="Script" path="res://Scripts/bone_v.gd" id="1_qkg15"]
+[ext_resource type="Script" uid="uid://bsgpyso4lldmc" path="res://Scripts/bone_v.gd" id="1_qkg15"]
 [ext_resource type="Texture2D" uid="uid://bvd5emw4mqfox" path="res://Resources/Sprites/Attacks/Bones/BoneV.png" id="2_r4hna"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_diw3u"]

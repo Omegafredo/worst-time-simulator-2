@@ -1,7 +1,7 @@
 [gd_scene load_steps=34 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
-[ext_resource type="Script" path="res://Scripts/battle_controller.gd" id="2_taess"]
+[ext_resource type="Script" uid="uid://hrnqstkpdscc" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
 [ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
@@ -18,7 +18,7 @@
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="17_xl1g0"]
 [ext_resource type="PackedScene" uid="uid://cvcmd3v8pm57c" path="res://Scenes/sans.tscn" id="18_0o2u4"]
 [ext_resource type="PackedScene" uid="uid://d4boxokq6un50" path="res://Scenes/target.tscn" id="18_t7tij"]
-[ext_resource type="Script" path="res://Scripts/health_bar.gd" id="19_khccm"]
+[ext_resource type="Script" uid="uid://cesu0ipu6u4cj" path="res://Scripts/health_bar.gd" id="19_khccm"]
 [ext_resource type="Texture2D" uid="uid://2ktqwwedgms0" path="res://Resources/Sprites/UI/HPText.png" id="19_rwh8x"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 [ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
@@ -194,9 +194,9 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tcdjl"]
 _data = {
-"RESET": SubResource("Animation_mnjtw"),
-"death": SubResource("Animation_jbk23"),
-"fade": SubResource("Animation_ckbld")
+&"RESET": SubResource("Animation_mnjtw"),
+&"death": SubResource("Animation_jbk23"),
+&"fade": SubResource("Animation_ckbld")
 }
 
 [node name="Main Node" type="Node"]
@@ -405,7 +405,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_tcdjl")
+&"": SubResource("AnimationLibrary_tcdjl")
 }
 autoplay = "fade"
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b3shckdxsreeu"]
 
-[ext_resource type="Script" path="res://Scripts/custom_attack_editor.gd" id="1_i7upa"]
+[ext_resource type="Script" uid="uid://ddxydrsb14pyd" path="res://Scripts/custom_attack_editor.gd" id="1_i7upa"]
 [ext_resource type="FontFile" uid="uid://difp5n5tpw25b" path="res://Resources/Fonts/determinationmonoweb-webfont.ttf" id="2_1axwo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y6sa"]

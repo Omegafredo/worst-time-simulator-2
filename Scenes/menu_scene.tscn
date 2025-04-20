@@ -1,17 +1,17 @@
 [gd_scene load_steps=21 format=3 uid="uid://blty1ony4m351"]
 
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
-[ext_resource type="Script" path="res://Scripts/menu.gd" id="1_yo4v4"]
-[ext_resource type="Script" path="res://Scripts/menu_node.gd" id="2_hl0mm"]
+[ext_resource type="Script" uid="uid://b142wa5m43ko7" path="res://Scripts/menu.gd" id="1_yo4v4"]
+[ext_resource type="Script" uid="uid://bta63cy7otkn5" path="res://Scripts/menu_node.gd" id="2_hl0mm"]
 [ext_resource type="AudioStream" uid="uid://dnyugy6hs76mb" path="res://Resources/Sounds/MenuCursor.ogg" id="3_8yvr6"]
 [ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul/Soul.png" id="3_pbhkn"]
-[ext_resource type="Script" path="res://Scripts/setting_selection.gd" id="3_rhj55"]
+[ext_resource type="Script" uid="uid://d3r01wtkit367" path="res://Scripts/setting_selection.gd" id="3_rhj55"]
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
-[ext_resource type="Script" path="res://Scripts/soul_selector.gd" id="4_fex45"]
-[ext_resource type="Script" path="res://Scripts/setting_scroll.gd" id="5_4cdd5"]
-[ext_resource type="Script" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
+[ext_resource type="Script" uid="uid://c6a8vvjisanla" path="res://Scripts/soul_selector.gd" id="4_fex45"]
+[ext_resource type="Script" uid="uid://cvs2r7cuh1kp5" path="res://Scripts/setting_scroll.gd" id="5_4cdd5"]
+[ext_resource type="Script" uid="uid://cd18bqp8g8hx2" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
-[ext_resource type="Script" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
+[ext_resource type="Script" uid="uid://3hk0cavd2egw" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
 
@@ -184,8 +184,9 @@ offset_bottom = 66.0
 text = "Master Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("5_4cdd5")
+DirMultiplier = 0.01
 MultiplyShown = 100.0
-ClampedMax = 100.0
+ClampedMax = 1.0
 LinkedProperty = "MasterBus"
 
 [node name="SoundVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
@@ -195,8 +196,9 @@ offset_bottom = 136.0
 text = "Sfx Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("5_4cdd5")
+DirMultiplier = 0.01
 MultiplyShown = 100.0
-ClampedMax = 100.0
+ClampedMax = 1.0
 LinkedProperty = "SfxBus"
 
 [node name="MusicVolume" type="Label" parent="Menu/MenuContainer/AudioMenu"]
@@ -206,8 +208,9 @@ offset_bottom = 206.0
 text = "Music Volume"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("5_4cdd5")
+DirMultiplier = 0.01
 MultiplyShown = 100.0
-ClampedMax = 100.0
+ClampedMax = 1.0
 LinkedProperty = "MusicBus"
 
 [node name="CustomAttacks" type="Node2D" parent="Menu/MenuContainer" node_paths=PackedStringArray("HeaderPos", "Animatables")]
@@ -269,10 +272,10 @@ texture = SubResource("AtlasTexture_0ggrs")
 position = Vector2(960, 1460)
 emitting = false
 amount = 160
-process_material = SubResource("ParticleProcessMaterial_4ckty")
 fixed_fps = 60
 collision_base_size = 0.0
 visibility_rect = Rect2(-960, -500, 1920, 500)
+process_material = SubResource("ParticleProcessMaterial_4ckty")
 
 [node name="BottomGradient" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0)
