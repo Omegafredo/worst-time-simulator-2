@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=35 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" uid="uid://hrnqstkpdscc" path="res://Scripts/battle_controller.gd" id="2_taess"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://2ktqwwedgms0" path="res://Resources/Sprites/UI/HPText.png" id="19_rwh8x"]
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 [ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
+[ext_resource type="PackedScene" uid="uid://dk7m362s6ohi3" path="res://Scenes/combat_zone_2.tscn" id="23_ys5i7"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
 size = Vector2(17, 17)
@@ -224,6 +225,7 @@ SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 [node name="AttackList" type="Node" parent="Battle Controller"]
 
 [node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
+visible = false
 position = Vector2(856, 1103)
 
 [node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZoneCorner"]
@@ -393,6 +395,9 @@ texture = ExtResource("20_aac14")
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller/Audio" groups=["SoundEffects"]]
 stream = ExtResource("17_xl1g0")
 bus = &"SoundEffects"
+
+[node name="CombatZone" parent="Battle Controller" instance=ExtResource("23_ys5i7")]
+position = Vector2(255, 140)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = 5

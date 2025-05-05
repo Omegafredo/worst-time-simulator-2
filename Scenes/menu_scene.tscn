@@ -9,9 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://byklmjr65hmoo" path="res://Resources/Sounds/MenuSelect.ogg" id="3_vws4m"]
 [ext_resource type="Script" uid="uid://c6a8vvjisanla" path="res://Scripts/soul_selector.gd" id="4_fex45"]
 [ext_resource type="Script" uid="uid://cvs2r7cuh1kp5" path="res://Scripts/setting_scroll.gd" id="5_4cdd5"]
-[ext_resource type="Script" uid="uid://cd18bqp8g8hx2" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
+[ext_resource type="Script" uid="uid://cukh4xhbo28j2" path="res://Scripts/setting_menuchanger.gd" id="5_4j1lc"]
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
-[ext_resource type="Script" uid="uid://3hk0cavd2egw" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
+[ext_resource type="Script" uid="uid://xjqtxylibf5k" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
 
