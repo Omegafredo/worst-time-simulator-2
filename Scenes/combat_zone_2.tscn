@@ -13,3 +13,11 @@ script = ExtResource("1_s63jv")
 visible = false
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_4bf0d")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+collision_layer = 2
+sync_to_physics = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimatableBody2D"]
+build_mode = 1
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
