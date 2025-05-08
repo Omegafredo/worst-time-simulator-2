@@ -19,7 +19,7 @@ func simple_move(BoxPos : Rect2) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	simple_move(Rect2(800, 720, 400, 432))
+	simple_move(Rect2(900, 820, 200, 232))
 	pass # Replace with function body.
 	
 	
@@ -75,8 +75,36 @@ func _process(delta):
 		set_point_position(i, MovementFrame)
 		#set_point_position(i, point.move_toward(move_to_points[i] - position, speed * delta - Movement.y))
 		i += 1
+		
+	var TopLeftPoints : PackedVector2Array
+	var BottomRightPoints : PackedVector2Array
 	
-	collision.polygon = points
+	var checkedPoints : PackedVector2Array = points
+	
+	checkedPoints.append(points[0])
+	
+	i = 0
+	for point in checkedPoints:
+		
+		var nextPoint : Vector2 = checkedPoints[i + 1 if i < checkedPoints.size() - 1 else 0]
+		var direction : float = point.angle_to_point(nextPoint)
+		var offset := Vector2.ONE.rotated(direction) * width/2
+		
+		TopLeftPoints.append(point - offset)
+		BottomRightPoints.append(point + offset)
+		
+		TopLeftPoints.append(nextPoint - offset)
+		BottomRightPoints.append(nextPoint + offset)
+		
+		i += 1
+	
+	
+	#TopLeftPoints.append(points[0] - Vector2.ONE * width)
+	#BottomRightPoints.append(points[0] - Vector2.ONE * width)
+	
+	BottomRightPoints.reverse()
+	
+	collision.polygon = TopLeftPoints + BottomRightPoints
 	
 	
 	
