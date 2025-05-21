@@ -1,8 +1,7 @@
-[gd_scene load_steps=35 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=33 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" uid="uid://hrnqstkpdscc" path="res://Scripts/battle_controller.gd" id="2_taess"]
-[ext_resource type="PackedScene" uid="uid://tmovq4tcmgda" path="res://Scenes/combat_zone.tscn" id="3_agmmr"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
 [ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
@@ -23,9 +22,6 @@
 [ext_resource type="FontVariation" uid="uid://cenrcotcahvop" path="res://Resources/Fonts/styles/boxText.tres" id="19_suyt8"]
 [ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
 [ext_resource type="PackedScene" uid="uid://dk7m362s6ohi3" path="res://Scenes/combat_zone_2.tscn" id="23_ys5i7"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4i75k"]
-size = Vector2(17, 17)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -218,24 +214,21 @@ KrIcon = NodePath("UI/KrIcon")
 PlayerName = NodePath("UI/Name")
 AttackList = NodePath("AttackList")
 AnimationController = NodePath("../AnimationPlayer")
-MaskedAttacks = NodePath("CombatZoneCorner/Mask/MaskedAttacks")
+MaskedAttacks = NodePath("CombatZone/Polygon2D/MaskedAttacks")
 VisibleAttacks = NodePath("VisibleAttacks")
 SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]
 
-[node name="CombatZoneCorner" parent="Battle Controller" instance=ExtResource("3_agmmr")]
-visible = false
-position = Vector2(856, 1103)
+[node name="CombatZone" parent="Battle Controller" node_paths=PackedStringArray("mask") instance=ExtResource("23_ys5i7")]
+position = Vector2(255, 140)
+mask = NodePath("Polygon2D")
 
-[node name="Mask" type="Sprite2D" parent="Battle Controller/CombatZoneCorner"]
+[node name="Polygon2D" type="Polygon2D" parent="Battle Controller/CombatZone"]
 clip_children = 1
-z_index = 3
-texture = SubResource("PlaceholderTexture2D_4i75k")
-centered = false
 
-[node name="MaskedAttacks" type="Node2D" parent="Battle Controller/CombatZoneCorner/Mask"]
-position = Vector2(-856, -1103)
+[node name="MaskedAttacks" type="Node2D" parent="Battle Controller/CombatZone/Polygon2D"]
+position = Vector2(-255, -140)
 
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
 position = Vector2(960, 672)
@@ -267,7 +260,7 @@ scroll_active = false
 shortcut_keys_enabled = false
 
 [node name="Attack Origin Point" type="RemoteTransform2D" parent="Battle Controller"]
-remote_path = NodePath("../CombatZoneCorner/Mask/MaskedAttacks")
+remote_path = NodePath("../CombatZone/Polygon2D/MaskedAttacks")
 
 [node name="VisibleAttacks" type="Node" parent="Battle Controller"]
 
@@ -395,9 +388,6 @@ texture = ExtResource("20_aac14")
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Battle Controller/Audio" groups=["SoundEffects"]]
 stream = ExtResource("17_xl1g0")
 bus = &"SoundEffects"
-
-[node name="CombatZone" parent="Battle Controller" instance=ExtResource("23_ys5i7")]
-position = Vector2(255, 140)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = 5

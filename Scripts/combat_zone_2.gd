@@ -1,14 +1,18 @@
 extends Line2D
-
+class_name CombatZoneV2
 
 var speed: float = 300.0
-@onready var collision: CollisionPolygon2D = $AnimatableBody2D/CollisionPolygon2D
 
+
+@onready var collision: CollisionPolygon2D = $AnimatableBody2D/CollisionPolygon2D
+@export var mask : Polygon2D
 
 var move_to_points : Array[Vector2]
 
 signal done_moving
 
+## Sets the box's destination to be the Rect2 coordinates.
+## Forces it into a square if it already isn't, adding or removing points to do so.
 func simple_move(BoxPos : Rect2) -> void:
 	move_to_points = [BoxPos.position, Vector2(BoxPos.end.x, BoxPos.position.y), BoxPos.end, Vector2(BoxPos.position.x, BoxPos.end.y)]
 	while points.size() != 4:
@@ -17,20 +21,29 @@ func simple_move(BoxPos : Rect2) -> void:
 		else:
 			remove_point(-1)
 
+## Instantly moves box to its destination.
+func instant_move() -> void:
+	var i : int = 0
+	for point in points:
+		set_point_position(i, move_to_points[i])
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	simple_move(Rect2(900, 820, 200, 232))
+	#simple_move(Rect2(900, 820, 200, 232))
 	pass # Replace with function body.
 	
-	
+## Returns the position between the [param index] point and the next in an [param modifyArray].[br]
+## The [param percentage_point] chooses where between the two points to get, going from 0 to 1.
 func point_coordinator(modifyArray : Array[Vector2], index : int, percentage_point : float) -> Vector2:
 	return modifyArray[index].lerp(modifyArray[index + 1 if index < modifyArray.size() - 1 else 0], percentage_point)
 	
-	
+## Removes a point at a certain index
 func point_remover(index : int) -> void:
 	move_to_points.remove_at(index)
 	remove_point(index)
-	
+
+## Adds a point after the specified [param index].[br]
+## The position of the new point is determined by [param percentage_point] going from the [param index] point to the next point, going from 0 to 1.
 func add_new_point(index : int, percentage_point : float) -> void:
 	
 	move_to_points.insert(index, point_coordinator(move_to_points, index, percentage_point))
@@ -105,6 +118,8 @@ func _process(delta):
 	BottomRightPoints.reverse()
 	
 	collision.polygon = TopLeftPoints + BottomRightPoints
+	
+	mask.polygon = points
 	
 	
 	

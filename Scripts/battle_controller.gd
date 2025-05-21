@@ -7,7 +7,7 @@ var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
 var PlatformPath := preload("res://Scenes/platform.tscn")
 var StrikeAnimation := preload("res://Scenes/strike.tscn")
 
-@onready var CombatZone := $CombatZoneCorner/CombatZone
+@onready var CombatZone := $CombatZone
 @export var Soul : Player
 @export var SansHimself : Node2D
 @export var SpeechBubble : TextSystem
@@ -32,13 +32,11 @@ var CurrentEnemy = "Sans"
 #region Attack Calls
 
 func CombatBox(NewRect : Rect2):
-	CombatZone.Moving = true
-	CombatZone.BoxSize.position = NewRect.position
-	CombatZone.BoxSize.end = NewRect.size
+	CombatZone.simple_move(NewRect)
 	
 func CombatBoxInstant(NewRect : Rect2):
-	CombatBox(NewRect)
-	CombatZone.SetPos()
+	CombatZone.simple_move(NewRect)
+	CombatZone.instant_move()
 
 func CombatBoxSpeed(NewSpeed : float):
 	CombatZone.Speed = NewSpeed
