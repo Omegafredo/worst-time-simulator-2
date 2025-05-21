@@ -31,11 +31,15 @@ func instant_move() -> void:
 func _ready():
 	#simple_move(Rect2(900, 820, 200, 232))
 	pass # Replace with function body.
+
+## Returns the next point after this index, looping to the start if at the end of the array.
+func next_point(pointArray : Array[Vector2], index) -> Vector2:
+	return pointArray[index + 1 if index < pointArray.size() - 1 else 0]
 	
 ## Returns the position between the [param index] point and the next in an [param modifyArray].[br]
 ## The [param percentage_point] chooses where between the two points to get, going from 0 to 1.
 func point_coordinator(modifyArray : Array[Vector2], index : int, percentage_point : float) -> Vector2:
-	return modifyArray[index].lerp(modifyArray[index + 1 if index < modifyArray.size() - 1 else 0], percentage_point)
+	return modifyArray[index].lerp(next_point(modifyArray, index), percentage_point)
 	
 ## Removes a point at a certain index
 func point_remover(index : int) -> void:
@@ -99,7 +103,7 @@ func _process(delta):
 	i = 0
 	for point in checkedPoints:
 		
-		var nextPoint : Vector2 = checkedPoints[i + 1 if i < checkedPoints.size() - 1 else 0]
+		var nextPoint : Vector2 = next_point(checkedPoints, i)
 		var direction : float = point.angle_to_point(nextPoint)
 		var offset := Vector2.ONE.rotated(direction) * width/2
 		

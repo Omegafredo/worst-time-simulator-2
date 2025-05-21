@@ -39,7 +39,7 @@ func CombatBoxInstant(NewRect : Rect2):
 	CombatZone.instant_move()
 
 func CombatBoxSpeed(NewSpeed : float):
-	CombatZone.Speed = NewSpeed
+	CombatZone.speed = NewSpeed
 	
 func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	var tween = get_tree().create_tween()
@@ -60,7 +60,7 @@ func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed 
 func BoneStab(Side : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36) -> Bone_Stab:
 	var newStab : Bone_Stab = BoneStabPath.instantiate()
 	newStab.BC = self
-	newStab.rotationOffset = deg_to_rad(Side * 90)
+	newStab.rotationOffset = deg_to_rad(CombatZone.get_point_position(Side).angle_to_point(CombatZone.next_point(CombatZone.points, Side)) + 90)
 	newStab.boneHeight = Height
 	newStab.waitTime = WaitTime
 	newStab.stayTime = StayTime
@@ -163,14 +163,14 @@ func _ready():
 	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxInstant(Rect2(111, 720, 1839, 1152))
+	CombatBoxInstant(Rect2(111, 720, 1839-111, 1152-720))
 	
 func InitializeAttack():
 	MenuMode = false
 	Soul.Controllable = true
 	MenuControl = NONE
 	Soul.show()
-	CombatBox(Rect2(800, 720, 1200, 1152))
+	CombatBox(Rect2(800, 720, 1200-800, 1152-720))
 	Soul.position = Vector2(1000, 1000)
 	AmountTurns += 1
 	AttackList.AttackStart()
@@ -178,7 +178,7 @@ func InitializeAttack():
 func ReturnToMenu():
 	if !StopProcess:
 		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-		CombatBox(Rect2(111, 720, 1839, 1152))
+		CombatBox(Rect2(111, 720, 1839-111, 1152-720))
 		SelectedMenu = "Main"
 		MenuHistory = ["Main"]
 		ClearAttacks()
