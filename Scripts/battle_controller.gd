@@ -7,7 +7,7 @@ var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
 var PlatformPath := preload("res://Scenes/platform.tscn")
 var StrikeAnimation := preload("res://Scenes/strike.tscn")
 
-@onready var CombatZone := $CombatZone
+@onready var CombatZone : CombatZoneV2 = $CombatZone
 @export var Soul : Player
 @export var SansHimself : Node2D
 @export var SpeechBubble : TextSystem
@@ -57,10 +57,14 @@ func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed 
 	newBone.set_masked(MaskedState)
 	return newBone
 
-func BoneStab(Side : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36) -> Bone_Stab:
+func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36) -> Bone_Stab:
 	var newStab : Bone_Stab = BoneStabPath.instantiate()
 	newStab.BC = self
-	newStab.rotationOffset = deg_to_rad(CombatZone.get_point_position(Side).angle_to_point(CombatZone.next_point(CombatZone.points, Side)) + 90)
+	newStab.point_index = absi(Side_Index)
+	if Side_Index > 0:
+		newStab.rotationOffset = 0
+	else:
+		newStab.rotationOffset = 180
 	newStab.boneHeight = Height
 	newStab.waitTime = WaitTime
 	newStab.stayTime = StayTime

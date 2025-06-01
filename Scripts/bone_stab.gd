@@ -1,6 +1,7 @@
 extends Attack
 class_name Bone_Stab
 
+var point_index : int
 var boneGap : float
 var waitTime : float
 var stayTime : float
@@ -9,17 +10,18 @@ var boneHeight : float
 enum states {STATE_WAIT, STATE_STAY, STATE_LEAVE}
 var currentState : states
 
-var rotationOffset : float
-var positionOffset : Vector2
-var heightOffset : float
+var rotationOffset : float = 0
+var positionOffset : Vector2 = Vector2.ZERO
+var heightOffset : float = 0
 
-var boxRotation : float:
+var point_position : Vector2:
 	get():
-		return BC.CombatZone.rotation
-var boxSize : Rect2:
+		return BC.CombatZone.point_coordinator(BC.CombatZone.points, point_index, 0.5).rotated(BC.CombatZone.rotation) + BC.CombatZone.position
+var point_rotation : float:
 	get():
-		return BC.CombatZone.BoxSize
-		
+		return deg_to_rad(BC.CombatZone.get_point_position(point_index).angle_to_point(BC.CombatZone.next_point(BC.CombatZone.points, point_index))) \
+		+ BC.CombatZone.rotation_degrees
+
 var bonesArray : Array[StandardBone]
 
 func _ready():
@@ -38,7 +40,7 @@ func _ready():
 
 
 func _process(delta):
-	positionOffset = Vector2(0, boxSize.size.y / 2)
+	positionOffset = point_position
 	
 	
 	match currentState:
@@ -61,5 +63,5 @@ func _process(delta):
 				heightOffset = 0
 	
 	positionOffset -= Vector2(0, heightOffset)
-	rotation = rotationOffset + boxRotation
-	position = Vector2(1920/2, boxSize.get_center().y) + positionOffset.rotated(boxRotation + rotation)	
+	rotation_degrees = rotationOffset + point_rotation
+	position = positionOffset.rotated(deg_to_rad(point_rotation) + rotation)	

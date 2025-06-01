@@ -32,7 +32,7 @@ func _ready():
 	#simple_move(Rect2(900, 820, 200, 232))
 	pass # Replace with function body.
 
-## Returns the next point after this index, looping to the start if at the end of the array.
+## Returns the next point after [param index], looping to the start if at the end of the array.
 func next_point(pointArray : Array[Vector2], index) -> Vector2:
 	return pointArray[index + 1 if index < pointArray.size() - 1 else 0]
 	

@@ -91,16 +91,22 @@ func Attack1() -> void:
 	#Bones.append_array(BoneStab3.bonesArray)
 	#Bones.append_array(BoneStab4.bonesArray)
 	#BoneStab1.set_masked(false)
+	return
 	var index : int = 0
 	while true:
+		if not BoneStab1: break
+		if BoneStab1.is_queued_for_deletion(): break
+		
 		var boneI : int = 0
 		for cBone in Bones:
 			var closeness : int = abs(index - boneI)
+			var yPosition = cBone.position.rotated(deg_to_rad(BoneStab1.point_rotation)).y
+			
 			if closeness <= 5:
-				if cBone.position.y > -300:
+				if yPosition > -300:
 					cBone.position.y -= 25
 			else:
-				if cBone.position.y < 0:
+				if yPosition < 0:
 					cBone.position.y += 2
 			boneI += 1
 		index += 1
