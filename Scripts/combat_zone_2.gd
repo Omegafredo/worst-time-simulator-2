@@ -9,6 +9,34 @@ var speed: float = 300.0
 
 var move_to_points : Array[Vector2]
 
+
+var CenterPos : Vector2:
+	get():
+		var TopLeft : Vector2 = Vector2.INF
+		var BottomRight : Vector2 = -Vector2.INF
+		
+		
+		for point in points:
+			TopLeft = TopLeft.min(point)
+			BottomRight = BottomRight.max(point)
+			
+	
+	
+		return TopLeft + BottomRight
+		
+var MoveToCenterPos : Vector2:
+	get():
+		
+		var MTTopLeft : Vector2 = Vector2.INF
+		var MTBottomRight : Vector2 = -Vector2.INF
+			
+		for point in move_to_points:
+			MTTopLeft = MTTopLeft.min(point)
+			MTBottomRight = MTBottomRight.max(point)
+		
+		
+		return (MTTopLeft + MTBottomRight)/2
+
 signal done_moving
 
 ## Sets the box's destination to be the Rect2 coordinates.
@@ -20,12 +48,20 @@ func simple_move(BoxPos : Rect2) -> void:
 			add_point(get_point_position(-1) if not null else position)
 		else:
 			remove_point(-1)
+			
+## Moves the box relatively in a direction without changing its shape.
+func relative_move(moveDir : Vector2) -> void:
+	for point in move_to_points:
+		point += moveDir
 
 ## Instantly moves box to its destination.
 func instant_move() -> void:
+	position = MoveToCenterPos
 	var i : int = 0
 	for point in points:
-		set_point_position(i, move_to_points[i])
+		set_point_position(i, move_to_points[i] - position)
+		i += 1
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -58,27 +94,6 @@ func add_new_point(index : int, percentage_point : float) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var oldPosition := position
-	
-	var CenterPos : Vector2
-	var MoveToCenterPos : Vector2
-	
-	var TopLeft : Vector2 = Vector2.INF
-	var BottomRight : Vector2 = -Vector2.INF
-	
-	var MTTopLeft : Vector2 = Vector2.INF
-	var MTBottomRight : Vector2 = -Vector2.INF
-	
-	for point in points:
-		TopLeft = TopLeft.min(point)
-		BottomRight = BottomRight.max(point)
-		
-	for point in move_to_points:
-		MTTopLeft = MTTopLeft.min(point)
-		MTBottomRight = MTBottomRight.max(point)
-	
-	
-	CenterPos = TopLeft + BottomRight
-	MoveToCenterPos = (MTTopLeft + MTBottomRight)/2
 	
 	var Movement = position - position.move_toward(MoveToCenterPos, speed/2 * delta)
 	position -= Movement

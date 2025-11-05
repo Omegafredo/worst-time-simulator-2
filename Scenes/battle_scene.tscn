@@ -221,14 +221,12 @@ SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 [node name="AttackList" type="Node" parent="Battle Controller"]
 
 [node name="CombatZone" parent="Battle Controller" node_paths=PackedStringArray("mask") instance=ExtResource("23_ys5i7")]
-position = Vector2(255, 140)
 mask = NodePath("Polygon2D")
 
 [node name="Polygon2D" type="Polygon2D" parent="Battle Controller/CombatZone"]
 clip_children = 1
 
 [node name="MaskedAttacks" type="Node2D" parent="Battle Controller/CombatZone/Polygon2D"]
-position = Vector2(-255, -140)
 
 [node name="Sans" parent="Battle Controller" instance=ExtResource("18_0o2u4")]
 position = Vector2(960, 672)
