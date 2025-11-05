@@ -11,7 +11,7 @@ enum states {STATE_WAIT, STATE_STAY, STATE_LEAVE}
 var currentState : states
 
 var rotationOffset : float = 0
-var positionOffset : Vector2 = Vector2.ZERO
+var positionOffset := Vector2.ZERO
 var heightOffset : float = 0
 
 var point_position : Vector2:
@@ -19,8 +19,8 @@ var point_position : Vector2:
 		return BC.CombatZone.point_coordinator(BC.CombatZone.points, point_index, 0.5).rotated(BC.CombatZone.rotation) + BC.CombatZone.position
 var point_rotation : float:
 	get():
-		return deg_to_rad(BC.CombatZone.get_point_position(point_index).angle_to_point(BC.CombatZone.next_point(BC.CombatZone.points, point_index))) \
-		+ BC.CombatZone.rotation_degrees
+		return BC.CombatZone.get_point_position(point_index).angle_to_point(BC.CombatZone.next_point(BC.CombatZone.points, point_index)) \
+		+ BC.CombatZone.rotation
 
 var bonesArray : Array[StandardBone]
 
@@ -62,6 +62,6 @@ func _process(delta):
 			elif heightOffset < 0:
 				heightOffset = 0
 	
-	positionOffset -= Vector2(0, heightOffset)
-	rotation_degrees = rotationOffset + point_rotation
-	position = positionOffset.rotated(deg_to_rad(point_rotation) + rotation)	
+	positionOffset -= Vector2(0, heightOffset).rotated(deg_to_rad(point_rotation) + rotation)
+	rotation = deg_to_rad(rotationOffset) + point_rotation
+	position = positionOffset

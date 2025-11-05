@@ -83,6 +83,7 @@ func AttackStart() -> void:
 
 func Attack1() -> void:
 	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 1, 20)
+	
 	#var BoneStab2 : Bone_Stab = BC.BoneStab(1, 125, 1, 20)
 	#var BoneStab3 : Bone_Stab = BC.BoneStab(2, 75, 1, 20)
 	#var BoneStab4 : Bone_Stab = BC.BoneStab(3, 50, 1, 20)
