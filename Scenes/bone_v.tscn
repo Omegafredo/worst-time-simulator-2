@@ -16,6 +16,7 @@ atlas = ExtResource("2_r4hna")
 region = Rect2(0, 16, 0, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqr6a"]
+resource_local_to_scene = true
 size = Vector2(10, 24)
 
 [node name="BoneV" type="Node2D" node_paths=PackedStringArray("Hitbox")]
