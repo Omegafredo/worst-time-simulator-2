@@ -82,8 +82,15 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.Bone(Vector2(1500, 1000), 50, 180, 200, false)
-	BC.Bone(Vector2(1500, 700), 20, 180, 200, false)
+	BC.CombatBox(Rect2(111, 720, 1839-111, 1152-720))
+	var b1 = BC.Bone(Vector2(1500, 1000), 50, 180, 100, false)
+	b1.set_color(1)
+	var b2 = BC.Bone(Vector2(1500, 700), 20, 180, 100, false)
+	b2.set_color(2)
+	await Globals.Wait(4)
+	var gb1 = BC.GasterBlaster(1, Vector2(2000, 950), Vector2(1800, 950), 180, 1, 2)
+	gb1.set_color(1)
+	
 	pass
 	
 func Attack2() -> void:
