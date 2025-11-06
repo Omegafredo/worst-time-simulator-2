@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://djr8tudb1kart"]
+[gd_scene load_steps=8 format=3 uid="uid://djr8tudb1kart"]
 
 [ext_resource type="Script" uid="uid://bsgpyso4lldmc" path="res://Scripts/bone_v.gd" id="1_qkg15"]
+[ext_resource type="Script" uid="uid://dh2dv5y7vp54k" path="res://addons/nine_patch_sprite_2d/nine_patch_sprite_2d.gd" id="2_kh3uw"]
 [ext_resource type="Texture2D" uid="uid://bvd5emw4mqfox" path="res://Resources/Sprites/Attacks/Bones/BoneV.png" id="2_r4hna"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_diw3u"]
@@ -19,32 +20,45 @@ region = Rect2(0, 16, 0, 8)
 resource_local_to_scene = true
 size = Vector2(10, 24)
 
-[node name="BoneV" type="Node2D" node_paths=PackedStringArray("Hitbox")]
+[node name="BoneV" type="Node2D" node_paths=PackedStringArray("CollisionShape", "BoneSprite", "Hitbox")]
 texture_filter = 1
 scale = Vector2(3, 3)
 script = ExtResource("1_qkg15")
+CollisionShape = NodePath("BoneHitreg/CollisionShape2D")
+BoneSprite = NodePath("BoneSprite")
 Hitbox = NodePath("BoneHitreg")
 Damage = 1
 Karma = 2
 
+[node name="BoneSprite" type="Node2D" parent="."]
+script = ExtResource("2_kh3uw")
+texture = ExtResource("2_r4hna")
+size = Vector2(10, 24)
+region_rect = Rect2(0, 0, 10, 24)
+patch_margin_top = 8
+patch_margin_bottom = 8
+
 [node name="BoneTop" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-5, 0)
 texture = SubResource("AtlasTexture_diw3u")
 centered = false
 
 [node name="BoneMiddle" type="Sprite2D" parent="."]
-position = Vector2(0, 8)
+visible = false
+position = Vector2(-5, 8)
 texture = SubResource("AtlasTexture_46aou")
 centered = false
 
 [node name="BoneBottom" type="Sprite2D" parent="."]
-position = Vector2(0, 16)
+visible = false
+position = Vector2(-5, 16)
 texture = SubResource("AtlasTexture_mwqxj")
 centered = false
 
 [node name="BoneHitreg" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BoneHitreg"]
-position = Vector2(5, 12)
 shape = SubResource("RectangleShape2D_qqr6a")
 
 [connection signal="area_shape_entered" from="BoneHitreg" to="." method="_body_entered"]

@@ -57,7 +57,7 @@ func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed 
 	newBone.set_masked(MaskedState)
 	return newBone
 
-func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36) -> Bone_Stab:
+func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36, xArea := 0.0) -> Bone_Stab:
 	var newStab : Bone_Stab = BoneStabPath.instantiate()
 	newStab.BC = self
 	newStab.point_index = absi(Side_Index)
@@ -69,6 +69,7 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	newStab.waitTime = WaitTime
 	newStab.stayTime = StayTime
 	newStab.boneGap = BoneGap
+	newStab.xArea = xArea
 	MaskedAttacks.add_child(newStab)
 	return newStab
 	

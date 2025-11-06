@@ -72,6 +72,26 @@ func TurnDescription() -> void:
 				BC.MenuText.setText("* Keep Attacking.")
 
 
+func TurnToBoneA(bone : StandardBone, Stall : float, ShootSpeed : float, Direction : float) -> void:
+	var rotation_acceleration := 0.0
+	
+	while Stall >= 0:
+		Stall -= get_process_delta_time()
+		
+		if rotation_acceleration < 1.25:
+			rotation_acceleration += 1 * get_process_delta_time()
+		
+		bone.rotation_degrees += rotation_acceleration
+		
+		await get_tree().process_frame
+	#bone.Direction = Direction
+	print(bone.Direction)
+	var t = bone.create_tween()
+	t.set_ease(Tween.EASE_IN)
+	t.set_trans(Tween.TRANS_SINE)
+	t.tween_property(bone, "Speed", ShootSpeed, 0.75)
+
+
 func AttackStart() -> void:
 	match BC.AttackTurns:
 		0:
@@ -82,39 +102,50 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 1, 20)
-	#BoneStab1.set_masked(false)
-	#var BoneStab2 : Bone_Stab = BC.BoneStab(1, 125, 1, 20)
-	#var BoneStab3 : Bone_Stab = BC.BoneStab(2, 75, 1, 20)
-	#var BoneStab4 : Bone_Stab = BC.BoneStab(3, 50, 1, 20)
-	var Bones : Array[StandardBone] = BoneStab1.bonesArray
-	#Bones.append_array(BoneStab2.bonesArray)
-	#Bones.append_array(BoneStab3.bonesArray)
-	#Bones.append_array(BoneStab4.bonesArray)
-	#BoneStab1.set_masked(false)
-	return
-	var index : int = 0
-	while true:
-		if not BoneStab1: break
-		if BoneStab1.is_queued_for_deletion(): break
-		
-		var boneI : int = 0
-		for cBone in Bones:
-			var closeness : int = abs(index - boneI)
-			var yPosition = cBone.position.rotated(deg_to_rad(BoneStab1.point_rotation)).y
-			
-			if closeness <= 5:
-				if yPosition > -300:
-					cBone.position.y -= 25
-			else:
-				if yPosition < 0:
-					cBone.position.y += 2
-			boneI += 1
-		index += 1
-		if index > Bones.size():
-			index = 0
-		await Globals.Wait(0.01)
-	#BC.ReturnToMenu()
+	BC.CombatBoxInstant(Rect2(200, 820, 1700-131, 1100-820))
+	BC.SoulMode(1)
+	var b1 : StandardBone
+	
+	for i in range(7):
+		b1 = BC.Bone(Vector2(1675, 1175), 50, 180, 0)
+		var t = b1.create_tween().set_parallel(true)
+		t.set_ease(Tween.EASE_OUT)
+		t.set_trans(Tween.TRANS_EXPO)
+		t.tween_property(b1, "position:y", b1.position.y - 125, 1)
+		#t.parallel().tween_interval(0.2)
+		t.set_ease(Tween.EASE_OUT)
+		t.set_trans(Tween.TRANS_CUBIC)
+		t.tween_property(b1, "Speed", 700, 3)
+		await Globals.Wait(0.15)
+	await Globals.Wait(1.5)
+	var t = b1.create_tween()
+	t.set_ease(Tween.EASE_OUT)
+	t.set_trans(Tween.TRANS_CUBIC)
+	t.tween_property(b1, "Speed", 0, 3)
+	await Globals.Wait(0.5)
+	t = b1.create_tween()
+	t.set_ease(Tween.EASE_IN_OUT)
+	t.set_trans(Tween.TRANS_CUBIC)
+	t.tween_property(b1, "position:y", 400, 3)
+	await Globals.Wait(0.5)
+	while b1.position.y > 1050 - b1.Height:
+		await get_tree().process_frame
+	print("switched")
+	b1.set_masked(false)
+	var dir = rad_to_deg(b1.position.angle_to_point(BC.Soul.position))
+	await TurnToBoneA(b1, 1.8, 2000, dir)
+	t.kill()
+	dir = rad_to_deg(b1.position.angle_to_point(BC.Soul.position))
+	b1.Direction = dir
+	print(b1.Direction)
+	t = b1.create_tween()
+	t.set_ease(Tween.EASE_OUT)
+	t.set_trans(Tween.TRANS_SINE)
+	b1.rotation_degrees = fposmod(b1.rotation_degrees, 360)
+	t.tween_property(b1, "rotation_degrees", dir + 90 + 360, 0.4)
+	
+	await Globals.Wait(2)
+	
 	pass
 	
 func Attack2() -> void:
