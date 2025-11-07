@@ -73,7 +73,7 @@ func TurnDescription() -> void:
 				
 
 
-const BoneASpinMeta := "BoneASpin"
+const BoneASpinMeta := "BoneASpinning"
 
 func SpinBone(bone : StandardBone) -> void:
 	var rotation_acceleration := 0.0
