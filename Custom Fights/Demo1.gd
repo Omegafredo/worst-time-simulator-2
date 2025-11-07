@@ -70,13 +70,17 @@ func TurnDescription() -> void:
 				BC.MenuText.setText("* You feel as if something\n[indent]bad is about to happen.")
 			else: # Remember to have a fail-safe
 				BC.MenuText.setText("* Keep Attacking.")
+				
 
 
-func TurnToBoneA(bone : StandardBone, Stall : float, ShootSpeed : float, Direction : float) -> void:
+const BoneASpinMeta := "BoneASpin"
+
+func SpinBone(bone : StandardBone) -> void:
 	var rotation_acceleration := 0.0
 	
-	while Stall >= 0:
-		Stall -= get_process_delta_time()
+	bone.set_meta(BoneASpinMeta, true)
+	
+	while bone.get_meta(BoneASpinMeta):
 		
 		if rotation_acceleration < 1.25:
 			rotation_acceleration += 1 * get_process_delta_time()
@@ -84,9 +88,15 @@ func TurnToBoneA(bone : StandardBone, Stall : float, ShootSpeed : float, Directi
 		bone.rotation_degrees += rotation_acceleration
 		
 		await get_tree().process_frame
-	#bone.Direction = Direction
-	print(bone.Direction)
-	var t = bone.create_tween()
+
+func ShootSpinningBone(bone : StandardBone, ShootSpeed : float, Direction : float) -> void:
+	bone.set_meta(BoneASpinMeta, false)
+	bone.Direction = Direction
+	var t = bone.create_tween().set_parallel(true)
+	t.set_ease(Tween.EASE_OUT)
+	t.set_trans(Tween.TRANS_SINE)
+	bone.rotation_degrees = fposmod(bone.rotation_degrees, 360)
+	t.tween_property(bone, "rotation_degrees", Direction + 90 + 360, 0.4)
 	t.set_ease(Tween.EASE_IN)
 	t.set_trans(Tween.TRANS_SINE)
 	t.tween_property(bone, "Speed", ShootSpeed, 0.75)
@@ -132,17 +142,11 @@ func Attack1() -> void:
 		await get_tree().process_frame
 	print("switched")
 	b1.set_masked(false)
-	var dir = rad_to_deg(b1.position.angle_to_point(BC.Soul.position))
-	await TurnToBoneA(b1, 1.8, 2000, dir)
+	SpinBone(b1)
+	await Globals.Wait(1.75)
 	t.kill()
-	dir = rad_to_deg(b1.position.angle_to_point(BC.Soul.position))
-	b1.Direction = dir
-	print(b1.Direction)
-	t = b1.create_tween()
-	t.set_ease(Tween.EASE_OUT)
-	t.set_trans(Tween.TRANS_SINE)
-	b1.rotation_degrees = fposmod(b1.rotation_degrees, 360)
-	t.tween_property(b1, "rotation_degrees", dir + 90 + 360, 0.4)
+	var dir = rad_to_deg(b1.position.angle_to_point(BC.Soul.position))
+	ShootSpinningBone(b1, 2000, dir)
 	
 	await Globals.Wait(2)
 	
