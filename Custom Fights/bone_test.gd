@@ -89,7 +89,7 @@ func Attack1() -> void:
 	b2.set_color(2)
 	await Globals.Wait(4)
 	var gb1 = BC.GasterBlaster(1, Vector2(2000, 950), Vector2(1800, 950), 180, 1, 2)
-	gb1.set_color(1)
+	gb1.set_color(3)
 	
 	pass
 	

@@ -52,9 +52,11 @@ func set_color(colorState : int) -> void:
 		0:
 			modulate = Color.WHITE
 		1:
-			modulate = Color.BLUE
+			modulate = Color8(0, 168, 255)
 		2:
-			modulate = Color.ORANGE
+			modulate = Color8(255, 168, 0)
+		3:
+			modulate = Color8(0, 255, 0)
 		
 
 func _body_entered(area_rid : RID, area : Area2D, area_shape_index : int, local_shape_index : int):
