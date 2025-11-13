@@ -85,9 +85,8 @@ func point_remover(index : int) -> void:
 ## Adds a point after the specified [param index].[br]
 ## The position of the new point is determined by [param percentage_point] going from the [param index] point to the next point, going from 0 to 1.
 func add_new_point(index : int, percentage_point : float) -> void:
-	
-	move_to_points.insert(index, point_coordinator(move_to_points, index, percentage_point))
-	add_point(point_coordinator(points, index, percentage_point), index)
+	move_to_points.insert(index + 1, point_coordinator(move_to_points, index, percentage_point))
+	add_point(point_coordinator(points, index, percentage_point), index + 1)
 	
 
 

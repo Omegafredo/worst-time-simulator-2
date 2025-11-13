@@ -61,10 +61,6 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	var newStab : Bone_Stab = BoneStabPath.instantiate()
 	newStab.BC = self
 	newStab.point_index = absi(Side_Index)
-	if Side_Index > 0:
-		newStab.rotationOffset = 0
-	else:
-		newStab.rotationOffset = 180
 	newStab.boneHeight = Height
 	newStab.waitTime = WaitTime
 	newStab.stayTime = StayTime

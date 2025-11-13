@@ -11,11 +11,15 @@ var xArea := 0.0
 enum states {STATE_WAIT, STATE_STAY, STATE_LEAVE}
 var currentState : states
 
+
+# Used by attack creators to customise attack
 var rotationOffset : float = 0
 var positionOffset := Vector2.ZERO
-var heightOffset : float = 0
-
+var customTransform := false
 var point_position_percentage := 0.5
+var boneSpeed : float = 1500
+
+var heightOffset : float = 0
 
 var point_position : Vector2:
 	get():
@@ -28,6 +32,8 @@ var point_rotation : float:
 var bonesArray : Array[StandardBone]
 
 func _ready():
+	
+	# Defaults to the current CombatZone length if no value is given
 	if xArea == 0:
 		xArea = (BC.CombatZone.get_point_position(point_index) - BC.CombatZone.next_point(BC.CombatZone.points, point_index)).length()
 	var boneX = -xArea/2
@@ -35,7 +41,7 @@ func _ready():
 		var newBone : StandardBone = BC.BonePath.instantiate()
 		newBone.BC = BC
 		newBone.position = Vector2(boneX, 0)
-		newBone.Height = 200
+		newBone.Height = 0
 		newBone.change_pivot(Vector2(0, -newBone.Height/2))
 		newBone.Direction = 0
 		newBone.Speed = 0
@@ -46,7 +52,6 @@ func _ready():
 	pass
 
 func _process(delta):
-	positionOffset = point_position
 	
 	
 	match currentState:
@@ -56,7 +61,7 @@ func _process(delta):
 				currentState = states.STATE_STAY
 		states.STATE_STAY:
 			if heightOffset < boneHeight:
-				heightOffset += delta * 1500
+				heightOffset += delta * boneSpeed
 			elif heightOffset > boneHeight:
 				heightOffset = boneHeight
 			stayTime -= delta
@@ -64,10 +69,15 @@ func _process(delta):
 				currentState = states.STATE_LEAVE
 		states.STATE_LEAVE:
 			if heightOffset > 0:
-				heightOffset -= delta * 1500
+				heightOffset -= delta * boneSpeed
 			elif heightOffset < 0:
 				heightOffset = 0
 	
-	positionOffset -= Vector2(0, heightOffset).rotated(deg_to_rad(point_rotation) + rotation)
-	rotation = deg_to_rad(rotationOffset) + point_rotation
-	position = positionOffset
+	# 15 is the thickness of a combatzone line, cutting it by half puts it to the edge away from the center
+	var heightAdjustment = Vector2(0, -7.5).rotated(point_rotation)
+	for bone in bonesArray:
+		bone.Height = heightOffset
+		bone.change_pivot(Vector2(0, -bone.Height/2))
+	if not customTransform:
+		rotation = deg_to_rad(rotationOffset) + point_rotation
+		position = point_position + heightAdjustment + positionOffset
