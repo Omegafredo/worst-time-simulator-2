@@ -7,7 +7,7 @@ var ShowIntro : bool = true
 var FirstTime := true
 var PlayerName := "CHARA"
 
-var CustomMode : bool
+var CustomPos : int = -1
 var HardMode : bool = false
 var NoDeath : bool = false
 
@@ -67,10 +67,6 @@ func _ready():
 	ResetInventory()
 
 func ResetInventory():
-	var CPie = Globals.CPie
-	var CNoodles = Globals.CNoodles
-	var CSteak = Globals.CSteak
-	var CHero = Globals.CHero
 	CurrentItems = [CPie, CNoodles, CSteak, CHero, CHero, CHero, CHero, CHero]
 
 # Other

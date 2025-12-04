@@ -48,8 +48,8 @@ func _ready() -> void:
 		dir.change_dir("Custom Fights")
 		for a in dir.get_files():
 			var res = load(dir.get_current_dir() + "/" + a)
-			print(dir.get_current_dir() + "/" + a)
-			print(res)
+			#print(dir.get_current_dir() + "/" + a)
+			#print(res)
 			if a.get_extension() in ["gd", "gdc"]:
 				var CFButton = SettingSelection.new()
 				CFButton.activated.connect(_on_custom_start.bind(res))
@@ -85,11 +85,13 @@ func _ready() -> void:
 		InitiateIntro()
 	else:
 		InitiateMenu()
-		if Globals.CustomMode:
+		if Globals.CustomPos >= 0:
 			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
-			
-	MoveIndex = get_top_active_index()
+			MoveSoul(Globals.CustomPos)
 	
+	if Globals.CustomPos < 0:
+		MoveIndex = get_top_active_index()
+	Globals.CustomPos = -1
 
 
 
@@ -185,12 +187,11 @@ func ConfirmAction() -> void:
 		MenuSelectSound.play()
 
 func _on_start():
-	Globals.CustomMode = false
 	InitiateBattle()
 
 
 func _on_custom_start(FightScript : GDScript):
-	Globals.CustomMode = true
+	Globals.CustomPos = MoveIndex
 	Globals.CustomAttackScript = FightScript
 	InitiateBattle()
 

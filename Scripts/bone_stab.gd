@@ -35,7 +35,7 @@ func _ready():
 	
 	# Defaults to the current CombatZone length if no value is given
 	if xArea == 0:
-		xArea = (BC.CombatZone.get_point_position(point_index) - BC.CombatZone.next_point(BC.CombatZone.points, point_index)).length()
+		xArea = BC.CombatZone.get_point_length(BC.CombatZone.points, point_index)
 	var boneX = -xArea/2
 	while boneX <= xArea/2:
 		var newBone : StandardBone = BC.BonePath.instantiate()

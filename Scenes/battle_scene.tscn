@@ -1,7 +1,8 @@
-[gd_scene load_steps=33 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=34 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
 [ext_resource type="Script" uid="uid://hrnqstkpdscc" path="res://Scripts/battle_controller.gd" id="2_taess"]
+[ext_resource type="PackedScene" uid="uid://b7t8h661yyk7h" path="res://Scenes/attack_warning.tscn" id="2_ys5i7"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
 [ext_resource type="PackedScene" uid="uid://wf7oo7q1il3f" path="res://Scenes/text_system.tscn" id="5_hr8wr"]
 [ext_resource type="FontVariation" uid="uid://be438q838t6oh" path="res://Resources/Fonts/styles/comicSansVariant.tres" id="6_piuie"]
@@ -201,6 +202,7 @@ _data = {
 [node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
+AttackWarningPath = ExtResource("2_ys5i7")
 Soul = NodePath("Player")
 SansHimself = NodePath("Sans")
 SpeechBubble = NodePath("SpeechBubble")

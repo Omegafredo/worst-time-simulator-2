@@ -71,6 +71,20 @@ func TurnDescription() -> void:
 			else: # Remember to have a fail-safe
 				BC.MenuText.setText("* Keep Attacking.")
 
+func CustomBoneStab() -> void:
+	var BoneStab : Bone_Stab = BC.BoneStab(0, 75, 3, 1)
+	
+	var warn : Attack_Warning = BoneStab.get_node("AttackWarning")
+	
+	warn.set_size(Vector2(warn.Sprite.size.x * 3, 0))
+	
+	while warn.Sprite.size.y < 75 * 3:
+		warn.set_size(Vector2(warn.Sprite.size.x * 3, warn.Sprite.size.y * 3 + 1))
+		print(warn.Sprite.size.y)
+		await get_tree().physics_frame
+		if not warn:
+			break
+	
 
 func AttackStart() -> void:
 	match BC.AttackTurns:
@@ -82,8 +96,14 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 1, 20)
-	BoneStab1.set_masked(false)
+	BC.CombatBoxInstant(Rect2(800, 720, 1200-800, 1152-720))
+	await Globals.Wait(1)
+	CustomBoneStab()
+	return
+	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 3, 1)
+	await Globals.Wait(4.5)
+	CustomBoneStab()
+	#BoneStab1.set_masked(false)
 	#var BoneStab2 : Bone_Stab = BC.BoneStab(1, 125, 1, 20)
 	#var BoneStab3 : Bone_Stab = BC.BoneStab(2, 75, 1, 20)
 	#var BoneStab4 : Bone_Stab = BC.BoneStab(3, 50, 1, 20)

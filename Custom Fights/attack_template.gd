@@ -51,6 +51,7 @@ func TurnDescription() -> void:
 		0:
 			BC.MenuText.setText("* This is the turn text for turn 1.")
 		1:
+			# On the first new line, you use [indent], afterwards it is not required.
 			BC.MenuText.setText("* This is how you split\n[indent]text onto\nthree lines.")
 		2:
 			# Conditional turn text

@@ -6,6 +6,7 @@ var BoneStabPath := preload("res://Scenes/bone_stab.tscn")
 var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
 var PlatformPath := preload("res://Scenes/platform.tscn")
 var StrikeAnimation := preload("res://Scenes/strike.tscn")
+@export var AttackWarningPath : PackedScene
 
 @onready var CombatZone : CombatZoneV2 = $CombatZone
 @export var Soul : Player
@@ -66,7 +67,19 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	newStab.stayTime = StayTime
 	newStab.boneGap = BoneGap
 	newStab.xArea = xArea
+	
+	var newWarning : Attack_Warning = AttackWarningPath.instantiate()
+	newWarning.BC = self
+	newWarning.set_color(0)
+	var sizeOffset = Vector2(30, 20)
+	newWarning.position.y = sizeOffset.y
+	newWarning.set_size(Vector2(CombatZone.get_point_length(CombatZone.move_to_points, Side_Index) - sizeOffset.x, Height * 3 - sizeOffset.y))
+	newWarning.set_pivot(Vector2(0, -0.5))
+	
 	MaskedAttacks.add_child(newStab)
+	newStab.add_child(newWarning)
+	newWarning.disappear_timer(WaitTime)
+	
 	return newStab
 	
 	
@@ -111,7 +124,7 @@ var AmountTurns : int = 0
 
 func _ready():
 	InitialiseBattle()
-	if Globals.CustomMode:
+	if Globals.CustomPos >= 0:
 		AttackList.set_script(Globals.CustomAttackScript)
 		AttackList.LoadVariables()
 	
@@ -171,7 +184,7 @@ func InitializeAttack():
 	Soul.Controllable = true
 	MenuControl = NONE
 	Soul.show()
-	CombatBox(Rect2(800, 720, 1200-800, 1152-720))
+	#CombatBox(Rect2(800, 720, 1200-800, 1152-720))
 	Soul.position = Vector2(1000, 1000)
 	AmountTurns += 1
 	AttackList.AttackStart()

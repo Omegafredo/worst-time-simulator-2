@@ -71,6 +71,10 @@ func _ready():
 ## Returns the next point after [param index], looping to the start if at the end of the array.
 func next_point(pointArray : Array[Vector2], index) -> Vector2:
 	return pointArray[index + 1 if index < pointArray.size() - 1 else 0]
+
+## Returns the length between [param index] and the next point.
+func get_point_length(pointArray : Array[Vector2], index) -> float:
+	return (pointArray[index] - next_point(pointArray, index)).length()
 	
 ## Returns the position between the [param index] point and the next in an [param modifyArray].[br]
 ## The [param percentage_point] chooses where between the two points to get, going from 0 to 1.
