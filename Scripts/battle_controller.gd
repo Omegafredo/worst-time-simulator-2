@@ -70,7 +70,6 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	
 	var newWarning : Attack_Warning = AttackWarningPath.instantiate()
 	newWarning.BC = self
-	newWarning.set_color(0)
 	var sizeOffset = Vector2(30, 20)
 	var sizeX : float
 	newWarning.position.y = sizeOffset.y

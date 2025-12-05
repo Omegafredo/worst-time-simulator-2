@@ -1,3 +1,14 @@
+
+v0.1.0
+New version formatting yes yes
+Added attack warnings
+Custom attack menu now remembers what attack you were on when returning to it
+Added colored attacks
+Fixed a lot of stuff with Bonestab
+The finally awaited combat zone rework
+A lot of stuff I forgot about...
+
+
 V0.03
 Fixed Menu history not resetting itself after an attack
 Fixed Gaster Blasters crashing the game by making them delete themselves instead of the VisibleAttacks node

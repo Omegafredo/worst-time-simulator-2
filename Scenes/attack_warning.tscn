@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bg73357ruan0n" path="res://Resources/Sprites/UI/BoneStabWarn.png" id="3_64irh"]
 
 [node name="AttackWarning" type="Node2D" node_paths=PackedStringArray("Sprite", "_timer")]
+modulate = Color(0.560784, 0.184314, 0.184314, 1)
 script = ExtResource("1_xg5s6")
 Sprite = NodePath("Sprite")
 _timer = NodePath("Timer")

@@ -6,6 +6,13 @@ class_name Attack_Warning
 
 var _pivotPoint : Vector2 = Vector2.ZERO
 
+var size : Vector2:
+	get():
+		return Sprite.size
+	set(x):
+		Sprite.size = x
+		_update_pivot()
+
 func set_color(colorState : int) -> void:
 	super(colorState)
 	

@@ -9,6 +9,20 @@ var speed: float = 300.0
 
 var move_to_points : Array[Vector2]
 
+var moving := false:
+	set(newMoving):
+		if moving and not newMoving:
+			done_moving.emit()
+		moving = newMoving
+
+signal done_moving
+		
+var pointGlobalPositions : PackedVector2Array:
+	get():
+		var x : PackedVector2Array
+		for point in points:
+			x.append(point + position)
+		return x
 
 var CenterPos : Vector2:
 	get():
@@ -36,8 +50,6 @@ var MoveToCenterPos : Vector2:
 		
 		
 		return (MTTopLeft + MTBottomRight)/2
-
-signal done_moving
 
 ## Sets the box's destination to be the Rect2 coordinates.
 ## Forces it into a square if it already isn't, adding or removing points to do so.
@@ -96,6 +108,8 @@ func add_new_point(index : int, percentage_point : float) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	moving = PackedVector2Array(move_to_points) != pointGlobalPositions
+	
 	var oldPosition := position
 	
 	var Movement = position - position.move_toward(MoveToCenterPos, speed/2 * delta)

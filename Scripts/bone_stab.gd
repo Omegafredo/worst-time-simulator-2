@@ -17,7 +17,7 @@ var rotationOffset : float = 0
 var positionOffset := Vector2.ZERO
 var customTransform := false
 var point_position_percentage := 0.5
-var boneSpeed : float = 1500
+var boneSpeed : float = 750
 
 var heightOffset : float = 0
 
@@ -60,17 +60,19 @@ func _process(delta):
 			if waitTime <= 0:
 				currentState = states.STATE_STAY
 		states.STATE_STAY:
-			if heightOffset < boneHeight:
-				heightOffset += delta * boneSpeed
-			elif heightOffset > boneHeight:
+			var newOffset = heightOffset + (delta * boneSpeed)
+			if newOffset < boneHeight:
+				heightOffset = newOffset
+			elif newOffset >= boneHeight:
 				heightOffset = boneHeight
 			stayTime -= delta
 			if stayTime <= 0:
 				currentState = states.STATE_LEAVE
 		states.STATE_LEAVE:
-			if heightOffset > 0:
-				heightOffset -= delta * boneSpeed
-			elif heightOffset < 0:
+			var newOffset = heightOffset - (delta * boneSpeed)
+			if newOffset > 0:
+				heightOffset = newOffset
+			elif newOffset <= 0:
 				heightOffset = 0
 	
 	# 15 is the thickness of a combatzone line, cutting it by half puts it to the edge away from the center
