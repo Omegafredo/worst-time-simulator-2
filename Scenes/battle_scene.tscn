@@ -223,6 +223,7 @@ SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 [node name="AttackList" type="Node" parent="Battle Controller"]
 
 [node name="CombatZone" parent="Battle Controller" node_paths=PackedStringArray("mask") instance=ExtResource("23_ys5i7")]
+z_index = 50
 mask = NodePath("Polygon2D")
 
 [node name="Polygon2D" type="Polygon2D" parent="Battle Controller/CombatZone"]

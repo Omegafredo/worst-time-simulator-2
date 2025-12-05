@@ -141,6 +141,8 @@ func _process(delta):
 	
 	collision.polygon = TopLeftPoints + BottomRightPoints
 	
+	# Gotta make the clip area smaller as non white objects are visible above the combat box outline
+	# ...or just increase the z-index of the combat box outline
 	mask.polygon = points
 	
 	

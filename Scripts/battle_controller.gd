@@ -72,8 +72,13 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	newWarning.BC = self
 	newWarning.set_color(0)
 	var sizeOffset = Vector2(30, 20)
+	var sizeX : float
 	newWarning.position.y = sizeOffset.y
-	newWarning.set_size(Vector2(CombatZone.get_point_length(CombatZone.move_to_points, Side_Index) - sizeOffset.x, Height * 3 - sizeOffset.y))
+	if xArea == 0.0:
+		sizeX = CombatZone.get_point_length(CombatZone.move_to_points, Side_Index) - sizeOffset.x
+	else:
+		sizeX = xArea
+	newWarning.set_size(Vector2(sizeX, Height * 3 - sizeOffset.y))
 	newWarning.set_pivot(Vector2(0, -0.5))
 	
 	MaskedAttacks.add_child(newStab)
