@@ -74,7 +74,7 @@ func TurnDescription() -> void:
 func CustomBoneStab() -> void:
 	var BoneStab : Bone_Stab = BC.BoneStab(0, 75, 3, 1)
 	
-	var warn : Attack_Warning = BoneStab.get_node("AttackWarning")
+	var warn : Attack_Warning = BoneStab.attackWarning
 	
 	warn.set_size(Vector2(warn.Sprite.size.x * 3, 0))
 	
@@ -108,7 +108,8 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.CombatBoxInstant(Rect2(800, 720, 1200-800, 1152-720))
+	BC.CombatBox(Rect2(800, 720, 1200-800, 1152-720))
+	BC.CombatBoxInstant()
 	await Globals.Wait(1)
 	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 3, 1)
 	await Globals.Wait(4.5)

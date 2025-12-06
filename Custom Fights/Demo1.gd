@@ -112,7 +112,8 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.CombatBoxInstant(Rect2(200, 820, 1700-131, 1100-820))
+	BC.CombatBoxLegacy(200, 820, 1700, 1100)
+	BC.CombatBoxInstant()
 	BC.SoulMode(1)
 	var b1 : StandardBone
 	

@@ -4,7 +4,10 @@ class_name Attack_Warning
 @export var Sprite : NinePatchSprite2D
 @export var _timer : Timer
 
-var _pivotPoint : Vector2 = Vector2.ZERO
+var _pivotPoint : Vector2 = Vector2.ZERO:
+	set(x):
+		_pivotPoint = x
+		_update_pivot()
 
 var size : Vector2:
 	get():
@@ -29,12 +32,11 @@ func disappear() -> void:
 	queue_free()
 
 func set_size(size : Vector2) -> void:
-	Sprite.set_size(size/3)
+	Sprite.set_size(size)
 	_update_pivot()
 
 func set_pivot(pivot : Vector2) -> void:
 	_pivotPoint = pivot
-	_update_pivot()
 
 func _update_pivot() -> void:
 	Sprite.position = Sprite.size * (-_pivotPoint * 3)

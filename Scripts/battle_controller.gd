@@ -32,11 +32,22 @@ var CurrentEnemy = "Sans"
 
 #region Attack Calls
 
+## The method most familiar to newcomers from BTS or WTS
+## Pick the coordinate for each side of the box seperately
+func CombatBoxLegacy(Left : float, Top : float, Right : float, Bottom : float):
+	CombatZone.simple_move(Rect2(Left, Top, Right - Left, Bottom - Top))
+
+## Rect2 method, sets the top left coordinate and extends the width and height from there
+## ...probably shouldn't be the default method.
 func CombatBox(NewRect : Rect2):
 	CombatZone.simple_move(NewRect)
-	
-func CombatBoxInstant(NewRect : Rect2):
-	CombatZone.simple_move(NewRect)
+
+## A nice convenient option, pick the center where you want it to be and extend the size from there
+func CombatBoxCenter(Center : Vector2, Size : Vector2):
+	CombatZone.simple_move(Rect2(Center - Size/2, Size))
+
+# Probably better for it to not change the box at all so it can be combined with any movement option by calling it afterwards
+func CombatBoxInstant():
 	CombatZone.instant_move()
 
 func CombatBoxSpeed(NewSpeed : float):
@@ -70,6 +81,7 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 	
 	var newWarning : Attack_Warning = AttackWarningPath.instantiate()
 	newWarning.BC = self
+	newStab.attackWarning = newWarning
 	var sizeOffset = Vector2(30, 20)
 	var sizeX : float
 	newWarning.position.y = sizeOffset.y
@@ -77,11 +89,12 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 		sizeX = CombatZone.get_point_length(CombatZone.move_to_points, Side_Index) - sizeOffset.x
 	else:
 		sizeX = xArea
-	newWarning.set_size(Vector2(sizeX, Height * 3 - sizeOffset.y))
+	newWarning.set_size(Vector2(sizeX / 3, Height - sizeOffset.y / 3))
 	newWarning.set_pivot(Vector2(0, -0.5))
 	
 	MaskedAttacks.add_child(newStab)
 	newStab.add_child(newWarning)
+	
 	newWarning.disappear_timer(WaitTime)
 	
 	return newStab
@@ -181,7 +194,8 @@ func _ready():
 	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxInstant(Rect2(111, 720, 1839-111, 1152-720))
+	CombatBoxLegacy(111, 720, 1839, 1152)
+	CombatBoxInstant()
 	
 func InitializeAttack():
 	MenuMode = false

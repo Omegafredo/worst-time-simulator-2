@@ -8,6 +8,8 @@ var stayTime : float
 var boneHeight : float
 var xArea := 0.0
 
+var attackWarning : Attack_Warning
+
 enum states {STATE_WAIT, STATE_STAY, STATE_LEAVE}
 var currentState : states
 
