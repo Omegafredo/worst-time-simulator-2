@@ -12,6 +12,8 @@ var gravityDir := 0:
 
 var gravity : float = 980
 
+@export var mainMenuPath : PackedScene
+
 @export var SplitSprite : Texture2D
 
 @export var SoulSprite : Sprite2D
@@ -45,7 +47,7 @@ signal died
 func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("menu"):
-		get_tree().change_scene_to_file("res://Scenes/menu_scene.tscn")
+		get_tree().change_scene_to_packed(mainMenuPath)
 		
 	
 	
@@ -195,6 +197,7 @@ func Death():
 	Soul_Type = DEAD
 	if OldFadeTween:
 		OldFadeTween.kill()
+	FadeSprite.visible = false
 	died.emit()
 	SoulSprite.modulate = Color(1, 0, 0)
 	await Globals.Wait(1)
@@ -205,6 +208,8 @@ func Death():
 	HeartShatter.play()
 	SoulSprite.visible = false
 	ShatterParticles.emitting = true
+	await Globals.Wait(3)
+	get_tree().change_scene_to_packed(mainMenuPath)
 	
 func TakeDamage(Damage : int, Karma : int):
 	Globals.KR += Karma
