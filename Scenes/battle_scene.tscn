@@ -237,7 +237,7 @@ scale = Vector2(6, 6)
 
 [node name="Player" parent="Battle Controller" instance=ExtResource("1_ma1ba")]
 unique_name_in_owner = true
-z_index = 6
+z_index = 90
 position = Vector2(1000, 1000)
 
 [node name="SpeechBubble" parent="Battle Controller" node_paths=PackedStringArray("TextLabel") instance=ExtResource("5_hr8wr")]
@@ -391,7 +391,7 @@ stream = ExtResource("17_xl1g0")
 bus = &"SoundEffects"
 
 [node name="ColorRect" type="ColorRect" parent="."]
-z_index = 5
+z_index = 80
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

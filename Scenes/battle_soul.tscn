@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://qjh4h6r7nww5"]
+[gd_scene load_steps=18 format=3 uid="uid://qjh4h6r7nww5"]
 
 [ext_resource type="Script" uid="uid://nwcw5x1xyw2f" path="res://Scripts/battle_soul.gd" id="1_6hssw"]
+[ext_resource type="PackedScene" uid="uid://blty1ony4m351" path="res://Scenes/menu_scene.tscn" id="2_60c28"]
 [ext_resource type="Texture2D" uid="uid://cu31l5tubftv7" path="res://Resources/Sprites/Soul/Soul.png" id="2_ab1kl"]
 [ext_resource type="Texture2D" uid="uid://dsiobw2jivci5" path="res://Resources/Sprites/Soul/Split.png" id="2_vxr54"]
 [ext_resource type="AudioStream" uid="uid://clnhipeueds0f" path="res://Resources/Sounds/Slam.ogg" id="3_tijpy"]
@@ -46,6 +47,7 @@ floor_constant_speed = true
 platform_on_leave = 2
 platform_floor_layers = 0
 script = ExtResource("1_6hssw")
+mainMenuPath = ExtResource("2_60c28")
 SplitSprite = ExtResource("2_vxr54")
 SoulSprite = NodePath("SoulSprite")
 FadeSprite = NodePath("SoulSprite/FadeSprite")
