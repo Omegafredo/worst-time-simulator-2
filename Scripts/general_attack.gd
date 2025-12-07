@@ -32,6 +32,8 @@ func _process(delta: float) -> void:
 			if Counter > 1.0/30.0:
 				Counter = 0
 				Soul.TakeDamage(Damage, Karma)
+		if color == 3:
+			Soul.TakeDamage(-Damage,0)
 			
 func set_masked(state : bool):
 	if state:

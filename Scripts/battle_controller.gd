@@ -58,7 +58,7 @@ func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
 	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
 	
 
-func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float, MaskedState : bool = true) -> StandardBone:
+func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float,attackColor : int = 0, MaskedState : bool = true) -> StandardBone:
 	var newBone : StandardBone = BonePath.instantiate()
 	newBone.BC = self
 	newBone.position = StartPos
@@ -66,10 +66,11 @@ func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed 
 	newBone.Direction = NewDirection
 	newBone.Speed = NewSpeed
 	add_child(newBone)
+	newBone.set_color(attackColor)
 	newBone.set_masked(MaskedState)
 	return newBone
 
-func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : float, BoneGap : float = 36, xArea := 0.0) -> Bone_Stab:
+func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : float,attackColor : int = 0, BoneGap : float = 36, xArea := 0.0) -> Bone_Stab:
 	var newStab : Bone_Stab = BoneStabPath.instantiate()
 	newStab.BC = self
 	newStab.point_index = absi(Side_Index)
@@ -91,9 +92,11 @@ func BoneStab(Side_Index : int, Height : float, WaitTime : float, StayTime : flo
 		sizeX = xArea
 	newWarning.set_size(Vector2(sizeX / 3, Height - sizeOffset.y / 3))
 	newWarning.set_pivot(Vector2(0, -0.5))
-	
 	MaskedAttacks.add_child(newStab)
 	newStab.add_child(newWarning)
+	
+	for Bone in newStab.bonesArray:
+		Bone.set_color(attackColor)
 	
 	newWarning.disappear_timer(WaitTime)
 	
