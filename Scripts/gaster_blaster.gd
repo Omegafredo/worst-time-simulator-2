@@ -25,9 +25,17 @@ var Size : int:
 				scale = Vector2(5, 5)
 			2:
 				scale = Vector2(8, 8)
+		var proprotionalScale = scale.y/5
+		var pixelHeight = 33
+		var flatOffset = -10
+		#hitboxShape.size.y = 33 * minf(scale.y/5, 1) * 0.75
+		# Reverses the scale multiplier when you scale a node (pixelHeight * propotionalScale), then makes it smaller (flatOffset), and then redoes the scale multiplier (propotionalScale) and finally min() prevents it from becoming bigger than the visual.
+		hitboxShape.size.y = min(((pixelHeight * proprotionalScale) + flatOffset)/proprotionalScale, 33)
 
 @export var BlasterSprite : AnimatedSprite2D
 @export var Blast : Node2D
+
+@export var hitboxShape : RectangleShape2D
 
 @export var SGasterBlaster : AudioStreamPlayer
 @export var SGasterBlast : AudioStreamPlayer
