@@ -15,7 +15,7 @@ var Width : float:
 var Speed : float
 var Direction : float
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	super(delta)
 	
 	position = position + Vector2(Speed * delta, 0).rotated(deg_to_rad(Direction))

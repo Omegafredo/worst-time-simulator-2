@@ -90,6 +90,7 @@ position = Vector2(2535, 0)
 shape = SubResource("RectangleShape2D_yetjb")
 
 [node name="Blast" type="Node2D" parent="."]
+visible = false
 
 [node name="Blast1" type="Sprite2D" parent="Blast"]
 position = Vector2(25, -11.25)

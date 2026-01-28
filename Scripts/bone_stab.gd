@@ -53,7 +53,7 @@ func _ready():
 		boneX += boneGap
 	pass
 
-func _process(delta):
+func _physics_process(delta):
 	
 	
 	match currentState:

@@ -44,88 +44,97 @@ var Controllable := true
 signal died
 
 
-func _process(delta: float) -> void:
-	
-	if Input.is_action_just_pressed("menu"):
-		get_tree().change_scene_to_packed(mainMenuPath)
-		
-	
-	
+func _physics_process(delta: float) -> void:
 	if Controllable:
-		# Get the input direction and handle the movement/deceleration.
-		var h_direction := Input.get_axis("left", "right")
-		var v_direction := Input.get_axis("up", "down")
+		player_movement(delta)
 		
+	karma_tick(delta)
+
+
+func _process(delta: float) -> void:
+	pass
 		
-		# Aligns the values to the rotaton of the combatbox before clamping
-		## No longer necessary due to the new combat box
-		
-		#var heart_local_position = CombatBox.to_local(global_position)
-		#
-		#heart_local_position = heart_local_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position)
-		#
-		#global_position = CombatBox.to_global(heart_local_position)
-		
-		#var local_heart_position = CombatBox.transform.basis_xform_inv(global_position)
-		#local_heart_position = local_heart_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position - CombatBox.CornerSize * 1.5)
-		#
-		#position = CombatBox.global_transform.basis_xform(local_heart_position)
-		
-		#position = position.clamp(CombatBox.CboxTopLeft.global_position + CombatBox.CornerSize * 3, CombatBox.CboxBottomRight.global_position)
-		
-		match Soul_Type:
-			SOUL_RED:
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu"):
+		get_tree().change_scene_to_packed(mainMenuPath)
+
+func player_movement(delta : float) -> void:
+	# Get the input direction and handle the movement/deceleration.
+	var h_direction := Input.get_axis("left", "right")
+	var v_direction := Input.get_axis("up", "down")
+	
+	
+	# Aligns the values to the rotaton of the combatbox before clamping
+	## No longer necessary due to the new combat box
+	
+	#var heart_local_position = CombatBox.to_local(global_position)
+	#
+	#heart_local_position = heart_local_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position)
+	#
+	#global_position = CombatBox.to_global(heart_local_position)
+	
+	#var local_heart_position = CombatBox.transform.basis_xform_inv(global_position)
+	#local_heart_position = local_heart_position.clamp(CombatBox.CboxTopLeft.position + CombatBox.CornerSize * 1.5, CombatBox.CboxBottomRight.position - CombatBox.CornerSize * 1.5)
+	#
+	#position = CombatBox.global_transform.basis_xform(local_heart_position)
+	
+	#position = position.clamp(CombatBox.CboxTopLeft.global_position + CombatBox.CornerSize * 3, CombatBox.CboxBottomRight.global_position)
+	
+	match Soul_Type:
+		SOUL_RED:
+			
+			if is_on_wall():
+				velocity = Vector2(h_direction, v_direction).normalized() * SPEED 
+			else:
+				velocity = Vector2(h_direction, v_direction) * SPEED 
+			
+			
+		SOUL_BLUE:
+			
+			
+			# Stops the soul's momentum if the player stops holding jump, really fucking messy
+			if ((!v_direction == -1 and gravityDir == 0) or (!v_direction == 1 and gravityDir == 2)) and velocity.rotated(deg_to_rad(gravityDir * -90)).y < -120:
+				velocity = Vector2(0, -120).rotated(deg_to_rad(gravityDir * -90))
 				
-				if is_on_wall():
-					velocity = Vector2(h_direction, v_direction).normalized() * SPEED 
+			if ((!h_direction == -1 and gravityDir == 1) or (!h_direction == 1 and gravityDir == 3)) and velocity.rotated(deg_to_rad(gravityDir * 90)).y < -120:
+				velocity = Vector2(0, -120).rotated(deg_to_rad(gravityDir * -90))
+				
+			
+			
+			if not is_on_floor():
+				if Slammed:
+					velocity = Vector2(0, MaxFallSpeed).rotated(deg_to_rad(gravityDir * -90))
 				else:
-					velocity = Vector2(h_direction, v_direction) * SPEED 
+					velocity += Vector2(0, gravity * delta).rotated(deg_to_rad(gravityDir * -90))
+			if (v_direction == -1 and gravityDir == 0) or (v_direction == 1 and gravityDir == 2) or (h_direction == -1 and gravityDir == 1) or (h_direction == 1 and gravityDir == 3):
+				JumpRemember.start()
 				
 				
-			SOUL_BLUE:
+			if not CoyoteTime.is_stopped() and not JumpRemember.is_stopped():
+				JumpRemember.stop()
+				CoyoteTime.stop()
+				velocity = Vector2(0, -JUMP_STRENGTH).rotated(deg_to_rad(gravityDir * -90))
+				
+			if gravityDir in [0, 2]:
+				velocity.x = h_direction * SPEED 
+			else:
+				velocity.y = v_direction * SPEED
+			
+				
+			if is_on_floor():
+				CoyoteTime.start()
 				
 				
-				# Stops the soul's momentum if the player stops holding jump, really fucking messy
-				if ((!v_direction == -1 and gravityDir == 0) or (!v_direction == 1 and gravityDir == 2)) and velocity.rotated(deg_to_rad(gravityDir * -90)).y < -120:
-					velocity = Vector2(0, -120).rotated(deg_to_rad(gravityDir * -90))
-					
-				if ((!h_direction == -1 and gravityDir == 1) or (!h_direction == 1 and gravityDir == 3)) and velocity.rotated(deg_to_rad(gravityDir * 90)).y < -120:
-					velocity = Vector2(0, -120).rotated(deg_to_rad(gravityDir * -90))
-					
-				
-				
-				if not is_on_floor():
-					if Slammed:
-						velocity = Vector2(0, MaxFallSpeed).rotated(deg_to_rad(gravityDir * -90))
-					else:
-						velocity += Vector2(0, gravity * delta).rotated(deg_to_rad(gravityDir * -90))
-				if (v_direction == -1 and gravityDir == 0) or (v_direction == 1 and gravityDir == 2) or (h_direction == -1 and gravityDir == 1) or (h_direction == 1 and gravityDir == 3):
-					JumpRemember.start()
-					
-					
-				if not CoyoteTime.is_stopped() and not JumpRemember.is_stopped():
-					JumpRemember.stop()
-					CoyoteTime.stop()
-					velocity = Vector2(0, -JUMP_STRENGTH).rotated(deg_to_rad(gravityDir * -90))
-					
-				if gravityDir in [0, 2]:
-					velocity.x = h_direction * SPEED 
-				else:
-					velocity.y = v_direction * SPEED
-				
-					
-				if is_on_floor():
-					CoyoteTime.start()
-					
-					
-		SoulSprite.rotation = rotate_toward(SoulSprite.rotation, deg_to_rad(gravityDir * -90 + 90), delta * 10)
-				
-		move_and_slide()
-		
-		if Slammed and is_on_floor():
-			SlamHitGround()
-		
-		
+	SoulSprite.rotation = rotate_toward(SoulSprite.rotation, deg_to_rad(gravityDir * -90 + 90), delta * 10)
+			
+	move_and_slide()
+	
+	if Slammed and is_on_floor():
+		SlamHitGround()
+
+## Calculate when to call KarmaDamage(). Runs every tick.
+func karma_tick(delta : float) -> void:
 	if Globals.KR == 0:
 		KR_Counter = 0
 	else:
@@ -141,8 +150,8 @@ func _process(delta: float) -> void:
 		KarmaDamage()
 	elif KR_Counter >= 1.0:
 		KarmaDamage()
-		
 
+## Deal damage and reduce karma
 func KarmaDamage() -> void:
 	Globals.KR -= 1
 	Globals.HP -= 1

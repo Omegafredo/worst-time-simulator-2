@@ -21,7 +21,7 @@ func change_pivot(pivot : Vector2) -> void:
 	CollisionShape.position = -pivot
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	super(delta)
 	
 	#position = position + Vector2(Speed * delta, 0).rotated(deg_to_rad(Direction))

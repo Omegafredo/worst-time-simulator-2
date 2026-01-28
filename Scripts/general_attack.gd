@@ -22,7 +22,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if PlayerHitboxIn:
 		if color == 0 or \
 		(color == 1 and absf(Soul.velocity.length()) > 0) or \

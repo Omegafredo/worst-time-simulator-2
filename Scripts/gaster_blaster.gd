@@ -62,7 +62,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta):
 	super(delta)
 	
 	if CurrentState == STATE_WAIT:
@@ -70,7 +70,7 @@ func _process(delta):
 			if WillShoot:
 				WaitCheck = false
 				Fire()
-				print("fire")
+				#print("fire")
 			elif Path.size() > 1 or Path.size() <= 1 and !Shooting:
 				WaitCheck = false
 				NextPathPoint()
@@ -81,13 +81,13 @@ func _process(delta):
 	if CurrentState == STATE_FIRE:
 		if Path.size() <= 1:
 			Exit()
-			print("exit")
+			#print("exit")
 			
 		
 	if CurrentState in [STATE_FIRE, STATE_LEAVE]:
 		if ShootTime <= 0:
 			Stop()
-			print("stop")
+			#print("stop")
 			NextPathPoint()
 		ShootTime -= delta
 		

@@ -107,7 +107,7 @@ func add_new_point(index : int, percentage_point : float) -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta):
 	moving = PackedVector2Array(move_to_points) != pointGlobalPositions
 	
 	var oldPosition := position
