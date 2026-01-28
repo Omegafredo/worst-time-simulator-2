@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://blty1ony4m351"]
+[gd_scene load_steps=22 format=3 uid="uid://blty1ony4m351"]
 
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
 [ext_resource type="Script" uid="uid://b142wa5m43ko7" path="res://Scripts/menu.gd" id="1_yo4v4"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="5_16xtt"]
 [ext_resource type="Script" uid="uid://3hk0cavd2egw" path="res://Scripts/setting_toggle.gd" id="6_lglhd"]
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
+[ext_resource type="Texture2D" uid="uid://cnaoc0tm2iotf" path="res://Resources/Sprites/UT Godot.png" id="8_6dmk6"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ggrs"]
@@ -89,14 +90,15 @@ label_settings = ExtResource("1_w1fbp")
 script = ExtResource("5_4j1lc")
 MenuChange = NodePath("../../SettingsMenu")
 
-[node name="Credits" type="Label" parent="Menu/MenuContainer/FirstMenu"]
+[node name="Credits" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 140.0
 offset_right = 600.0
 offset_bottom = 206.0
 text = "Credits"
 label_settings = ExtResource("1_w1fbp")
-script = ExtResource("3_rhj55")
-DeactiveState = true
+script = ExtResource("5_4j1lc")
+MenuChange = NodePath("../../CreditsMenu")
+metadata/_custom_type_script = "uid://cd18bqp8g8hx2"
 
 [node name="CustomAttack" type="Label" parent="Menu/MenuContainer/FirstMenu" node_paths=PackedStringArray("MenuChange")]
 offset_top = 210.0
@@ -224,6 +226,97 @@ Animatables = [null]
 [node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CustomAttacks"]
 position = Vector2(0, -100)
 
+[node name="CreditsMenu" type="Node2D" parent="Menu/MenuContainer" node_paths=PackedStringArray("HeaderPos", "Animatables")]
+visible = false
+script = ExtResource("2_hl0mm")
+CustomMenu = true
+HeaderPos = NodePath("Marker2D")
+Animatables = [NodePath("Creator"), NodePath("Contributor"), NodePath("BTS"), NodePath("Undertale"), NodePath("Godot"), NodePath("GodotImage")]
+metadata/_custom_type_script = "uid://bta63cy7otkn5"
+
+[node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CreditsMenu"]
+position = Vector2(-120, -100)
+
+[node name="SettingSelection" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+offset_left = 34.0
+offset_top = 510.0
+offset_right = 130.0
+offset_bottom = 532.333
+script = ExtResource("3_rhj55")
+DeactiveState = true
+metadata/_custom_type_script = "uid://d3r01wtkit367"
+
+[node name="Creator" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -208.0
+offset_right = 208.0
+offset_bottom = 66.0
+grow_horizontal = 2
+text = "Made by Fredo"
+label_settings = ExtResource("1_w1fbp")
+horizontal_alignment = 1
+
+[node name="Contributor" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -384.0
+offset_top = 100.0
+offset_right = 384.0
+offset_bottom = 166.0
+grow_horizontal = 2
+text = "FriskyBits - Contributor"
+label_settings = ExtResource("1_w1fbp")
+horizontal_alignment = 1
+
+[node name="BTS" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -432.0
+offset_top = 200.0
+offset_right = 432.0
+offset_bottom = 266.0
+grow_horizontal = 2
+text = "Bad Time Simulator by Jcw87"
+label_settings = ExtResource("1_w1fbp")
+horizontal_alignment = 1
+
+[node name="Undertale" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -432.0
+offset_top = 300.0
+offset_right = 432.0
+offset_bottom = 366.0
+grow_horizontal = 2
+text = "Undertale by Toby Fox"
+label_settings = ExtResource("1_w1fbp")
+horizontal_alignment = 1
+
+[node name="Godot" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -448.0
+offset_top = 400.0
+offset_right = 448.0
+offset_bottom = 466.0
+grow_horizontal = 2
+text = "Made proudly in Godot Engine"
+label_settings = ExtResource("1_w1fbp")
+horizontal_alignment = 1
+
+[node name="GodotImage" type="TextureRect" parent="Menu/MenuContainer/CreditsMenu"]
+offset_left = -125.0
+offset_top = 483.0
+offset_right = 75.0
+offset_bottom = 683.0
+texture = ExtResource("8_6dmk6")
+
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
 stream = ExtResource("3_8yvr6")
 bus = &"SoundEffects"
@@ -296,3 +389,5 @@ texture = SubResource("GradientTexture1D_wdhac")
 [connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
 [connection signal="entered" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_menu"]
 [connection signal="exited" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_exit"]
+[connection signal="entered" from="Menu/MenuContainer/CreditsMenu" to="Menu" method="_on_credits_menu_entered"]
+[connection signal="exited" from="Menu/MenuContainer/CreditsMenu" to="Menu" method="_on_credits_menu_exited"]

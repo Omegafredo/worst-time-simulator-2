@@ -69,6 +69,8 @@ func _ready() -> void:
 		for option in menu.get_children():
 			if option is SettingScroll:
 				SideOptions.append(option)
+			elif option is Control:
+				OriginalSelectPos[option] = option.global_position
 		for selection in get_menu_selections(menu):
 			OriginalSelectPos[selection] = selection.global_position
 	
@@ -247,7 +249,77 @@ func _on_customattack_exit(Movables : Array[Node]):
 	var tween = InterpolateObject(TopMenu, "global_position", OriginalSelectPos[TopMenu], 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
 	TopMenu.set_meta("ActiveTween", tween)
 	
+func _on_credits_menu_entered(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]) -> void:
+	var CreditsMenu = CurrentMenu
+	CreditsMenu.visible = true
+	CreditsMenu.HideAfter = false
 	
+	
+	for child in Movables:
+		
+		if child in [Movables[0], Movables[2]]:
+			child.global_position.x = OriginalSelectPos[child].x - 400
+		elif child in [Movables[1], Movables[3]]:
+			child.global_position.x = OriginalSelectPos[child].x + 400
+		child.modulate.a = 0
+	
+
+		
+	#InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	var MovedMenu = Header
+	var oldTween = MovedMenu.get_meta("ActiveTween")
+	if oldTween:
+		if oldTween.is_valid():
+			oldTween.kill()
+	var tween = InterpolateObject(MovedMenu, "global_position", HeaderPos.global_position, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+	MovedMenu.set_meta("ActiveTween", tween)
+	MenuLabelHistory.append(MovedMenu)
+	
+	#var cycles : int = 0
+	for child in Movables:
+		if child != Movables[5]:
+			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		#cycles += 1
+		# Waits for 0.2 seconds and if the CreditsMenu changes to off or exiting during that, abort the function
+		var timePos = Time.get_ticks_msec() + (0.2 * 1000)
+		while Time.get_ticks_msec() < timePos:
+			await get_tree().process_frame
+			if CreditsMenu.currentState in [Menu.STATES.off, Menu.STATES.exiting]:
+				#print("interrupted after " + str(cycles) + " cycles")
+				return
+		
+
+			
+	if CreditsMenu.currentState == Menu.STATES.entering:
+		CreditsMenu.currentState = Menu.STATES.on
+	
+	
+
+
+func _on_credits_menu_exited(Movables : Array[Node]) -> void:
+	#CurrentMenu.HideAfter = true
+	
+	#InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	var TopMenu = MenuLabelHistory[-1]
+	
+	var oldTween = TopMenu.get_meta("ActiveTween")
+	if oldTween:
+		if oldTween.is_valid():
+			oldTween.kill()
+	var tween = InterpolateObject(TopMenu, "global_position", OriginalSelectPos[TopMenu], 1, Tween.EASE_OUT, Tween.TRANS_EXPO)
+	TopMenu.set_meta("ActiveTween", tween)
+	
+	for child in Movables:
+		if child in [Movables[0], Movables[2]]:
+			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x - 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		if child in [Movables[1], Movables[3]]:
+			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x + 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
 func UpdateLabels() -> void:
 	for child in find_children("*", "SettingSelection", true):
