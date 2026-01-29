@@ -25,12 +25,13 @@ var StrikeAnimation := preload("res://Scenes/strike.tscn")
 @export var AnimationController : AnimationPlayer
 @export var MaskedAttacks : Node2D
 @export var VisibleAttacks : Node
+@export var BattleMusic : AudioStreamPlayer
 
 var StopProcess := false
 
 var CurrentEnemy = "Sans"
 
-#region Attack Calls
+#region Custom Attack Functions
 
 ## The method most familiar to newcomers from BTS or WTS
 ## Pick the coordinate for each side of the box seperately
@@ -42,7 +43,7 @@ func CombatBoxLegacy(Left : float, Top : float, Right : float, Bottom : float):
 func CombatBox(NewRect : Rect2):
 	CombatZone.simple_move(NewRect)
 
-## A nice convenient option, pick the center where you want it to be and extend the size from there
+## Pick the center where you want it to be and extend the size from there
 func CombatBoxCenter(Center : Vector2, Size : Vector2):
 	CombatZone.simple_move(Rect2(Center - Size/2, Size))
 
@@ -137,6 +138,38 @@ func Platform(StartPos : Vector2, Width : float, Direction : float, Speed : floa
 	newPlatform.set_masked(MaskedState)
 	return newPlatform
 
+## Play the battle music if it isn't playing already
+func PlayMusic():
+	if not BattleMusic.playing:
+		BattleMusic.play()
+
+func StopMusic():
+	BattleMusic.stop()
+
+func EndAttack():
+	if !StopProcess:
+		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
+		CombatBox(Rect2(111, 720, 1839-111, 1152-720))
+		SelectedMenu = "Main"
+		MenuHistory = ["Main"]
+		ClearAttacks()
+		MoveMenu(0)
+		MenuMode = true
+		Soul.Controllable = false
+		await CombatZone.done_moving
+		MenuControl = ACTIONABLE
+		if AttackList.has_method("TurnDescription"):
+			AttackList.TurnDescription()
+		else:
+			MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
+	
+func ClearAttacks():
+	var allattacks : Array = MaskedAttacks.get_children()
+	allattacks.append_array(VisibleAttacks.get_children())
+	for child in allattacks:
+		if child is Attack:
+			child.queue_free()
+
 #endregion
 
 var AttackTurns : int = 0
@@ -209,30 +242,6 @@ func InitializeAttack():
 	Soul.position = Vector2(1000, 1000)
 	AmountTurns += 1
 	AttackList.AttackStart()
-
-func ReturnToMenu():
-	if !StopProcess:
-		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-		CombatBox(Rect2(111, 720, 1839-111, 1152-720))
-		SelectedMenu = "Main"
-		MenuHistory = ["Main"]
-		ClearAttacks()
-		MoveMenu(0)
-		MenuMode = true
-		Soul.Controllable = false
-		await CombatZone.DoneMoving
-		MenuControl = ACTIONABLE
-		if AttackList.has_method("TurnDescription"):
-			AttackList.TurnDescription()
-		else:
-			MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
-	
-func ClearAttacks():
-	var allattacks : Array = MaskedAttacks.get_children()
-	allattacks.append_array(VisibleAttacks.get_children())
-	for child in allattacks:
-		if child is Attack:
-			child.queue_free()
 	
 
 func _process(_delta) -> void:
@@ -466,8 +475,8 @@ func FightAction() -> void:
 	Target.get_child(0).scale.x = 0.75
 	Target.modulate.a = 0
 	var tween = Target.create_tween()
-	tween.tween_property(Target.get_child(0), "scale:x", 1, 0.5)
-	tween.parallel().tween_property(Target, "modulate:a", 1, 0.5)
+	tween.tween_property(Target.get_child(0), "scale:x", 1, 0.25)
+	tween.parallel().tween_property(Target, "modulate:a", 1, 0.25)
 	Target.Start()
 	
 func _on_target_fight_end():

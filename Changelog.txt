@@ -5,6 +5,8 @@ Additions
 Attack Warnings
 Colored Attacks
 Combat Zone rework (again)
+Music
+Credits screen
 
 Changes and fixes
 
@@ -15,7 +17,7 @@ Fixed a lot of stuff with Bonestab
 Fixed heart shatter particles being too small
 Switched to using fixed physics updates where it's needed, improving consistency with variable frame rates
 
-A some other stuff I forgot about because of a break I took and didn't document anything prior to it...
+Some other stuff I forgot about because of a break I took and didn't document anything prior to it...
 
 V0.03
 Fixed Menu history not resetting itself after an attack

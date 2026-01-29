@@ -200,7 +200,7 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "SelectableOptions")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "BattleMusic", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
 AttackWarningPath = ExtResource("2_ys5i7")
@@ -219,6 +219,7 @@ AttackList = NodePath("AttackList")
 AnimationController = NodePath("../AnimationPlayer")
 MaskedAttacks = NodePath("CombatZone/Polygon2D/MaskedAttacks")
 VisibleAttacks = NodePath("VisibleAttacks")
+BattleMusic = NodePath("Audio/BattleMusic")
 SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]

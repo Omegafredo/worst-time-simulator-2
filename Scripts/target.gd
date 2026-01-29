@@ -3,7 +3,7 @@ class_name FightTarget
 
 @export var Sprite : AnimatedSprite2D
 
-const Speed : float = 350
+const Speed : float = 450
 const SideRight : float = 320
 const SideLeft : float = -345
 

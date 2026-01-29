@@ -445,7 +445,6 @@ func LoadMods() -> void:
 	var dir = DirAccess.open(OS.get_executable_path().get_base_dir())
 	if dir.dir_exists(ModFolderPath) != null:
 		dir.change_dir(ModFolderPath)
-		print("found mods folder")
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":

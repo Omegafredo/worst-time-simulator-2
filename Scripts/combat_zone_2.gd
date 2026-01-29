@@ -54,6 +54,7 @@ var MoveToCenterPos : Vector2:
 ## Sets the box's destination to be the Rect2 coordinates.
 ## Forces it into a square if it already isn't, adding or removing points to do so.
 func simple_move(BoxPos : Rect2) -> void:
+	moving = true
 	move_to_points = [BoxPos.position, Vector2(BoxPos.end.x, BoxPos.position.y), BoxPos.end, Vector2(BoxPos.position.x, BoxPos.end.y)]
 	while points.size() != 4:
 		if points.size() < 4:
@@ -63,11 +64,13 @@ func simple_move(BoxPos : Rect2) -> void:
 			
 ## Moves the box relatively in a direction without changing its shape.
 func relative_move(moveDir : Vector2) -> void:
+	moving = true
 	for point in move_to_points:
 		point += moveDir
 
 ## Instantly moves box to its destination.
 func instant_move() -> void:
+	moving = true
 	position = MoveToCenterPos
 	var i : int = 0
 	for point in points:
@@ -101,6 +104,7 @@ func point_remover(index : int) -> void:
 ## Adds a point after the specified [param index].[br]
 ## The position of the new point is determined by [param percentage_point] going from the [param index] point to the next point, going from 0 to 1.
 func add_new_point(index : int, percentage_point : float) -> void:
+	moving = true
 	move_to_points.insert(index + 1, point_coordinator(move_to_points, index, percentage_point))
 	add_point(point_coordinator(points, index, percentage_point), index + 1)
 	
