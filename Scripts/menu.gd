@@ -94,7 +94,18 @@ func _ready() -> void:
 			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
 			MoveSoul(Globals.CustomPos)
 			if floor(MoveIndex / CUSTOM_ATTACK_ROWS) > 0:
-				move_custom_attacks_columns_visual(floor(MoveIndex / CUSTOM_ATTACK_ROWS), 1)
+				for child in get_menu_selections():
+					if child in get_attack_column(MoveIndex / CUSTOM_ATTACK_ROWS):
+						child.modulate.a = 1
+					else:
+						child.modulate.a = 0
+						InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			for child in MenuHistory[-2].get_children():
+				if child == MenuLabelHistory[-1]:
+					continue
+				child.modulate.a = 0
+				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+						
 	
 	if Globals.CustomPos < 0:
 		MoveIndex = get_top_active_index()
@@ -214,7 +225,7 @@ func _on_custom_start(FightScript : GDScript):
 	Globals.CustomAttackScript = FightScript
 	InitiateBattle()
 	
-const CUSTOM_ATTACK_ROWS = 3
+const CUSTOM_ATTACK_ROWS = 10
 
 func get_attack_column(column : int) -> Array[SettingSelection]:
 	var tempArray : Array[SettingSelection]
@@ -242,15 +253,10 @@ func move_custom_attack_columns(direction : int):
 		
 	
 	currentColumn = floor(MoveIndex / CUSTOM_ATTACK_ROWS)
-	move_custom_attacks_columns_visual(currentColumn, direction)
-
-func move_custom_attacks_columns_visual(currentColumn : int, direction : float):
-	for i in range(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS)))):
-		print(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS))))
-		if i == currentColumn: continue
-		for child in get_attack_column(i):
-			InterpolateObject(child, "global_position:x", -500 * direction + 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	for child in get_attack_column(currentColumn - direction):
+		InterpolateObject(child, "global_position:x", -500 * direction + 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
 	
 	for child in get_attack_column(currentColumn):
@@ -258,6 +264,21 @@ func move_custom_attacks_columns_visual(currentColumn : int, direction : float):
 		child.global_position.x = -500 * -direction + 61
 		InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+
+#func move_custom_attacks_columns_visual(currentColumn : int, direction : float):
+	#for i in range(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS)))):
+		#print(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS))))
+		#if i == currentColumn: continue
+		#for child in get_attack_column(i):
+			#InterpolateObject(child, "global_position:x", -500 * direction + 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			#InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	#
+	#
+	#for child in get_attack_column(currentColumn):
+		#child.modulate.a = 0
+		#child.global_position.x = -500 * -direction + 61
+		#InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		#InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 
 func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]):
 	#var CustomAttackEditor : Control = Movables[0]
