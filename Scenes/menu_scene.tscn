@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://blty1ony4m351"]
+[gd_scene load_steps=23 format=3 uid="uid://blty1ony4m351"]
 
 [ext_resource type="LabelSettings" uid="uid://yf5bvn4e6wey" path="res://Resources/Fonts/styles/menu_label.tres" id="1_w1fbp"]
 [ext_resource type="Script" uid="uid://b142wa5m43ko7" path="res://Scripts/menu.gd" id="1_yo4v4"]
@@ -15,6 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://df024t67wo4ev" path="res://Resources/Sounds/Logo Appearing.ogg" id="7_x23ft"]
 [ext_resource type="Texture2D" uid="uid://cnaoc0tm2iotf" path="res://Resources/Sprites/UT Godot.png" id="8_6dmk6"]
 [ext_resource type="Texture2D" uid="uid://ddb4l4xbjhcqv" path="res://Resources/Sprites/Worst Time Simulator.png" id="9_xvpl8"]
+[ext_resource type="AudioStream" uid="uid://cgtdrg8oc6y0i" path="res://Resources/Music/It's Raining Somewhere Else.mp3" id="16_nv2tf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ggrs"]
 atlas = ExtResource("9_xvpl8")
@@ -54,7 +55,7 @@ use_hdr = true
 
 [node name="Menu Scene" type="Node"]
 
-[node name="Menu" type="Node2D" parent="." node_paths=PackedStringArray("Soul", "MainContainer", "MenuCursorSound", "MenuSelectSound", "MenuLogoSound", "FlashSound", "WTSLogo", "BottomParticles", "BottomGradient")]
+[node name="Menu" type="Node2D" parent="." node_paths=PackedStringArray("Soul", "MainContainer", "MenuCursorSound", "MenuSelectSound", "MenuLogoSound", "FlashSound", "MenuMusic", "WTSLogo", "BottomParticles", "BottomGradient")]
 texture_filter = 1
 position = Vector2(900, 300)
 script = ExtResource("1_yo4v4")
@@ -64,6 +65,7 @@ MenuCursorSound = NodePath("MenuCursor")
 MenuSelectSound = NodePath("MenuSelect")
 MenuLogoSound = NodePath("LogoAppear")
 FlashSound = NodePath("Flash")
+MenuMusic = NodePath("../MenuMusic")
 WTSLogo = NodePath("../WTS")
 BottomParticles = NodePath("../BottomParticles")
 BottomGradient = NodePath("../BottomGradient")
@@ -151,6 +153,7 @@ text = "Hard Mode"
 label_settings = ExtResource("1_w1fbp")
 script = ExtResource("6_lglhd")
 LinkedProperty = "HardMode"
+DeactiveState = true
 
 [node name="NoDeath" type="Label" parent="Menu/MenuContainer/DifficultyMenu"]
 offset_top = 70.0
@@ -237,11 +240,10 @@ metadata/_custom_type_script = "uid://bta63cy7otkn5"
 [node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CreditsMenu"]
 position = Vector2(-120, -100)
 
-[node name="SettingSelection" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
-offset_left = 34.0
-offset_top = 510.0
-offset_right = 130.0
-offset_bottom = 532.333
+[node name="SoulPos" type="Label" parent="Menu/MenuContainer/CreditsMenu"]
+offset_top = 140.0
+offset_right = 96.0
+offset_bottom = 162.333
 script = ExtResource("3_rhj55")
 DeactiveState = true
 metadata/_custom_type_script = "uid://d3r01wtkit367"
@@ -301,20 +303,21 @@ horizontal_alignment = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -448.0
+offset_left = -80.0
 offset_top = 400.0
-offset_right = 448.0
-offset_bottom = 466.0
+offset_right = 405.0
+offset_bottom = 535.0
 grow_horizontal = 2
-text = "Made proudly in Godot Engine"
+text = "Made proudly
+in Godot Engine"
 label_settings = ExtResource("1_w1fbp")
 horizontal_alignment = 1
 
 [node name="GodotImage" type="TextureRect" parent="Menu/MenuContainer/CreditsMenu"]
-offset_left = -125.0
-offset_top = 483.0
-offset_right = 75.0
-offset_bottom = 683.0
+offset_left = -296.0
+offset_top = 363.0
+offset_right = -96.0
+offset_bottom = 563.0
 texture = ExtResource("8_6dmk6")
 
 [node name="MenuCursor" type="AudioStreamPlayer" parent="Menu"]
@@ -385,6 +388,11 @@ grow_vertical = 0
 rotation = -1.5708
 mouse_filter = 2
 texture = SubResource("GradientTexture1D_wdhac")
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_nv2tf")
+volume_db = -13.979
+bus = &"Music"
 
 [connection signal="activated" from="Menu/MenuContainer/FirstMenu/Start" to="Menu" method="_on_start"]
 [connection signal="entered" from="Menu/MenuContainer/CustomAttacks" to="Menu" method="_on_customattack_menu"]

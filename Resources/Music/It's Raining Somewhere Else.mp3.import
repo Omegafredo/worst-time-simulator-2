@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cgtdrg8oc6y0i"
+path="res://.godot/imported/It's Raining Somewhere Else.mp3-422ba17a25e8e783a4558a8d9eb2c28d.mp3str"
+
+[deps]
+
+source_file="res://Resources/Music/It's Raining Somewhere Else.mp3"
+dest_files=["res://.godot/imported/It's Raining Somewhere Else.mp3-422ba17a25e8e783a4558a8d9eb2c28d.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=40.0
+bpm=0.0
+beat_count=0
+bar_beats=4

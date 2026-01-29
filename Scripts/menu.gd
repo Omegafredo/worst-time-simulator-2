@@ -19,9 +19,11 @@ var IndexHistory : Array[int]
 @export var MenuSelectSound : AudioStreamPlayer
 @export var MenuLogoSound : AudioStreamPlayer
 @export var FlashSound : AudioStreamPlayer
+@export var MenuMusic : AudioStreamPlayer
 @export var WTSLogo : TextureRect
 @export var BottomParticles : GPUParticles2D
 @export var BottomGradient : TextureRect
+
 
 var OriginalSelectPos : Dictionary
 const SoulOffset : Vector2 = Vector2(-60, 35)
@@ -60,7 +62,7 @@ func _ready() -> void:
 				
 				i += 1
 	else:
-		print("fuck you")
+		print("Custom Fights folder doesn't exist")
 	if i == 0:
 		$MenuContainer/FirstMenu/CustomAttack.DeactiveState = true
 		UpdateLabels()
@@ -69,10 +71,10 @@ func _ready() -> void:
 		for option in menu.get_children():
 			if option is SettingScroll:
 				SideOptions.append(option)
-			elif option is Control:
+			if option is Control:
 				OriginalSelectPos[option] = option.global_position
-		for selection in get_menu_selections(menu):
-			OriginalSelectPos[selection] = selection.global_position
+		#for selection in get_menu_selections(menu):
+			#OriginalSelectPos[selection] = selection.global_position
 	
 	# Sets the first menu as the Current Menu
 	CurrentMenu = Menus[0]
@@ -99,6 +101,8 @@ func _ready() -> void:
 
 var held_time : float
 var held_free : bool = true
+
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -257,13 +261,13 @@ func _on_credits_menu_entered(HeaderPos : Marker2D, Header : SettingMenuChanger,
 	
 	for child in Movables:
 		
-		if child in [Movables[0], Movables[2]]:
+		if child in [Movables[0], Movables[2], Movables[5]]:
 			child.global_position.x = OriginalSelectPos[child].x - 400
-		elif child in [Movables[1], Movables[3]]:
+		elif child in [Movables[1], Movables[3], Movables[4]]:
 			child.global_position.x = OriginalSelectPos[child].x + 400
 		child.modulate.a = 0
 	
-
+	InterpolateObject(Soul, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		
 	#InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	#InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
@@ -279,8 +283,7 @@ func _on_credits_menu_entered(HeaderPos : Marker2D, Header : SettingMenuChanger,
 	
 	#var cycles : int = 0
 	for child in Movables:
-		if child != Movables[5]:
-			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		#cycles += 1
 		# Waits for 0.2 seconds and if the CreditsMenu changes to off or exiting during that, abort the function
@@ -305,6 +308,8 @@ func _on_credits_menu_exited(Movables : Array[Node]) -> void:
 	#InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	#InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
+	InterpolateObject(Soul, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
 	var TopMenu = MenuLabelHistory[-1]
 	
 	var oldTween = TopMenu.get_meta("ActiveTween")
@@ -315,9 +320,9 @@ func _on_credits_menu_exited(Movables : Array[Node]) -> void:
 	TopMenu.set_meta("ActiveTween", tween)
 	
 	for child in Movables:
-		if child in [Movables[0], Movables[2]]:
+		if child in [Movables[0], Movables[2], Movables[5]]:
 			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x - 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		if child in [Movables[1], Movables[3]]:
+		if child in [Movables[1], Movables[3], Movables[4]]:
 			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x + 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
@@ -362,6 +367,9 @@ func SideOption(Direction : int) -> void:
 		UpdateLabels()
 	
 func InitiateBattle() -> void:
+	InterpolateObject(MenuMusic, "volume_linear", 0, 1.5, Tween.EASE_OUT, Tween.TRANS_CIRC)
+	#InterpolateObject(MenuMusic, "pitch_scale", 0.9, 1.5, Tween.EASE_OUT, Tween.TRANS_CIRC)
+	
 	AssignEnumArray(ControlsBlocked, StartingBattle)
 	for i in range(4):
 		await Flash(true)
@@ -374,6 +382,11 @@ func InitiateBattle() -> void:
 	get_tree().change_scene_to_file("res://Scenes/battle_scene.tscn")
 	
 func InitiateIntro() -> void:
+	
+	MenuMusic.volume_linear = 0
+	MenuMusic.play()
+	InterpolateObject(MenuMusic, "volume_linear", 0.2, 10, Tween.EASE_IN, Tween.TRANS_CIRC)
+	
 	ControlsBlocked.append(IntroAnim)
 	MainContainer.hide()
 	Soul.hide()
@@ -415,6 +428,7 @@ func InitiateMenu() -> void:
 	BottomGradient.modulate.a = 1
 	Soul.position = CurrentMenu.global_position + SoulOffset
 	ControlsBlocked.clear()
+	MenuMusic.play(40)
 	
 	MenuSway()
 	
@@ -441,7 +455,7 @@ func LoadMods() -> void:
 				print(dir.get_current_dir() + "/" + file_name)
 			file_name = dir.get_next()
 	else:
-		print("couldn't")
+		print("Mods folder does not exist")
 	if mods:
 		for mod in mods:
 			print(ProjectSettings.load_resource_pack(mod))
