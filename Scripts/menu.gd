@@ -214,7 +214,7 @@ func _on_custom_start(FightScript : GDScript):
 	Globals.CustomAttackScript = FightScript
 	InitiateBattle()
 	
-const CUSTOM_ATTACK_ROWS = 7
+const CUSTOM_ATTACK_ROWS = 3
 
 func get_attack_column(column : int) -> Array[SettingSelection]:
 	var tempArray : Array[SettingSelection]
