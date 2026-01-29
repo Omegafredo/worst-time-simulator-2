@@ -55,7 +55,8 @@ func _ready() -> void:
 			if a.get_extension() in ["gd", "gdc"]:
 				var CFButton = SettingSelection.new()
 				CFButton.activated.connect(_on_custom_start.bind(res))
-				CFButton.position = Vector2(61, i * 70)
+				CFButton.position = Vector2(61, i % CUSTOM_ATTACK_ROWS * 70)
+				CFButton.modulate.a = 0
 				CFButton.text = a
 				CFButton.label_settings = load("res://Resources/Fonts/styles/menu_label.tres")
 				$MenuContainer/CustomAttacks.add_child(CFButton)
@@ -92,6 +93,8 @@ func _ready() -> void:
 		if Globals.CustomPos >= 0:
 			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
 			MoveSoul(Globals.CustomPos)
+			if floor(MoveIndex / CUSTOM_ATTACK_ROWS) > 0:
+				move_custom_attacks_columns_visual(floor(MoveIndex / CUSTOM_ATTACK_ROWS), 1)
 	
 	if Globals.CustomPos < 0:
 		MoveIndex = get_top_active_index()
@@ -103,6 +106,10 @@ var held_time : float
 var held_free : bool = true
 
 
+func _input(event: InputEvent) -> void:
+	if event.is_action("left") or event.is_action("right"):
+		if CurrentMenu == $MenuContainer/CustomAttacks and Input.get_axis("left", "right") != 0:
+			move_custom_attack_columns(Input.get_axis("left", "right"))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -114,12 +121,18 @@ func _process(delta: float) -> void:
 			held_time = 0
 		
 		if Input.is_action_just_pressed("up"):
-			MoveAction(-1)
+			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() != 0:
+				MoveAction(-1)
 		elif Input.is_action_just_pressed("down"):
-			MoveAction(1)
+			
+			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() != get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() - 1:
+				MoveAction(1)
 		if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("right"):
+			
 			@warning_ignore("narrowing_conversion")
 			SideOption(Input.get_axis("left", "right"))
+			
+			
 		if Input.is_action_pressed("left") or Input.is_action_pressed("right"):
 			held_time += delta
 			
@@ -200,17 +213,65 @@ func _on_custom_start(FightScript : GDScript):
 	Globals.CustomPos = MoveIndex
 	Globals.CustomAttackScript = FightScript
 	InitiateBattle()
+	
+const CUSTOM_ATTACK_ROWS = 7
+
+func get_attack_column(column : int) -> Array[SettingSelection]:
+	var tempArray : Array[SettingSelection]
+	
+	for i in range(CUSTOM_ATTACK_ROWS):
+		var child = get_menu_selections().get(column * (CUSTOM_ATTACK_ROWS) + i)
+		if child:
+			tempArray.append(child)
+	return tempArray
+	
+
+func move_custom_attack_columns(direction : int):
+	var currentColumn = floor(MoveIndex / CUSTOM_ATTACK_ROWS)
+	
+	if currentColumn == 0 and direction < 0:
+		return
+	
+	if get_attack_column(currentColumn + 1) == [] and direction > 0:
+		return
+	
+	if MoveIndex + CUSTOM_ATTACK_ROWS > get_menu_selections().size() - 1 and direction > 0:
+		MoveAction(get_menu_selections().size() - 1 - MoveIndex)
+	else:
+		MoveAction(CUSTOM_ATTACK_ROWS * direction)
+		
+	
+	currentColumn = floor(MoveIndex / CUSTOM_ATTACK_ROWS)
+	move_custom_attacks_columns_visual(currentColumn, direction)
+
+func move_custom_attacks_columns_visual(currentColumn : int, direction : float):
+	for i in range(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS)))):
+		print(int(ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS))))
+		if i == currentColumn: continue
+		for child in get_attack_column(i):
+			InterpolateObject(child, "global_position:x", -500 * direction + 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	
+	for child in get_attack_column(currentColumn):
+		child.modulate.a = 0
+		child.global_position.x = -500 * -direction + 61
+		InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 
 func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]):
 	#var CustomAttackEditor : Control = Movables[0]
 	
 	CurrentMenu.visible = true
-	CurrentMenu.HideAfter = false
+	var i : int = 0
 	for child in get_menu_selections():
+		if i > CUSTOM_ATTACK_ROWS - 1:
+			break
 		child.modulate.a = 0
 		child.global_position.x = -300
 		InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+		i += 1
 	
 	
 	
@@ -234,7 +295,6 @@ func _on_customattack_exit(Movables : Array[Node]):
 			#Selections.append(Movable)
 			
 	
-	CurrentMenu.HideAfter = true
 	for child in get_menu_selections():
 		if child != MenuLabelHistory[-1]:
 			if child is SettingSelection:
@@ -256,7 +316,6 @@ func _on_customattack_exit(Movables : Array[Node]):
 func _on_credits_menu_entered(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]) -> void:
 	var CreditsMenu = CurrentMenu
 	CreditsMenu.visible = true
-	CreditsMenu.HideAfter = false
 	
 	
 	for child in Movables:
@@ -547,7 +606,6 @@ func OldMenuIn() -> void:
 
 func NewMenuIn() -> void:
 	CurrentMenu.visible = true
-	CurrentMenu.HideAfter = false
 	for child in CurrentMenu.get_children():
 		child.modulate.a = 0
 		child.position.x = 300
@@ -557,7 +615,6 @@ func NewMenuIn() -> void:
 
 func NewMenuOut() -> void:
 
-	CurrentMenu.HideAfter = true
 	for child in CurrentMenu.get_children():
 		if child != MenuLabelHistory[-1]:
 			InterpolateObject(child, "position:x", 500, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
