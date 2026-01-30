@@ -138,6 +138,17 @@ func Platform(StartPos : Vector2, Width : float, Direction : float, Speed : floa
 	newPlatform.set_masked(MaskedState)
 	return newPlatform
 
+func AttackWarning(StartPos : Vector2, Size : Vector2, Duration : float, Pivot : Vector2 = Vector2.ZERO) -> Attack_Warning:
+	var newWarning : Attack_Warning = AttackWarningPath.instantiate()
+	newWarning.BC = self
+	newWarning.set_size(Size)
+	newWarning.disappear_timer(Duration)
+	newWarning.set_pivot(Pivot)
+	add_child(newWarning)
+	newWarning.set_masked(true)
+	newWarning.position = StartPos
+	return newWarning
+
 ## Play the battle music if it isn't playing already
 func PlayMusic():
 	if not BattleMusic.playing:
