@@ -234,7 +234,7 @@ visible = false
 script = ExtResource("2_hl0mm")
 CustomMenu = true
 HeaderPos = NodePath("Marker2D")
-Animatables = [NodePath("Creator"), NodePath("Contributor"), NodePath("BTS"), NodePath("Undertale"), NodePath("Godot"), NodePath("GodotImage")]
+Animatables = [NodePath("Creator"), NodePath("Contributor"), NodePath("BTS"), NodePath("Undertale"), NodePath("GodotImage"), NodePath("Godot")]
 metadata/_custom_type_script = "uid://bta63cy7otkn5"
 
 [node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CreditsMenu"]
@@ -308,8 +308,8 @@ offset_top = 400.0
 offset_right = 405.0
 offset_bottom = 535.0
 grow_horizontal = 2
-text = "Made proudly
-in Godot Engine"
+text = "Proudly made with
+Godot Engine"
 label_settings = ExtResource("1_w1fbp")
 horizontal_alignment = 1
 

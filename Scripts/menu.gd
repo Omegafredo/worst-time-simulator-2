@@ -4,7 +4,7 @@ var MoveIndex : int = 0
 
 enum {StartingBattle, IntroAnim, CodeFocused}
 var ControlsBlocked : Array[int]
-@export var Soul : Node2D
+@export var Soul : MenuSoul
 var CurrentMenu : Menu
 var CurrentLabel : SettingSelection:
 	get():
@@ -91,18 +91,34 @@ func _ready() -> void:
 	else:
 		InitiateMenu()
 		if Globals.CustomPos >= 0:
-			ChangeMenu($MenuContainer/CustomAttacks, $MenuContainer/FirstMenu/CustomAttack)
-			MoveSoul(Globals.CustomPos)
-			if floor(MoveIndex / CUSTOM_ATTACK_ROWS) > 0:
-				for child in get_menu_selections():
-					if child in get_attack_column(MoveIndex / CUSTOM_ATTACK_ROWS):
-						child.modulate.a = 1
-					else:
-						child.modulate.a = 0
-						InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+			var CustomAttacksTitle : SettingMenuChanger = $MenuContainer/FirstMenu/CustomAttack
+			var CustomAttacksMenu : Menu = $MenuContainer/CustomAttacks
+			ChangeMenu(CustomAttacksMenu, CustomAttacksTitle)
+			
+			# Not using MoveSoul() here to prevent the animation from happening. Might turn into a function later
+			MoveIndex = Globals.CustomPos
+			Soul.position = OriginalSelectPos[CurrentLabel] + SoulOffset
+			Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
+			
+			var CAMpos : Vector2 = CustomAttacksMenu.get_node("Marker2D").global_position
+			
+			# Prevents the CustomAttack title from being animated when returning from an attack
+			CustomAttacksTitle.global_position = CAMpos
+			InterpolateObject(CustomAttacksTitle, "global_position", CAMpos, 0.75, Tween.EASE_OUT, Tween.TRANS_BACK)
+			
+			#if floor(MoveIndex / CUSTOM_ATTACK_ROWS) > 0:
+			for child in get_menu_selections():
+				if child in get_attack_column(MoveIndex / CUSTOM_ATTACK_ROWS):
+					child.modulate.a = 1
+				else:
+					child.modulate.a = 0
+					InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+				child.global_position = OriginalSelectPos[child]
+				InterpolateObject(child, "global_position", OriginalSelectPos[child], 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			for child in MenuHistory[-2].get_children():
 				if child == MenuLabelHistory[-1]:
 					continue
+				# Prevents the FirstMenu (Start, Settings etc...) menu from being animated when changing to the Custom Menu after returning from an attack
 				child.modulate.a = 0
 				InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 						
@@ -341,9 +357,9 @@ func _on_credits_menu_entered(HeaderPos : Marker2D, Header : SettingMenuChanger,
 	
 	for child in Movables:
 		
-		if child in [Movables[0], Movables[2], Movables[5]]:
+		if child in [Movables[0], Movables[2], Movables[4]]:
 			child.global_position.x = OriginalSelectPos[child].x - 400
-		elif child in [Movables[1], Movables[3], Movables[4]]:
+		elif child in [Movables[1], Movables[3], Movables[5]]:
 			child.global_position.x = OriginalSelectPos[child].x + 400
 		child.modulate.a = 0
 	
@@ -400,9 +416,9 @@ func _on_credits_menu_exited(Movables : Array[Node]) -> void:
 	TopMenu.set_meta("ActiveTween", tween)
 	
 	for child in Movables:
-		if child in [Movables[0], Movables[2], Movables[5]]:
+		if child in [Movables[0], Movables[2], Movables[4]]:
 			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x - 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
-		if child in [Movables[1], Movables[3], Movables[4]]:
+		if child in [Movables[1], Movables[3], Movables[5]]:
 			InterpolateObject(child, "global_position:x", OriginalSelectPos[child].x + 400, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	

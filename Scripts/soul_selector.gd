@@ -1,4 +1,5 @@
 extends Node2D
+class_name MenuSoul
 
 var MoveTo : Vector2
 #var LerpProgress: float
