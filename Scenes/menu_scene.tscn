@@ -224,10 +224,18 @@ position = Vector2(-743, 4)
 script = ExtResource("2_hl0mm")
 CustomMenu = true
 HeaderPos = NodePath("Marker2D")
-Animatables = [null]
+Animatables = [NodePath("PageCounter")]
 
 [node name="Marker2D" type="Marker2D" parent="Menu/MenuContainer/CustomAttacks"]
 position = Vector2(0, -100)
+
+[node name="PageCounter" type="Label" parent="Menu/MenuContainer/CustomAttacks"]
+offset_left = 61.0
+offset_top = -25.0
+offset_right = 253.0
+offset_bottom = 41.0
+text = "PAGE #"
+label_settings = ExtResource("1_w1fbp")
 
 [node name="CreditsMenu" type="Node2D" parent="Menu/MenuContainer" node_paths=PackedStringArray("HeaderPos", "Animatables")]
 visible = false

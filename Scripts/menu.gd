@@ -55,7 +55,7 @@ func _ready() -> void:
 			if a.get_extension() in ["gd", "gdc"]:
 				var CFButton = SettingSelection.new()
 				CFButton.activated.connect(_on_custom_start.bind(res))
-				CFButton.position = Vector2(61, i % CUSTOM_ATTACK_ROWS * 70)
+				CFButton.position = Vector2(61, 55 + (i % CUSTOM_ATTACK_ROWS * 70))
 				CFButton.modulate.a = 0
 				CFButton.text = a
 				CFButton.label_settings = load("res://Resources/Fonts/styles/menu_label.tres")
@@ -100,6 +100,8 @@ func _ready() -> void:
 			Soul.position = OriginalSelectPos[CurrentLabel] + SoulOffset
 			Soul.InterpolateMovement(OriginalSelectPos[CurrentLabel] + SoulOffset)
 			
+			update_customattack_page_count()
+			
 			var CAMpos : Vector2 = CustomAttacksMenu.get_node("Marker2D").global_position
 			
 			# Prevents the CustomAttack title from being animated when returning from an attack
@@ -113,6 +115,7 @@ func _ready() -> void:
 				else:
 					child.modulate.a = 0
 					InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+				# Prevents the Custom Attack menu pages from being animated when returning from an attack
 				child.global_position = OriginalSelectPos[child]
 				InterpolateObject(child, "global_position", OriginalSelectPos[child], 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			for child in MenuHistory[-2].get_children():
@@ -148,11 +151,11 @@ func _process(delta: float) -> void:
 			held_time = 0
 		
 		if Input.is_action_just_pressed("up"):
-			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() != 0:
+			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(get_current_attack_column()).size() != 0:
 				MoveAction(-1)
 		elif Input.is_action_just_pressed("down"):
 			
-			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() != get_attack_column(floor(MoveIndex / CUSTOM_ATTACK_ROWS)).size() - 1:
+			if not CurrentMenu == $MenuContainer/CustomAttacks or MoveIndex % get_attack_column(get_current_attack_column()).size() != get_attack_column(get_current_attack_column()).size() - 1:
 				MoveAction(1)
 		if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("right"):
 			
@@ -243,6 +246,9 @@ func _on_custom_start(FightScript : GDScript):
 	
 const CUSTOM_ATTACK_ROWS = 10
 
+func get_current_attack_column() -> int:
+	return floor(MoveIndex / CUSTOM_ATTACK_ROWS)
+
 func get_attack_column(column : int) -> Array[SettingSelection]:
 	var tempArray : Array[SettingSelection]
 	
@@ -254,7 +260,7 @@ func get_attack_column(column : int) -> Array[SettingSelection]:
 	
 
 func move_custom_attack_columns(direction : int):
-	var currentColumn = floor(MoveIndex / CUSTOM_ATTACK_ROWS)
+	var currentColumn = get_current_attack_column()
 	
 	if currentColumn == 0 and direction < 0:
 		return
@@ -266,9 +272,10 @@ func move_custom_attack_columns(direction : int):
 		MoveAction(get_menu_selections().size() - 1 - MoveIndex)
 	else:
 		MoveAction(CUSTOM_ATTACK_ROWS * direction)
-		
 	
-	currentColumn = floor(MoveIndex / CUSTOM_ATTACK_ROWS)
+	update_customattack_page_count()
+	
+	currentColumn = get_current_attack_column()
 	
 	for child in get_attack_column(currentColumn - direction):
 		InterpolateObject(child, "global_position:x", -500 * direction + 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
@@ -296,6 +303,15 @@ func move_custom_attack_columns(direction : int):
 		#InterpolateObject(child, "position:x", 61, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		#InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 
+func update_customattack_page_count() -> void:
+	var PageCounter : Label = $MenuContainer/CustomAttacks/PageCounter
+	# Gets the amount of pages there are in total
+	if ceil(float(get_menu_selections().size()) / float(CUSTOM_ATTACK_ROWS)) > 1:
+		PageCounter.text = "PAGE " + str(get_current_attack_column() + 1)
+		PageCounter.show()
+	else:
+		PageCounter.hide()
+
 func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Movables : Array[Node]):
 	#var CustomAttackEditor : Control = Movables[0]
 	
@@ -310,9 +326,14 @@ func _on_customattack_menu(HeaderPos : Marker2D, Header : SettingMenuChanger, Mo
 		InterpolateObject(child, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 		i += 1
 	
+	MoveIndex = 0
+	update_customattack_page_count()
 	
+	Movables[0].global_position.x = -300
+	Movables[0].modulate.a = 0
+	InterpolateObject(Movables[0], "global_position:x", OriginalSelectPos[Movables[0]].x, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	InterpolateObject(Movables[0], "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
-		
 	#InterpolateObject(CustomAttackEditor, "position:x", 461, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	#InterpolateObject(CustomAttackEditor, "modulate:a", 1, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
@@ -337,6 +358,9 @@ func _on_customattack_exit(Movables : Array[Node]):
 			if child is SettingSelection:
 				InterpolateObject(child, "global_position:x", -300, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 			InterpolateObject(child, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	
+	InterpolateObject(Movables[0], "global_position:x", -300, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
+	InterpolateObject(Movables[0], "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	
 	#InterpolateObject(CustomAttackEditor, "position:x", 1000, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
 	#InterpolateObject(CustomAttackEditor, "modulate:a", 0, 0.75, Tween.EASE_OUT, Tween.TRANS_CUBIC)
