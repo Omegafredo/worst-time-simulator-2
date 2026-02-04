@@ -65,8 +65,20 @@ func simple_move(BoxPos : Rect2) -> void:
 ## Moves the box relatively in a direction without changing its shape.
 func relative_move(moveDir : Vector2) -> void:
 	moving = true
-	for point in move_to_points:
-		point += moveDir
+	for i in range(move_to_points.size()):
+		move_to_points[i] += moveDir
+
+## Resizes the box relatively while trying to retain its shape.[br]
+## Has issues if a point intersects the center lines
+func relative_resize(left : float, up : float, right : float, down : float) -> void:
+	moving = true
+	for i in range(move_to_points.size()):
+		if move_to_points[i].x < MoveToCenterPos.x:
+			move_to_points[i].x -= left
+		else: move_to_points[i].x += right
+		if move_to_points[i].y < MoveToCenterPos.y:
+			move_to_points[i].y -= up
+		else: move_to_points[i].y += down
 
 ## Instantly moves box to its destination.
 func instant_move() -> void:

@@ -12,8 +12,6 @@ var gravityDir := 0:
 
 var gravity : float = 980
 
-@export var mainMenuPath : PackedScene
-
 @export var SplitSprite : Texture2D
 
 @export var SoulSprite : Sprite2D
@@ -41,7 +39,8 @@ var KR_Counter : float = 0
 
 var Controllable := true
 
-signal died
+signal death_started
+signal death_finished
 
 
 func _physics_process(delta: float) -> void:
@@ -54,10 +53,6 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	pass
 		
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("menu"):
-		get_tree().change_scene_to_packed(mainMenuPath)
 
 func player_movement(delta : float) -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -207,7 +202,7 @@ func Death():
 	if OldFadeTween:
 		OldFadeTween.kill()
 	FadeSprite.visible = false
-	died.emit()
+	death_started.emit()
 	SoulSprite.modulate = Color(1, 0, 0)
 	await Globals.Wait(1)
 	HeartSplit.play()
@@ -218,7 +213,7 @@ func Death():
 	SoulSprite.visible = false
 	ShatterParticles.emitting = true
 	await Globals.Wait(3)
-	get_tree().change_scene_to_packed(mainMenuPath)
+	death_finished.emit()
 	
 func TakeDamage(Damage : int, Karma : int):
 	Globals.KR += Karma

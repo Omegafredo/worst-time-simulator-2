@@ -1,6 +1,8 @@
 extends Node
 class_name BattleController
 
+@export var mainMenuPath : PackedScene
+
 var BonePath := preload("res://Scenes/bone_v.tscn")
 var BoneStabPath := preload("res://Scenes/bone_stab.tscn")
 var BlasterPath := preload("res://Scenes/gaster_blaster.tscn")
@@ -14,18 +16,24 @@ var StrikeAnimation := preload("res://Scenes/strike.tscn")
 @export var SpeechBubble : TextSystem
 @export var MenuText : TextSystem
 @export var MenuButtons : Node
-@export var MenuCursor : AudioStreamPlayer
+
 @export var HealthText : Label
 @export var HealthBar: Sprite2D
 #@export var HpIcon: Sprite2D = $UI/HpIcon
 @export var Target : FightTarget
 @export var KrIcon: Sprite2D
 @export var PlayerName: Label
+
 @export var AttackList : Node
 @export var AnimationController : AnimationPlayer
 @export var MaskedAttacks : Node2D
 @export var VisibleAttacks : Node
+@export var FlashScreen : ColorRect
+
+@export var MenuCursor : AudioStreamPlayer
 @export var BattleMusic : AudioStreamPlayer
+@export var FlashSfx : AudioStreamPlayer
+
 
 var StopProcess := false
 
@@ -33,30 +41,40 @@ var CurrentEnemy = "Sans"
 
 #region Custom Attack Functions
 
-## The method most familiar to newcomers from BTS or WTS
+## The method most familiar to newcomers from BTS or WTS[br]
 ## Pick the coordinate for each side of the box seperately
-func CombatBoxLegacy(Left : float, Top : float, Right : float, Bottom : float):
+func CombatBox(Left : float, Top : float, Right : float, Bottom : float):
 	CombatZone.simple_move(Rect2(Left, Top, Right - Left, Bottom - Top))
 
 ## Rect2 method, sets the top left coordinate and extends the width and height from there
-## ...probably shouldn't be the default method.
-func CombatBox(NewRect : Rect2):
+func CombatBoxRect(NewRect : Rect2):
 	CombatZone.simple_move(NewRect)
 
-## Pick the center where you want it to be and extend the size from there
+## Pick the center where you want it to be and extend the size from there.
 func CombatBoxCenter(Center : Vector2, Size : Vector2):
 	CombatZone.simple_move(Rect2(Center - Size/2, Size))
 
-# Probably better for it to not change the box at all so it can be combined with any movement option by calling it afterwards
+## Instantly teleports the combat box to its current destination.[br]
+## Meant to be used after a movement method such as [method BattleController.CombatBox] or [method BattleControlelr.CombatBoxCenter].
 func CombatBoxInstant():
 	CombatZone.instant_move()
 
+## Moves the combat box without changing it's shape.
+func CombatBoxMove(moveDirection : Vector2):
+	CombatZone.relative_move(moveDirection)
+
+## Works like [method BattleController.CombatBox], but each direction is relative from its current position.
+func CombatBoxRelative(Left : float, Up : float, Right : float, Down : float):
+	CombatZone.relative_resize(Left, Up, Right, Down)
+
+## Sets how many pixels the combat box moves per frame. Default = 300.0
 func CombatBoxSpeed(NewSpeed : float):
 	CombatZone.speed = NewSpeed
-	
-func CombatBoxRotate(NewRotation : float, RotationSpeed : float = 2):
+
+## Set the rotation in degrees and how long it takes
+func CombatBoxRotate(NewRotation : float, RotationTime : float = 2):
 	var tween = get_tree().create_tween()
-	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationSpeed)
+	tween.tween_property(CombatZone, "rotation_degrees", NewRotation, RotationTime)
 	
 
 func Bone(StartPos : Vector2, NewHeight : float, NewDirection : float, NewSpeed : float,attackColor : int = 0, MaskedState : bool = true) -> StandardBone:
@@ -149,18 +167,29 @@ func AttackWarning(StartPos : Vector2, Size : Vector2, Duration : float, Pivot :
 	newWarning.position = StartPos
 	return newWarning
 
-## Play the battle music if it isn't playing already
-func PlayMusic():
-	if not BattleMusic.playing:
-		BattleMusic.play()
+## Change if the music is playing
+func MusicPlaying(play : bool):
+	# Stops the music from restarting if it's already playing
+	if not BattleMusic.playing and play:
+		BattleMusic.playing = play
 
-func StopMusic():
-	BattleMusic.stop()
+func Flash(enable : bool, muted : bool = false) -> void:
+	FlashScreen.visible = enable
+	
+	AudioServer.set_bus_mute(2, enable)
+	if enable:
+		stop_sfx()
+	if not muted:
+		FlashSfx.play()
+		
+
+func HeartTeleport(position : Vector2) -> void:
+	Soul.position = position
 
 func EndAttack():
 	if !StopProcess:
 		CombatBoxRotate(round(CombatZone.rotation_degrees / 180.0) * 180.0, 0.5)
-		CombatBox(Rect2(111, 720, 1839-111, 1152-720))
+		CombatBox(111, 720, 1839, 1152)
 		SelectedMenu = "Main"
 		MenuHistory = ["Main"]
 		ClearAttacks()
@@ -175,6 +204,7 @@ func EndAttack():
 			MenuText.setText("* You feel like you're going to\n[indent]have the worst time of your\nlife.")
 	
 func ClearAttacks():
+	stop_sfx()
 	var allattacks : Array = MaskedAttacks.get_children()
 	allattacks.append_array(VisibleAttacks.get_children())
 	for child in allattacks:
@@ -241,7 +271,7 @@ func _ready():
 	
 func InitialiseBattle():
 	request_ready()
-	CombatBoxLegacy(111, 720, 1839, 1152)
+	CombatBox(111, 720, 1839, 1152)
 	CombatBoxInstant()
 	
 func InitializeAttack():
@@ -254,6 +284,12 @@ func InitializeAttack():
 	AmountTurns += 1
 	AttackList.AttackStart()
 	
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu"):
+		return_main_menu()
+		
+		
 
 func _process(_delta) -> void:
 	if MenuMode and MenuControl == ACTIONABLE:
@@ -284,12 +320,18 @@ func _process(_delta) -> void:
 	$"Attack Origin Point".update_scale = false
 	$"Attack Origin Point".update_scale = true
 	
-func _on_player_death():
+func _on_player_death_started():
 	ClearAttacks()
-	get_tree().call_group("SoundEffects", "stop")
 	AnimationController.play("death")
 	Soul.Controllable = false
-	
+
+func stop_sfx() -> void:
+	get_tree().call_group("SoundEffects", "stop")
+
+func return_main_menu() -> void:
+	# Here incase the player returns to the menu while flash is on
+	AudioServer.set_bus_mute(2, false)
+	get_tree().change_scene_to_packed(mainMenuPath)
 
 @export var SelectableOptions: Node2D
 var SelectedMenu = "Main"

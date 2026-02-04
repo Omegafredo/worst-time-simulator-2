@@ -1,6 +1,7 @@
-[gd_scene load_steps=35 format=3 uid="uid://cvcua7q4keqn3"]
+[gd_scene load_steps=37 format=3 uid="uid://cvcua7q4keqn3"]
 
 [ext_resource type="PackedScene" uid="uid://qjh4h6r7nww5" path="res://Scenes/battle_soul.tscn" id="1_ma1ba"]
+[ext_resource type="PackedScene" uid="uid://blty1ony4m351" path="res://Scenes/menu_scene.tscn" id="2_ejyr1"]
 [ext_resource type="Script" uid="uid://hrnqstkpdscc" path="res://Scripts/battle_controller.gd" id="2_taess"]
 [ext_resource type="PackedScene" uid="uid://b7t8h661yyk7h" path="res://Scenes/attack_warning.tscn" id="2_ys5i7"]
 [ext_resource type="Texture2D" uid="uid://tpdj2mae3iil" path="res://Resources/Sprites/UI/SpeechBubble.png" id="4_kn0io"]
@@ -24,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://ca4sgunnqxdlg" path="res://Resources/Sprites/UI/KRText.png" id="20_aac14"]
 [ext_resource type="PackedScene" uid="uid://dk7m362s6ohi3" path="res://Scenes/combat_zone_2.tscn" id="23_ys5i7"]
 [ext_resource type="AudioStream" uid="uid://bkijfm4vf8o48" path="res://Resources/Music/Megalovania.mp3" id="24_qncpg"]
+[ext_resource type="AudioStream" uid="uid://sog4kjiopuhm" path="res://Resources/Sounds/Flash.ogg" id="26_ojquc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c56tm"]
 animations = [{
@@ -113,7 +115,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("FadeIn:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -125,7 +127,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/path = NodePath("FadeIn:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -141,7 +143,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("FadeIn:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -153,7 +155,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/path = NodePath("FadeIn:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -169,7 +171,7 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
+tracks/0/path = NodePath("FadeIn:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -181,7 +183,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/path = NodePath("FadeIn:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -200,16 +202,16 @@ _data = {
 
 [node name="Main Node" type="Node"]
 
-[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "MenuCursor", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "BattleMusic", "SelectableOptions")]
+[node name="Battle Controller" type="Node" parent="." node_paths=PackedStringArray("Soul", "SansHimself", "SpeechBubble", "MenuText", "MenuButtons", "HealthText", "HealthBar", "Target", "KrIcon", "PlayerName", "AttackList", "AnimationController", "MaskedAttacks", "VisibleAttacks", "FlashScreen", "MenuCursor", "BattleMusic", "FlashSfx", "SelectableOptions")]
 unique_name_in_owner = true
 script = ExtResource("2_taess")
+mainMenuPath = ExtResource("2_ejyr1")
 AttackWarningPath = ExtResource("2_ys5i7")
 Soul = NodePath("Player")
 SansHimself = NodePath("Sans")
 SpeechBubble = NodePath("SpeechBubble")
 MenuText = NodePath("UI/BoxCorner/BoxText")
 MenuButtons = NodePath("UI/MenuButtons")
-MenuCursor = NodePath("Audio/MenuCursor")
 HealthText = NodePath("UI/Health")
 HealthBar = NodePath("UI/HealthBar")
 Target = NodePath("UI/BoxCorner/Target")
@@ -219,7 +221,10 @@ AttackList = NodePath("AttackList")
 AnimationController = NodePath("../AnimationPlayer")
 MaskedAttacks = NodePath("CombatZone/Polygon2D/MaskedAttacks")
 VisibleAttacks = NodePath("VisibleAttacks")
+FlashScreen = NodePath("../Flash")
+MenuCursor = NodePath("Audio/MenuCursor")
 BattleMusic = NodePath("Audio/BattleMusic")
+FlashSfx = NodePath("Audio/Flash")
 SelectableOptions = NodePath("UI/BoxCorner/SelectableOptions")
 
 [node name="AttackList" type="Node" parent="Battle Controller"]
@@ -396,8 +401,22 @@ bus = &"SoundEffects"
 stream = ExtResource("24_qncpg")
 bus = &"Music"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Flash" type="AudioStreamPlayer" parent="Battle Controller/Audio"]
+stream = ExtResource("26_ojquc")
+bus = &"SoundEffects"
+
+[node name="FadeIn" type="ColorRect" parent="."]
 z_index = 80
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Flash" type="ColorRect" parent="."]
+visible = false
+z_index = 200
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -411,6 +430,7 @@ libraries = {
 }
 autoplay = "fade"
 
-[connection signal="died" from="Battle Controller/Player" to="Battle Controller" method="_on_player_death"]
+[connection signal="death_finished" from="Battle Controller/Player" to="Battle Controller" method="return_main_menu"]
+[connection signal="death_started" from="Battle Controller/Player" to="Battle Controller" method="_on_player_death_started"]
 [connection signal="confirmed" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_confirmed"]
 [connection signal="end" from="Battle Controller/UI/BoxCorner/Target" to="Battle Controller" method="_on_target_fight_end"]
