@@ -43,7 +43,7 @@ func _ready() -> void:
 	for child in MainContainer.get_children():
 		Menus.append(child)
 	
-	# Adds custom fights to the custom fight menu
+	# Adds custom fight buttons to the custom fight menu
 	var dir = DirAccess.open("res://")
 	var i : int = 0
 	if dir.dir_exists("Custom Fights"):
@@ -54,10 +54,13 @@ func _ready() -> void:
 			#print(res)
 			if a.get_extension() in ["gd", "gdc"]:
 				var CFButton = SettingSelection.new()
+				# Matches everything before the dot in the string, the group excluding the dot.
+				var regex = RegEx.create_from_string("(.*)\\.")
 				CFButton.activated.connect(_on_custom_start.bind(res))
 				CFButton.position = Vector2(61, 55 + (i % CUSTOM_ATTACK_ROWS * 70))
 				CFButton.modulate.a = 0
-				CFButton.text = a
+				# Strings gets the match and the group, the second value in the array being the group.
+				CFButton.text = regex.search(a).strings[1]
 				CFButton.label_settings = load("res://Resources/Fonts/styles/menu_label.tres")
 				$MenuContainer/CustomAttacks.add_child(CFButton)
 				

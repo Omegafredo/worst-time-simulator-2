@@ -6,6 +6,7 @@ Attack Warnings
 Colored Attacks
 Combat Zone rework (again)
 Music
+Flashes
 Credits screen
 
 Changes and fixes
