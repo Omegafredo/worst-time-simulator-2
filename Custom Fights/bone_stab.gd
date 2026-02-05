@@ -108,7 +108,7 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.CombatBox(Rect2(800, 720, 1200-800, 1152-720))
+	BC.CombatBox(800, 720, 1200, 1152)
 	BC.CombatBoxInstant()
 	await Globals.Wait(1)
 	var BoneStab1 : Bone_Stab = BC.BoneStab(0, 75, 3, 1)

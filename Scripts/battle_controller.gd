@@ -55,7 +55,7 @@ func CombatBoxCenter(Center : Vector2, Size : Vector2):
 	CombatZone.simple_move(Rect2(Center - Size/2, Size))
 
 ## Instantly teleports the combat box to its current destination.[br]
-## Meant to be used after a movement method such as [method BattleController.CombatBox] or [method BattleControlelr.CombatBoxCenter].
+## Meant to be used after a movement method such as [method BattleController.CombatBox] or [method BattleController.CombatBoxCenter].
 func CombatBoxInstant():
 	CombatZone.instant_move()
 
@@ -66,6 +66,23 @@ func CombatBoxMove(moveDirection : Vector2):
 ## Works like [method BattleController.CombatBox], but each direction is relative from its current position.
 func CombatBoxRelative(Left : float, Up : float, Right : float, Down : float):
 	CombatZone.relative_resize(Left, Up, Right, Down)
+
+## Returns the [member CombatZone.move_to_points] array to allow moving them.
+func CombatBoxPointArray() -> Array[Vector2]:
+	return CombatZone.move_to_points
+
+## Adds a point between [param pointIndex] and the next one after that. [param pixels] decides how many pixels into the next point the new one is spawned at.
+func CombatBoxAddPoint(pointIndex : int, pixels : float):
+	CombatZone.add_new_point(pointIndex, pixels/CombatZone.get_point_length(CombatZone.move_to_points, pointIndex))
+
+## Adds a point between [param pointIndex] and the next one after that.[br]
+## [param percentage] going from 0 to 1, decides how much into the next point is spawned at, 0 being at [param pointIndex] and 1 being the next point after that.
+func CombatBoxAddPointPercentage(pointIndex : int, percentage : float):
+	CombatZone.add_new_point(pointIndex, percentage)
+
+## Removes the point at [param pointIndex], pretty self explanatory.
+func CombatBoxRemovePoint(pointIndex : int):
+	CombatZone.point_remover(pointIndex)
 
 ## Sets how many pixels the combat box moves per frame. Default = 300.0
 func CombatBoxSpeed(NewSpeed : float):

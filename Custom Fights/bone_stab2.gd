@@ -82,7 +82,7 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.CombatBox(Rect2(600, 750, 800, 400))
+	BC.CombatBoxRect(Rect2(600, 750, 800, 400))
 	#BC.CombatZone.instant_move()
 	BC.CombatZone.add_new_point(2, 0.4)
 	BC.CombatZone.add_new_point(3, 0)

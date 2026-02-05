@@ -152,7 +152,7 @@ func AttackStart() -> void:
 func Attack1() -> void:
 	
 	
-	BC.CombatBox(Rect2(450,720,1000,400))
+	BC.CombatBoxRect(Rect2(450,720,1000,400))
 	BC.CombatBoxInstant()
 	
 	#var Platform = BC.Platform(Vector2(600,900),500,0,100,true)
@@ -183,7 +183,7 @@ func Attack1() -> void:
 	Fucking_Coming_Back_Bones_XD(28,1)
 	
 	BC.CombatBoxSpeed(30)
-	BC.CombatBox(Rect2(750, 720, 400, 400))
+	BC.CombatBoxRect(Rect2(750, 720, 400, 400))
 	
 	await Globals.Wait(8)
 	

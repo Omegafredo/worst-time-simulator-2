@@ -82,7 +82,7 @@ func AttackStart() -> void:
 			Attack3()
 
 func Attack1() -> void:
-	BC.CombatBox(Rect2(111, 720, 1839-111, 1152-720))
+	BC.CombatBoxRect(Rect2(111, 720, 1839-111, 1152-720))
 	var b1 = BC.Bone(Vector2(1500, 1075), 50, 180, 100,1,false)
 	var b2 = BC.Bone(Vector2(1500, 755), 20, 180, 100,2,false)
 	await Globals.Wait(4)
