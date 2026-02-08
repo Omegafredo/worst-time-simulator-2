@@ -157,9 +157,10 @@ func GasterBlaster(Size : int, StartPos : Vector2, EndPos : Vector2, Angle : flo
 func SoulMode(NewSoulType : int):
 	Soul.Change_Soul(NewSoulType)
 
-func SoulSlam(SlamDirection : int):
+func SoulSlam(SlamDirection : int, SlamDamage : int = 1):
 	Soul.Change_Soul(1)
 	Soul.Slammed = true
+	Soul.SlamDamage = SlamDamage
 	Soul.gravityDir = SlamDirection
 
 func Platform(StartPos : Vector2, Width : float, Direction : float, Speed : float, MaskedState : bool = false) -> Attack:

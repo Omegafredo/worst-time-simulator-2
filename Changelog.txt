@@ -14,6 +14,7 @@ Changes and fixes
 Custom attack menu now remembers what attack you were on when returning to it
 Custom attack menu now splits itself to other pages when the list is too long
 Changed the Gaster Blaster hitboxes to be less forgiving with large Gaster Blasters
+Added damage customization to the SoulSlam attack
 New version formatting
 Fixed a lot of stuff with Bonestab
 Fixed heart shatter particles being too small
